@@ -1,6 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/immo_log_in">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/titleForLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Welcome to Real Estate Manager"
+        android:textColor="#FFFFFF"
+        android:textSize="48sp" />
+
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:text="Log In"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/googleLoginButton"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcomeText"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="#db3236"
+        android:text="Log in with Google"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/facebookLoginButton"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Log in with Facebook"
+        android:backgroundTint="#3b5998"
+        android:textColor="#FFFFFF"
+        android:layout_below="@id/googleLoginButton"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/emailLoginButton"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Log in with Email"
+        android:backgroundTint="#007bff"
+        android:textColor="#FFFFFF"
+        android:layout_below="@id/facebookLoginButton"
+        android:layout_marginTop="20dp"/>
+
+</RelativeLayout>
