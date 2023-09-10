@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:197966899826:android:d2775aae95aa1b86f530eb",
+        "mobilesdk_app_id": "1:197966899826:android:9997b5f3c20c8a87f530eb",
         "android_client_info": {
-          "package_name": "Real.Estate.Manager"
+          "package_name": "com.openclassrooms.realestatemanager"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "197966899826-qnmp55hg8ju7oh9vc58v7rte3929qs2c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBh_oMvdpJXHiEuqXX8W6F77Bl60-xZcEI"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197966899826-qnmp55hg8ju7oh9vc58v7rte3929qs2c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

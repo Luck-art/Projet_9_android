@@ -2,6 +2,9 @@ package com.openclassrooms.realestatemanager
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
+import android.widget.RelativeLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -12,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -29,18 +33,17 @@ class LogInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.log_in_activity)
 
-        // Initialize Firebase Auth and GoogleSignInClient here
         auth = Firebase.auth
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.app_name)) // app_name provisional
+            .requestIdToken(getString(R.string.app_name))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
             callbackManager = CallbackManager.Factory.create()
 
-        val googleLoginButton = findViewById<Button>(R.id.googleLoginButton)
-        val facebookLoginButton = findViewById<Button>(R.id.facebookLoginButton)
+        val googleLoginButton = findViewById<LoginButton>(R.id.googleLoginButton)
+        val facebookLoginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
         val emailLoginButton = findViewById<Button>(R.id.emailLoginButton)
 
         googleLoginButton.setOnClickListener {
@@ -56,23 +59,54 @@ class LogInActivity : AppCompatActivity() {
             }
 
             override fun onCancel() {
-                // Handle cancel case
+                Snackbar.make(
+                    findViewById(R.id.logIn),
+                    "Facebook sign in cancelled.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
 
+
             override fun onError(error: FacebookException) {
-                // Handle error case
+                Snackbar.make(
+                    findViewById(R.id.logIn),
+                    "Facebook sign in failed.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
+
         })
 
         emailLoginButton.setOnClickListener {
-            val email = // Get this from EditText
-            val password = // Get this from EditText
-                signInWithEmail(email, password)
-        }
-    }
+            val dialogView = layoutInflater.inflate(R.layout.sign_in_mail_pop_up, null)
 
-    private fun signInWithEmail(email: String, password: String) {
-        // Your existing implementation
+            val emailEditText = dialogView.findViewById<EditText>(R.id.emailEditText)
+            val passwordEditText = dialogView.findViewById<EditText>(R.id.passwordEditText)
+
+            val alertDialog = AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setTitle("Sign in with Email")
+                .setPositiveButton("Sign In") { dialog, which ->
+                    val email = emailEditText.text.toString()
+                    val password = passwordEditText.text.toString()
+
+                    auth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                            } else {
+                                Snackbar.make(
+                                    findViewById(R.id.logIn),
+                                    "Authentication Failed.",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                }
+                .setNegativeButton("Cancel", null)
+                .create()
+
+            alertDialog.show()
+        }
     }
 }
 
