@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
@@ -9,12 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.FacebookSdk
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -31,7 +34,10 @@ class LogInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("LogInActivity", "Before setContentView")
         setContentView(R.layout.log_in_activity)
+        Log.d("LogInActivity", "After setContentView")
+
 
         auth = Firebase.auth
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -42,16 +48,22 @@ class LogInActivity : AppCompatActivity() {
 
             callbackManager = CallbackManager.Factory.create()
 
-        val googleLoginButton = findViewById<LoginButton>(R.id.googleLoginButton)
+        val googleSignInButton = findViewById<SignInButton>(R.id.googleSignInButton)
         val facebookLoginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
         val emailLoginButton = findViewById<Button>(R.id.emailLoginButton)
 
-        googleLoginButton.setOnClickListener {
-            val signInIntent = googleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_SIGN_IN)
+        if (googleSignInButton != null) {
+            googleSignInButton.setOnClickListener {
+                val signInIntent = googleSignInClient.signInIntent
+                startActivityForResult(signInIntent, RC_SIGN_IN)
+            }
+        } else {
+            Log.e("LogInActivity", "googleSignInButton is null")
         }
 
         facebookLoginButton.setReadPermissions("email", "public_profile")
+        FacebookSdk.setApplicationId("1231913224148121");
+        FacebookSdk.sdkInitialize(getApplicationContext());
         facebookLoginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 val credential = FacebookAuthProvider.getCredential(loginResult.accessToken.token)
