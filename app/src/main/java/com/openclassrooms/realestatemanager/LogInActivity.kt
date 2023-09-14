@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -119,6 +120,13 @@ class LogInActivity : AppCompatActivity() {
 
             alertDialog.show()
         }
+
+        val createAccountButton = findViewById<Button>(R.id.createAccountButton)
+        createAccountButton.setOnClickListener {
+            val intent = Intent(this, CreateAccountActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }
 
