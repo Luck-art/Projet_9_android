@@ -1,3 +1,5 @@
+package com.openclassrooms.realestatemanager.estate_list
+
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -6,6 +8,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.adapters.RealEstateListAdapter
 import com.openclassrooms.realestatemanager.models.RealEstateListModel
 import com.openclassrooms.realestatemanager.service.GooglePlacesApi
+import com.openclassrooms.realestatemanager.utils.setupDrawer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +26,13 @@ class RealEstateListActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         fetchEstatesFromApi()
+
+        setupDrawer(
+            drawerLayoutId = R.id.drawer_layout,
+            navigationViewId = R.id.nav_view,
+            burgerMenuId = R.id.burger_menu
+        )
+
     }
 
     private fun fetchEstatesFromApi() {

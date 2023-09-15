@@ -18,5 +18,7 @@
         android:layout_gravity="end"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
-        android:src="@drawable/ic_menu_burger" />
+        android:clickable="true"
+        android:src="@drawable/ic_menu_burger"
+        android:focusable="true" />
 </androidx.appcompat.widget.Toolbar>

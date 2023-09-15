@@ -13,25 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- Votre MainActivity sans intent-filter -->
-        <activity android:name="com.openclassrooms.realestatemanager.MainActivity"
+        <activity android:name="com.openclassrooms.realestatemanager.other.MainActivity"
             android:exported="true">
         </activity>
 
-        <!-- Votre SecondActivity -->
-        <activity android:name="com.openclassrooms.realestatemanager.SecondActivity" />
+        <activity android:name="com.openclassrooms.realestatemanager.other.SecondActivity" />
 
-        <!-- Votre LogInActivity avec intent-filter -->
         <activity android:name="com.openclassrooms.realestatemanager.LogInActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Votre CreateAccountActivity -->
         <activity android:name="com.openclassrooms.realestatemanager.CreateAccountActivity" />
+
+        <activity android:name="com.openclassrooms.realestatemanager.estate_list.RealEstateListActivity"/>
 
         <meta-data android:name="com.facebook.sdk.ClientToken" android:value="28d53f45543f0de52d0256beba61af04"/>
         <meta-data
