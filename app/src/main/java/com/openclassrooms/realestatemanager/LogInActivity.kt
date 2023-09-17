@@ -24,6 +24,7 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.openclassrooms.realestatemanager.estate_list.RealEstateListActivity
 
 
 class LogInActivity : AppCompatActivity() {
@@ -53,6 +54,8 @@ class LogInActivity : AppCompatActivity() {
         val facebookLoginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
         val emailLoginButton = findViewById<Button>(R.id.emailLoginButton)
 
+        // Google
+
         if (googleSignInButton != null) {
             googleSignInButton.setOnClickListener {
                 val signInIntent = googleSignInClient.signInIntent
@@ -62,13 +65,20 @@ class LogInActivity : AppCompatActivity() {
             Log.e("LogInActivity", "googleSignInButton is null")
         }
 
+        // Facebook
+
         facebookLoginButton.setReadPermissions("email", "public_profile")
         FacebookSdk.setApplicationId("1231913224148121");
         FacebookSdk.sdkInitialize(getApplicationContext());
         facebookLoginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 val credential = FacebookAuthProvider.getCredential(loginResult.accessToken.token)
-                auth.signInWithCredential(credential)
+                auth.signInWithCredential(credential).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        val intent = Intent(this@LogInActivity, RealEstateListActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
             }
 
             override fun onCancel() {
@@ -90,6 +100,8 @@ class LogInActivity : AppCompatActivity() {
 
         })
 
+        // Email & password
+
         emailLoginButton.setOnClickListener {
             val dialogView = layoutInflater.inflate(R.layout.sign_in_mail_pop_up, null)
 
@@ -106,6 +118,8 @@ class LogInActivity : AppCompatActivity() {
                     auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
+                                val intent = Intent(this@LogInActivity, RealEstateListActivity::class.java)
+                                startActivity(intent)
                             } else {
                                 Snackbar.make(
                                     findViewById(R.id.logIn),
