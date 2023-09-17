@@ -15,14 +15,4 @@ interface RealEstateDao {
         @Insert
         fun insert(realEstate: RealEstate): Long
     }
-
-    @Dao
-    interface ImageDao {
-        @Query("SELECT * FROM images WHERE realEstateId = :realEstateId")
-        fun getImagesByRealEstateId(realEstateId: Long): List<Image>
-
-        @Insert
-        fun insert(image: Image)
-    }
-
 }
