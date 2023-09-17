@@ -25,43 +25,11 @@ class RealEstateListActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        fetchEstatesFromApi()
-
-        setupDrawer(
+        /*setupDrawer(
             drawerLayoutId = R.id.drawer_layout,
             navigationViewId = R.id.nav_view,
             burgerMenuId = R.id.burger_menu
-        )
+        )*/
 
-    }
-
-    private fun fetchEstatesFromApi() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://maps.googleapis.com/maps/api/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val api = retrofit.create(GooglePlacesApi::class.java)
-
-        val latitude = ""
-        val longitude = ""
-        val radius = 0
-        val placeType = ""
-        val apiKey = ""
-
-        api.getPlaces("$latitude,$longitude", radius, placeType, apiKey)
-            .enqueue(object : Callback<RealEstateListModel> {
-                override fun onResponse(
-                    call: Call<RealEstateListModel>,
-                    response: Response<RealEstateListModel>
-                ) {
-                    val estatesFromApi = response.body()
-                    recyclerView.adapter = RealEstateListAdapter(estatesFromApi)
-                }
-
-                override fun onFailure(call: Call<RealEstateListModel>, t: Throwable) {
-
-                }
-            })
     }
 }

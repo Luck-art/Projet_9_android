@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.openclassrooms.realestatemanager.database.tables.SellerName
 
-interface SellerNameDao {
     @Dao
     interface SellerNameDao {
         @Query("SELECT * FROM seller_name")
@@ -13,5 +12,7 @@ interface SellerNameDao {
 
         @Insert
         fun insert(sellerName: SellerName): Long
+
+        @Query("SELECT COUNT(*) FROM seller_name")
+        fun getRowCount(): Int
     }
-}
