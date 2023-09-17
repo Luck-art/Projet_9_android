@@ -12,17 +12,11 @@ interface RealEstateDao {
         @Query("SELECT * FROM real_estate")
         fun getAll(): List<RealEstate>
 
+        @Query("SELECT COUNT(*) FROM real_estate")
+        fun getRowCount(): Int
+
         @Insert
         fun insert(realEstate: RealEstate): Long
-    }
-
-    @Dao
-    interface ImageDao {
-        @Query("SELECT * FROM images WHERE realEstateId = :realEstateId")
-        fun getImagesByRealEstateId(realEstateId: Long): List<Image>
-
-        @Insert
-        fun insert(image: Image)
     }
 
 }
