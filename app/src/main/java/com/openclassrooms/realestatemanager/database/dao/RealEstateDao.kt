@@ -12,7 +12,11 @@ interface RealEstateDao {
         @Query("SELECT * FROM real_estate")
         fun getAll(): List<RealEstate>
 
+        @Query("SELECT COUNT(*) FROM real_estate")
+        fun getRowCount(): Int
+
         @Insert
         fun insert(realEstate: RealEstate): Long
     }
+
 }
