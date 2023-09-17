@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.CallbackManager
@@ -15,13 +16,17 @@ import com.facebook.FacebookSdk
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.openclassrooms.realestatemanager.estate_list.RealEstateListActivity
@@ -53,6 +58,7 @@ class LogInActivity : AppCompatActivity() {
         val googleSignInButton = findViewById<SignInButton>(R.id.googleSignInButton)
         val facebookLoginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
         val emailLoginButton = findViewById<Button>(R.id.emailLoginButton)
+
 
         // Google
 
@@ -139,6 +145,37 @@ class LogInActivity : AppCompatActivity() {
         createAccountButton.setOnClickListener {
             val intent = Intent(this, CreateAccountActivity::class.java)
             startActivity(intent)
+        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+
+        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        val account = task.getResult(ApiException::class.java)
+
+        if (requestCode == RC_SIGN_IN) {
+            try {
+                val intent = Intent(this, RealEstateListActivity::class.java)
+                startActivity(intent)
+            } catch (e: ApiException) {
+                Log.w("LogInActivity", "Google sign in failed", e)
+            }
+        }
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                val intent = Intent(this@LogInActivity, RealEstateListActivity::class.java)
+                startActivity(intent)
+            } else {
+                Snackbar.make(
+                    findViewById(R.id.logIn),
+                    "Authentication Failed.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
         }
 
     }
