@@ -6,7 +6,7 @@ import androidx.room.Query
 import com.openclassrooms.realestatemanager.database.tables.Images
 
 @Dao
-interface ImageDao {
+interface ImagesDao {
     @Query("SELECT * FROM images WHERE realEstateId = :realEstateId")
     fun getImagesByRealEstateId(realEstateId: Long): List<Images>
 
