@@ -1,13 +1,43 @@
 package com.openclassrooms.realestatemanager.estate_manager
 
-import com.openclassrooms.realestatemanager.database.dao.ImageDao
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
+import com.openclassrooms.realestatemanager.database.dao.ImagesDao
 import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.database.dao.SellerNameDao
 import com.openclassrooms.realestatemanager.models.RealEstateManagerModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
-class RealEstateManagerActivity {
-    suspend fun initializeDatabase(realEstateDao: RealEstateDao, imageDao: ImageDao, sellerNameDao: SellerNameDao) {
+class RealEstateManagerActivity : AppCompatActivity() {
+
+    private lateinit var realEstateDao: RealEstateDao
+    private lateinit var imageDao: ImagesDao
+    private lateinit var sellerNameDao: SellerNameDao
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.real_estate_manager)
+
+        val db = Room.databaseBuilder(
+            applicationContext,
+            RealEstateManagerDatabase::class.java, "database-name"
+        ).build()
+
+        realEstateDao = db.realEstateDao()
+        imageDao = db.imageDao()
+        sellerNameDao = db.sellerNameDao()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            initializeDatabase(realEstateDao, imageDao, sellerNameDao)
+        }
+    }
+    private suspend fun initializeDatabase(realEstateDao: RealEstateDao, imageDao: ImagesDao, sellerNameDao: SellerNameDao) {
         if (realEstateDao.getRowCount() == 0) {
             RealEstateManagerModel.getDefaultSellers().forEach { seller ->
                 sellerNameDao.insert(seller)
@@ -20,5 +50,4 @@ class RealEstateManagerActivity {
             }
         }
     }
-
 }
