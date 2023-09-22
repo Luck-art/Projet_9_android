@@ -2,8 +2,11 @@ package com.openclassrooms.realestatemanager.estate_manager
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
 import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
 import com.openclassrooms.realestatemanager.database.dao.ImagesDao
 import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
@@ -12,6 +15,7 @@ import com.openclassrooms.realestatemanager.models.RealEstateManagerModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class RealEstateManagerActivity : AppCompatActivity() {
@@ -35,6 +39,22 @@ class RealEstateManagerActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             initializeDatabase(realEstateDao, imageDao, sellerNameDao)
+        }
+
+        // Initialize RecyclerView
+        val recyclerView: RecyclerView = findViewById(R.id.realEstateRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            initializeDatabase(realEstateDao, imageDao, sellerNameDao)
+
+            val realEstates = realEstateDao.getAll()
+
+            val adapter = RealEstateManagerAdapter(realEstates)
+
+            withContext(Dispatchers.Main) {
+                recyclerView.adapter = adapter
+            }
         }
     }
     private suspend fun initializeDatabase(realEstateDao: RealEstateDao, imageDao: ImagesDao, sellerNameDao: SellerNameDao) {

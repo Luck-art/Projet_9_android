@@ -14,8 +14,8 @@ object RealEstateManagerModel {
 
     fun getDefaultRealEstates(): List<RealEstate> {
         return listOf(
-            RealEstate(0, "Tall house", "17 beautiful av, California", 100000),
-            RealEstate(1, "Sweet home", "5 George Washington blv, New York", 150000)
+            RealEstate(0, "Tall house", "17 beautiful av, California", "", "", 15000),
+            RealEstate(1, "Sweet home", "5 George Washington blv, New York", "", "", 150000)
         )
     }
 
