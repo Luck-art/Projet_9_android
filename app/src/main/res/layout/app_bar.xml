@@ -15,10 +15,45 @@
         android:id="@+id/burger_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="start"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:clickable="true"
         android:src="@drawable/ic_menu_burger"
         android:focusable="true" />
+
+    <ImageView
+        android:id="@+id/search_estate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_search"
+        android:focusable="true" />
+
+    <ImageView
+        android:id="@+id/edit_estate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_edit"
+        android:focusable="true" />
+
+
+    <ImageView
+        android:id="@+id/add_estate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_add"
+        android:focusable="true" />
+
 </androidx.appcompat.widget.Toolbar>
