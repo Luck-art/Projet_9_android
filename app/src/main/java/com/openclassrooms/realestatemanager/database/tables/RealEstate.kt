@@ -10,6 +10,5 @@ data class RealEstate(
     val img: String,
     val name: String,
     val description : String,
-    val location: String,
     val price: Int
 )
