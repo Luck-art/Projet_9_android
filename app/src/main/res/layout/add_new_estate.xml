@@ -33,6 +33,14 @@
         android:hint="Price"
         android:inputType="number" />
 
+    <Button
+        android:id="@+id/buttonAddEstate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFF"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_gravity="center"
+        android:text="OK"/>
 
 
 </LinearLayout>

@@ -29,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.openclassrooms.realestatemanager.estate_list.RealEstateListActivity
+import com.openclassrooms.realestatemanager.estate_manager.RealEstateManagerActivity
 
 
 class LogInActivity : AppCompatActivity() {
@@ -81,7 +81,7 @@ class LogInActivity : AppCompatActivity() {
                 val credential = FacebookAuthProvider.getCredential(loginResult.accessToken.token)
                 auth.signInWithCredential(credential).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        val intent = Intent(this@LogInActivity, RealEstateListActivity::class.java)
+                        val intent = Intent(this@LogInActivity, RealEstateManagerActivity::class.java)
                         startActivity(intent)
                     }
                 }
@@ -124,7 +124,7 @@ class LogInActivity : AppCompatActivity() {
                     auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
-                                val intent = Intent(this@LogInActivity, RealEstateListActivity::class.java)
+                                val intent = Intent(this@LogInActivity, RealEstateManagerActivity::class.java)
                                 startActivity(intent)
                             } else {
                                 Snackbar.make(
@@ -158,7 +158,7 @@ class LogInActivity : AppCompatActivity() {
 
         if (requestCode == RC_SIGN_IN) {
             try {
-                val intent = Intent(this, RealEstateListActivity::class.java)
+                val intent = Intent(this, RealEstateManagerActivity::class.java)
                 startActivity(intent)
             } catch (e: ApiException) {
                 Log.w("LogInActivity", "Google sign in failed", e)
@@ -167,7 +167,7 @@ class LogInActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                val intent = Intent(this@LogInActivity, RealEstateListActivity::class.java)
+                val intent = Intent(this@LogInActivity, RealEstateManagerActivity::class.java)
                 startActivity(intent)
             } else {
                 Snackbar.make(
