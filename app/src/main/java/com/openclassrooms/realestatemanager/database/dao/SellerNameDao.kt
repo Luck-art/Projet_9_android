@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.openclassrooms.realestatemanager.database.tables.SellerName
 
@@ -10,9 +11,9 @@ import com.openclassrooms.realestatemanager.database.tables.SellerName
         @Query("SELECT * FROM seller_name")
         fun getAll(): List<SellerName>
 
-        @Insert
-        fun insert(sellerName: SellerName): Long
+        @Insert(onConflict = OnConflictStrategy.IGNORE)
+         fun insert(sellerName: SellerName): Long
 
         @Query("SELECT COUNT(*) FROM seller_name")
-        fun getRowCount(): Int
+         fun getRowCount(): Int
     }

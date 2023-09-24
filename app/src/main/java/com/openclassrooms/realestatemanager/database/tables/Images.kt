@@ -6,12 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "images",
-    foreignKeys = [ForeignKey(
-        entity = RealEstate::class,
-        parentColumns = ["id"],
-        childColumns = ["realEstateId"],
-        onDelete = ForeignKey.CASCADE
-    )]
+
 )
 data class Images(
     @PrimaryKey(autoGenerate = true)
