@@ -12,10 +12,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AddNewEstate (
+class AddNewEstate(
     private val context: Context,
-    private val realEstateDao: RealEstateDao  )
-{
+    private val realEstateDao: RealEstateDao
+) {
     fun showAddPropertyDialog() {
         val builder = AlertDialog.Builder(context)
         val inflater = LayoutInflater.from(context)
@@ -35,20 +35,26 @@ class AddNewEstate (
             val img = editImage.text.toString()
             val name = editName.text.toString()
             val description = editDescription.text.toString()
-            val price = editPrice.text.toString().toInt()
+            val price = editPrice.text.toString().toIntOrNull() ?: 0
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val newEstate = RealEstate(0, img, name, description, price)
-                realEstateDao.insert(newEstate)
+            if(img.isNotBlank() && name.isNotBlank() && description.isNotBlank() && price > 0) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val newEstate = RealEstate(0, img, name, description, price)
+                    realEstateDao.insert(newEstate)
+                }
+
+                dialog.dismiss()
+            } else {
+                // Affichez un message d'erreur ou quelque chose pour indiquer à l'utilisateur que les données sont invalides.
             }
-
-            dialog.dismiss()
         }
 
-        builder.setNegativeButton("Annuler") { dialogInterface, i -> }
+        builder.setNegativeButton(context.getString(R.string.cancel)) { dialogInterface, _ ->
+            dialog.dismiss()
+        }
         dialog.show()
     }
-
 }
+
 
 

@@ -14,8 +14,8 @@ object RealEstateManagerModel {
 
     fun getDefaultRealEstates(): List<RealEstate> {
         return listOf(
-            RealEstate(id = 0, img ="Tall house", name = "17 beautiful av, California", description = "Tall house description", price = 15000),
-            RealEstate(id = 1, img = "Sweet home", name = "5 George Washington blv, New York", description = "Sweet home description",  price = 150000)
+            RealEstate(id = 0, img ="https://managecasa.com/wp-content/uploads/2021/02/shutterstock_1731900589-e1612637876218-995x460.jpg", name = "Tall house", description = "17 beautiful av, California", price = 15000),
+            RealEstate(id = 1, img = "https://www.trulia.com/pictures/thumbs_5/zillowstatic/fp/3cbe9c6ede199cab234379ca9901a7a9-full.jpg", name = "Sweet home", description = "5 George Washington blv, New York",  price = 150000)
         )
     }
 

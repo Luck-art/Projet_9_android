@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.estate_manager
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -27,37 +28,42 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RealEstateManagerActivity : AppCompatActivity() {
 
-
-
-    private  lateinit var  addButton: ImageView
+    private lateinit var addButton: ImageView
     val callViewModel : RealEstateManagerViewModel by viewModel()
-    //val addNewEstate = AddNewEstate(this, realEstateDao)
-
+    lateinit var addNewEstate: AddNewEstate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.real_estate_manager)
 
+        supportActionBar?.hide()
 
-       //addButton = findViewById(R.id.add_estate)
+        val addButton: ImageView = findViewById(R.id.add_estate)
+
+        val database = Room.databaseBuilder(
+            this,
+            RealEstateManagerDatabase::class.java,
+            "real_estate_manager_database"
+        ).build()
+
+        val realEstateDao = database.realEstateDao()
+
+        addNewEstate = AddNewEstate(this, realEstateDao)
 
         //  RecyclerView
         val recyclerView: RecyclerView = findViewById(R.id.realEstateRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-
         lifecycleScope.launchWhenStarted {
             callViewModel.viewState.collect {
                 val adapter = RealEstateManagerAdapter(it)
-
-                    recyclerView.adapter = adapter
+                recyclerView.adapter = adapter
             }
         }
 
-        /*addButton.setOnClickListener {
-           // addNewEstate.showAddPropertyDialog()
-        }*/
+        addButton.setOnClickListener {
+            addNewEstate.showAddPropertyDialog()
+        }
     }
-
-
 }
+
