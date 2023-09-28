@@ -1,8 +1,9 @@
 package com.openclassrooms.realestatemanager.view_models
 
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+import RealEstateManagerViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val ViewModelsModule = module {
-    viewModelOf(::RealEstateManagerViewModel)
+    viewModel { RealEstateManagerViewModel(get(), get(), get()) }
 }

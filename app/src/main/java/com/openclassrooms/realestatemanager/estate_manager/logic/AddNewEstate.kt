@@ -45,7 +45,7 @@ class AddNewEstate(
 
                 dialog.dismiss()
             } else {
-                // Affichez un message d'erreur ou quelque chose pour indiquer à l'utilisateur que les données sont invalides.
+
             }
         }
 
