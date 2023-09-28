@@ -48,7 +48,7 @@ class RealEstateManagerActivity : AppCompatActivity() {
 
         val realEstateDao = database.realEstateDao()
 
-        addNewEstate = AddNewEstate(this, realEstateDao)
+        addNewEstate = AddNewEstate(this, realEstateDao, callViewModel)
 
         //  RecyclerView
         val recyclerView: RecyclerView = findViewById(R.id.realEstateRecyclerView)

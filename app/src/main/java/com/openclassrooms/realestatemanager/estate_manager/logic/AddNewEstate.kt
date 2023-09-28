@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.estate_manager.logic
 
+import RealEstateManagerViewModel
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.Button
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 
 class AddNewEstate(
     private val context: Context,
-    private val realEstateDao: RealEstateDao
+    private val realEstateDao: RealEstateDao,
+    private val viewModel: RealEstateManagerViewModel
 ) {
     fun showAddPropertyDialog() {
         val builder = AlertDialog.Builder(context)
@@ -40,12 +42,12 @@ class AddNewEstate(
             if(img.isNotBlank() && name.isNotBlank() && description.isNotBlank() && price > 0) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val newEstate = RealEstate(0, img, name, description, price)
-                    realEstateDao.insert(newEstate)
+                    viewModel.addNewRealEstate(newEstate)
                 }
 
                 dialog.dismiss()
             } else {
-
+                print("error")
             }
         }
 
