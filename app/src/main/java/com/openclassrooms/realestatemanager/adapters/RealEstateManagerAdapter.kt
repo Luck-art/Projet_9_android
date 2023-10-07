@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestListener
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 
-class RealEstateManagerAdapter(private val dataSet: List<RealEstate>) :
+class RealEstateManagerAdapter(private val dataSet: List<RealEstate>,private val onItemClicked: (RealEstate, Boolean) -> Unit, private var isInEditMode: Boolean = false) :
     RecyclerView.Adapter<RealEstateManagerAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -38,6 +38,10 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>) :
             .load(item.img)
             .into(holder.estateImageView)
 
+
+        holder.itemView.setOnClickListener {
+           onItemClicked(item, isInEditMode)
+        }
         holder.estateTextView.text = item.name
         holder.estateDesciptionView.text = item.description
         holder.estatePriceView.text = item.price.toString()
@@ -52,7 +56,7 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>) :
                     isFirstResource: Boolean
                 ): Boolean {
                     Log.e("GlideError", "Load failed", e)
-                    return false // Permet aux autres écouteurs de recevoir l'événement.
+                    return false
                 }
 
                 override fun onResourceReady(
@@ -62,7 +66,7 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>) :
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    return false // Permet aux autres écouteurs de recevoir l'événement.
+                    return false
                 }
             })
 
@@ -70,6 +74,12 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>) :
 
 
     }
+
+    fun setEditMode(isInEditMode: Boolean) {
+        this.isInEditMode = isInEditMode
+        notifyDataSetChanged()
+    }
+
 
     override fun getItemCount() = dataSet.size
 }

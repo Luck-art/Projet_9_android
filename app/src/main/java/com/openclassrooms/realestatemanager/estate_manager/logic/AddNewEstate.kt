@@ -7,18 +7,12 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.openclassrooms.realestatemanager.estate_manager.RealEstateManagerActivity
 
 class AddNewEstate(
-    private val context: Context,
-    private val realEstateDao: RealEstateDao,
-    private val viewModel: RealEstateManagerViewModel
 ) {
-    fun showAddPropertyDialog() {
+    fun showAddPropertyDialog(viewModel: RealEstateManagerViewModel, context: Context, realEstate: RealEstate?) {
         val builder = AlertDialog.Builder(context)
         val inflater = LayoutInflater.from(context)
         val dialogLayout = inflater.inflate(R.layout.add_new_estate, null)
@@ -28,6 +22,19 @@ class AddNewEstate(
         val editDescription = dialogLayout.findViewById<EditText>(R.id.editDescription)
         val editPrice = dialogLayout.findViewById<EditText>(R.id.editPrice)
         val buttonAddEstate = dialogLayout.findViewById<Button>(R.id.buttonAddEstate)
+
+        realEstate?.img?.let {
+            editImage.setText(it)
+        }
+        realEstate?.name?.let {
+            editName.setText(it)
+        }
+        realEstate?.description?.let {
+            editDescription.setText(it)
+        }
+        realEstate?.price?.let {
+            editPrice.setText(it.toString())
+        }
 
         builder.setView(dialogLayout)
 
@@ -40,9 +47,18 @@ class AddNewEstate(
             val price = editPrice.text.toString().toIntOrNull() ?: 0
 
             if(img.isNotBlank() && name.isNotBlank() && description.isNotBlank() && price > 0) {
-                CoroutineScope(Dispatchers.IO).launch {
+                if (realEstate == null) {
                     val newEstate = RealEstate(0, img, name, description, price)
                     viewModel.addNewRealEstate(newEstate)
+                } else {
+                    viewModel.editRealEstate(
+                        realEstate.copy(
+                            img = img,
+                            name = name,
+                            description = description,
+                            price = price
+                        )
+                    )
                 }
 
                 dialog.dismiss()
