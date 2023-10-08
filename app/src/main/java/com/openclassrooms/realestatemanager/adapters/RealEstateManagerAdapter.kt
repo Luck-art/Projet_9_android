@@ -18,6 +18,8 @@ import com.openclassrooms.realestatemanager.database.tables.RealEstate
 class RealEstateManagerAdapter(private val dataSet: List<RealEstate>,private val onItemClicked: (RealEstate, Boolean) -> Unit, private var isInEditMode: Boolean = false) :
     RecyclerView.Adapter<RealEstateManagerAdapter.ViewHolder>() {
 
+    private var filteredDataSet: List<RealEstate> = dataSet
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val estateImageView: ImageView = view.findViewById(R.id.estate_img)
         val estateTextView: TextView = view.findViewById(R.id.estate_name)
@@ -73,6 +75,15 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>,private val
             .into(holder.estateImageView)
 
 
+    }
+
+    fun filterItems(text: String) {
+        filteredDataSet = if (text.isEmpty()) {
+            dataSet
+        } else {
+            dataSet.filter { it.name.contains(text, ignoreCase = true) }
+        }
+        notifyDataSetChanged()
     }
 
     fun setEditMode(isInEditMode: Boolean) {
