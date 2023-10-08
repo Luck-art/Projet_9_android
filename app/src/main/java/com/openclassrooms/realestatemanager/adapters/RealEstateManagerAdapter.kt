@@ -34,7 +34,7 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>,private val
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = dataSet[position]
+        val item = filteredDataSet[position]
 
         Glide.with(holder.estateImageView.context)
             .load(item.img)
@@ -77,6 +77,8 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>,private val
 
     }
 
+    // Search filter
+
     fun filterItems(text: String) {
         filteredDataSet = if (text.isEmpty()) {
             dataSet
@@ -92,5 +94,5 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>,private val
     }
 
 
-    override fun getItemCount() = dataSet.size
+    override fun getItemCount() = filteredDataSet.size
 }

@@ -3,7 +3,9 @@ package com.openclassrooms.realestatemanager.estate_manager
 import RealEstateManagerViewModel
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -18,6 +20,7 @@ import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
 import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.estate_manager.logic.AddNewEstate
+import com.openclassrooms.realestatemanager.estate_manager.logic.SearchFilter
 import com.openclassrooms.realestatemanager.models.DialogState
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -32,6 +35,11 @@ class RealEstateManagerActivity : AppCompatActivity() {
     private lateinit var realEstateRecyclerView: RecyclerView
     lateinit var addNewEstate: AddNewEstate
     private var isInEditMode = false
+
+    private lateinit var adapter: RealEstateManagerAdapter
+
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -82,9 +90,11 @@ class RealEstateManagerActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        val searchIcon: ImageView = findViewById(R.id.search_estate)
+        val searchEditText: EditText = findViewById(R.id.searchEditText)
+        val searchFilter by lazy { SearchFilter(adapter) }
         val addButton: ImageView = findViewById(R.id.add_estate)
         val editButton: ImageView = findViewById(R.id.edit_estate)
-
         val database = Room.databaseBuilder(
             this,
             RealEstateManagerDatabase::class.java,
@@ -118,7 +128,7 @@ class RealEstateManagerActivity : AppCompatActivity() {
 
         lifecycleScope.launchWhenStarted {
             callViewModel.viewState.collect { list ->
-                val adapter = RealEstateManagerAdapter(list, ::onEstateItemClicked)
+                adapter = RealEstateManagerAdapter(list, ::onEstateItemClicked)
                 recyclerView.adapter = adapter
             }
         }
@@ -129,6 +139,13 @@ class RealEstateManagerActivity : AppCompatActivity() {
 
         editButton.setOnClickListener {
             showSelectEstateDialog()
+        }
+
+
+
+        searchIcon.setOnClickListener {
+            Log.d("SearchIcon", "Icon clicked")
+            searchFilter.toggleSearchBar(searchEditText)
         }
 
         callViewModel.showDialog.observe(this) { shouldShow ->
