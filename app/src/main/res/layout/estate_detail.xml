@@ -49,10 +49,16 @@
                 android:layout_gravity="center">
 
                 <VideoView
-                    android:id="@+id/estate_video"
+                    android:id="@+id/main_display_video"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center" />
+
+                <ImageView
+                    android:id="@+id/main_display_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop" />
 
                 <ImageButton
                     android:id="@+id/playButton"
