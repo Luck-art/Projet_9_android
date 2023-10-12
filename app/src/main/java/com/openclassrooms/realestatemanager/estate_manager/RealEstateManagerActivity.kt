@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.estate_manager
 
 import RealEstateManagerViewModel
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
 import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
+import com.openclassrooms.realestatemanager.details.EstateDetailsActivity
 import com.openclassrooms.realestatemanager.estate_manager.logic.AddNewEstate
 import com.openclassrooms.realestatemanager.estate_manager.logic.SearchFilter
 import com.openclassrooms.realestatemanager.models.DialogState
@@ -37,6 +39,9 @@ class RealEstateManagerActivity : AppCompatActivity() {
     private var isInEditMode = false
 
     private lateinit var adapter: RealEstateManagerAdapter
+
+
+
 
 
 
@@ -90,6 +95,7 @@ class RealEstateManagerActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+
         val searchIcon: ImageView = findViewById(R.id.search_estate)
         val searchEditText: EditText = findViewById(R.id.searchEditText)
         val searchFilter by lazy { SearchFilter(adapter) }
@@ -114,9 +120,12 @@ class RealEstateManagerActivity : AppCompatActivity() {
             if (isInEditMode) {
                 callViewModel.selectRealEstateForEditing(realEstate)
             } else {
-
+                val intent = Intent(this, EstateDetailsActivity::class.java)
+                intent.putExtra("estateName", realEstate.name)
+                startActivity(intent)
             }
         }
+
 
 
 

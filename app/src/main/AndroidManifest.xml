@@ -24,6 +24,8 @@
 
         <activity android:name="com.openclassrooms.realestatemanager.estate_manager.RealEstateManagerActivity" />
 
+        <activity android:name=".details.EstateDetailsActivity"/>
+
         <activity android:name="com.openclassrooms.realestatemanager.LogInActivity"
             android:exported="true">
 
