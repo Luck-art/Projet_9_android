@@ -12,7 +12,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Image principale du bien immobilier -->
             <ImageView
                 android:id="@+id/estate_imageview"
                 android:layout_width="match_parent"
@@ -20,7 +19,6 @@
                 android:layout_gravity="center"
                 android:scaleType="centerCrop" />
 
-            <!-- Nom -->
             <TextView
                 android:id="@+id/estate_name"
                 android:layout_width="wrap_content"
@@ -29,7 +27,6 @@
                 android:layout_marginTop="8dp"
                 android:textSize="16sp" />
 
-            <!-- Description -->
             <TextView
                 android:id="@+id/estate_description"
                 android:layout_width="match_parent"
@@ -37,7 +34,6 @@
                 android:layout_marginTop="8dp"
                 android:textSize="16sp" />
 
-            <!-- Prix -->
             <TextView
                 android:id="@+id/estate_price"
                 android:layout_width="wrap_content"
@@ -46,7 +42,6 @@
                 android:layout_marginTop="8dp"
                 android:textSize="16sp" />
 
-            <!-- Pour la vidéo -->
 
             <FrameLayout
                 android:layout_width="match_parent"
