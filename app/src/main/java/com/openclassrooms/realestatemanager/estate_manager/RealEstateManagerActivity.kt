@@ -122,6 +122,9 @@ class RealEstateManagerActivity : AppCompatActivity() {
             } else {
                 val intent = Intent(this, EstateDetailsActivity::class.java)
                 intent.putExtra("estateName", realEstate.name)
+                intent.putExtra("estateImageUrl", realEstate.img)
+                intent.putExtra("estateDescription", realEstate.description)
+                intent.putExtra("estatePrice", realEstate.price.toString())
                 startActivity(intent)
             }
         }
