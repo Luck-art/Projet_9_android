@@ -25,7 +25,8 @@ class EstateDetailsActivity : AppCompatActivity() {
 
     val callViewModel : EstateDetailsViewModel by viewModel()
 
-
+    lateinit var playButton: ImageButton
+    lateinit var pauseButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -40,6 +41,8 @@ class EstateDetailsActivity : AppCompatActivity() {
         val imagesRecyclerView = findViewById<RecyclerView>(R.id.image_list)
         imagesRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
+        playButton = findViewById(R.id.playButton)
+        pauseButton = findViewById(R.id.pauseButton)
 
         lifecycleScope.launchWhenStarted {
             callViewModel.state.collect { viewState ->
@@ -59,6 +62,9 @@ class EstateDetailsActivity : AppCompatActivity() {
                             val videoUri = Uri.parse(mediaItem.uri)
                             videoView.setVideoURI(videoUri)
                             videoView.start()
+
+                            playButton.visibility = View.VISIBLE
+                            pauseButton.visibility = View.GONE
                         } else {
                             findViewById<VideoView>(R.id.main_display_video).visibility = View.GONE
                             val imageView = findViewById<ImageView>(R.id.main_display_image)
@@ -66,8 +72,12 @@ class EstateDetailsActivity : AppCompatActivity() {
                             Glide.with(this@EstateDetailsActivity)
                                 .load(mediaItem.uri)
                                 .into(imageView)
+
+                            playButton.visibility = View.GONE
+                            pauseButton.visibility = View.GONE
                         }
                     }
+
 
                     imagesRecyclerView.adapter = adapter
                 }
@@ -82,13 +92,6 @@ class EstateDetailsActivity : AppCompatActivity() {
 
 
 
-        /*val mediaController = MediaController(this)
-        videoView.setMediaController(mediaController)
-        mediaController.setAnchorView(videoView)*/
-
-
-        val playButton: ImageButton = findViewById(R.id.playButton)
-        val pauseButton: ImageButton = findViewById(R.id.pauseButton)
 
         playButton.setOnClickListener {
             videoView.start()
