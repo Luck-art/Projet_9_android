@@ -26,6 +26,9 @@ import kotlinx.coroutines.flow.Flow
         @Query("SELECT COUNT(*) FROM real_estate")
          fun getRowCount(): Int
 
+        @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
+        fun observeOneItem(id : Long): Flow<RealEstate?>
+
         @Update
         fun update(realEstate: RealEstate): Unit
 

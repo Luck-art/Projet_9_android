@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.details
 
+import EstateDetailsAdapter
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
@@ -10,14 +11,19 @@ import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import android.widget.VideoView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.adapters.EstateDetailsAdapter
+import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
+import com.openclassrooms.realestatemanager.models.EstateDetailsModel
+import com.openclassrooms.realestatemanager.view_models.EstateDetailsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EstateDetailsActivity : AppCompatActivity() {
 
+    val callViewModel : EstateDetailsViewModel by viewModel()
 
 
 
@@ -27,39 +33,59 @@ class EstateDetailsActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.estate_detail)
-
-        val estateName = intent.getStringExtra("estateName")
         val textView = findViewById<TextView>(R.id.estate_name)
-        textView.text = estateName
-
-        val estateDescription = intent.getStringExtra("estateDescription")
         val descriptionTextView = findViewById<TextView>(R.id.estate_description)
-        descriptionTextView.text = estateDescription
-
-        val estatePrice = intent.getStringExtra("estatePrice")
         val priceTextView = findViewById<TextView>(R.id.estate_price)
-        priceTextView.text = estatePrice
-
-        val estateImageUrl = intent.getStringExtra("estateImageUrl")
         val imageView = findViewById<ImageView>(R.id.estate_imageview)
+        val imagesRecyclerView = findViewById<RecyclerView>(R.id.image_list)
+        imagesRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        Glide.with(this)
-            .load(estateImageUrl)
-            .into(imageView)
 
-        val videoView = findViewById<VideoView>(R.id.estate_video)
+        lifecycleScope.launchWhenStarted {
+            callViewModel.state.collect { viewState ->
+                viewState?.realEstate?.let {
+                    textView.text = it.name
+                    descriptionTextView.text = it.description
+                    priceTextView.text = it.price.toString()
+                    Glide.with(this@EstateDetailsActivity)
+                        .load(it.img)
+                        .into(imageView)
 
-        val videoUri = Uri.parse("https://player.vimeo.com/external/539011265.sd.mp4?s=ac4e448f51f5a518ea1b971f79fc7a9986f2a359&profile_id=164&oauth2_token_id=57447761")
+                    val adapter = EstateDetailsAdapter(mediaItems = viewState.medias) { mediaItem ->
+                        if (mediaItem.type == "video") {
+                            findViewById<ImageView>(R.id.main_display_image).visibility = View.GONE
+                            val videoView = findViewById<VideoView>(R.id.main_display_video)
+                            videoView.visibility = View.VISIBLE
+                            val videoUri = Uri.parse(mediaItem.uri)
+                            videoView.setVideoURI(videoUri)
+                            videoView.start()
+                        } else {
+                            findViewById<VideoView>(R.id.main_display_video).visibility = View.GONE
+                            val imageView = findViewById<ImageView>(R.id.main_display_image)
+                            imageView.visibility = View.VISIBLE
+                            Glide.with(this@EstateDetailsActivity)
+                                .load(mediaItem.uri)
+                                .into(imageView)
+                        }
+                    }
 
-        videoView.setVideoURI(videoUri)
+                    imagesRecyclerView.adapter = adapter
+                }
+            }
+        }
+
+
+
+
+
+        val videoView = findViewById<VideoView>(R.id.main_display_video)
+
+
 
         val mediaController = MediaController(this)
         videoView.setMediaController(mediaController)
         mediaController.setAnchorView(videoView)
 
-        videoView.setOnCompletionListener {
-            videoView.start()
-        }
 
         val playButton: ImageButton = findViewById(R.id.playButton)
         val pauseButton: ImageButton = findViewById(R.id.pauseButton)
@@ -75,23 +101,6 @@ class EstateDetailsActivity : AppCompatActivity() {
             playButton.visibility = View.VISIBLE
             pauseButton.visibility = View.GONE
         }
-
-
-
-
-        val imagesRecyclerView = findViewById<RecyclerView>(R.id.image_list)
-
-        val estateImageUrls = listOf(
-            "https://images.pexels.com/photos/126271/pexels-photo-126271.jpeg?auto=compress&cs=tinysrgb&w=1600",
-            "https://images.pexels.com/photos/276554/pexels-photo-276554.jpeg?auto=compress&cs=tinysrgb&w=1600",
-            "https://images.pexels.com/photos/5563472/pexels-photo-5563472.jpeg?auto=compress&cs=tinysrgb&w=1600",
-            "https://images.pexels.com/photos/1486785/pexels-photo-1486785.jpeg?auto=compress&cs=tinysrgb&w=1600"
-        )
-
-        val adapter = EstateDetailsAdapter(imageUrls = estateImageUrls)
-        imagesRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        imagesRecyclerView.adapter = adapter
-
 
 
     }
