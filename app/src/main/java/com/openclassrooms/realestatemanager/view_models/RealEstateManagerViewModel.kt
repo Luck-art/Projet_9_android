@@ -6,12 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.database.dao.ImagesDao
 import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.database.dao.SellerNameDao
+import com.openclassrooms.realestatemanager.database.tables.Media
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.models.DialogState
 import com.openclassrooms.realestatemanager.models.RealEstateManagerModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -119,7 +121,12 @@ class RealEstateManagerViewModel(
         showDialog.value = null
     }
 
+
+
+
+
     val viewState = realEstateDao.getAll()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
 }

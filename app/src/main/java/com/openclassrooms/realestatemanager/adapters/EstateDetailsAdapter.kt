@@ -7,11 +7,12 @@ import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.database.tables.Media
 import com.openclassrooms.realestatemanager.models.EstateDetailsModel
 
 class EstateDetailsAdapter(
-    private val mediaItems: List<EstateDetailsModel.MediaItem>,
-    private val onItemClicked: (EstateDetailsModel.MediaItem) -> Unit
+    private val mediaItems: List<Media>,
+    private val onItemClicked: (Media) -> Unit
 ) : RecyclerView.Adapter<EstateDetailsAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
@@ -39,16 +40,14 @@ class EstateDetailsAdapter(
             holder.imageView.visibility = View.VISIBLE
             holder.videoView.visibility = View.GONE
             Glide.with(holder.imageView.context)
-                .load(mediaItem.url)
+                .load(mediaItem.uri)
                 .into(holder.imageView)
         } else if (mediaItem.type == "video") {
             holder.imageView.visibility = View.GONE
             holder.videoView.visibility = View.VISIBLE
-            // Pour afficher une vignette, vous pouvez utiliser une bibliothèque tierce ou une logique spécifique à votre application
-            // Note: Cette partie est un exemple simplifié, vous aurez besoin de déterminer comment obtenir des vignettes pour vos vidéos.
-            val videoUri = Uri.parse(mediaItem.url)
+            val videoUri = Uri.parse(mediaItem.uri)
             holder.videoView.setVideoURI(videoUri)
-            holder.videoView.seekTo(1)  // Cela peut être utilisé pour obtenir une vignette de la première seconde de la vidéo
+            holder.videoView.seekTo(1)
         }
     }
 

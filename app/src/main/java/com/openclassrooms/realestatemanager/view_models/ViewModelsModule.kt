@@ -6,4 +6,5 @@ import org.koin.dsl.module
 
 val ViewModelsModule = module {
     viewModel { RealEstateManagerViewModel(get(), get(), get()) }
+    viewModel { EstateDetailsViewModel(get(), get(), get()) }
 }
