@@ -82,9 +82,9 @@ class EstateDetailsActivity : AppCompatActivity() {
 
 
 
-        val mediaController = MediaController(this)
+        /*val mediaController = MediaController(this)
         videoView.setMediaController(mediaController)
-        mediaController.setAnchorView(videoView)
+        mediaController.setAnchorView(videoView)*/
 
 
         val playButton: ImageButton = findViewById(R.id.playButton)
