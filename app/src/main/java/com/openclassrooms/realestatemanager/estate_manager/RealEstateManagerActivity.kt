@@ -11,6 +11,8 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +31,6 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-
 class RealEstateManagerActivity : AppCompatActivity() {
 
     private lateinit var addButton: ImageView
@@ -39,6 +40,10 @@ class RealEstateManagerActivity : AppCompatActivity() {
     private var isInEditMode = false
 
     private lateinit var adapter: RealEstateManagerAdapter
+    lateinit var burgerMenu: ImageView
+    lateinit var drawerLayout: DrawerLayout
+
+
 
 
 
@@ -91,9 +96,14 @@ class RealEstateManagerActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.real_estate_manager)
 
+        burgerMenu = findViewById(R.id.burger_menu)
+        drawerLayout = findViewById(R.id.drawer_layout)
+
         supportActionBar?.hide()
+
 
 
         val searchIcon: ImageView = findViewById(R.id.search_estate)
@@ -175,7 +185,22 @@ class RealEstateManagerActivity : AppCompatActivity() {
             }
         }
 
+
+
+
+        burgerMenu.setOnClickListener {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+
+
+
     }
+
+
 
 
     private fun updateEditModeInAdapter() {
@@ -184,4 +209,3 @@ class RealEstateManagerActivity : AppCompatActivity() {
 
 
 }
-
