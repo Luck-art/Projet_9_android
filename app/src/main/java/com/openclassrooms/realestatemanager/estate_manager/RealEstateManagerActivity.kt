@@ -18,6 +18,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.openclassrooms.realestatemanager.LogInActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
 import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
@@ -198,6 +204,33 @@ class RealEstateManagerActivity : AppCompatActivity() {
 
 
 
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.drawer_logout -> {
+                    logout()
+                    true
+                }
+                else -> false
+            }
+        }
+
+
+
+    }
+
+
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+
+        GoogleSignIn.getClient(this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()).signOut()
+
+        LoginManager.getInstance().logOut()
+
+        val intent = Intent(this, LogInActivity::class.java)
+        startActivity(intent)
+
+        finish()
     }
 
 
