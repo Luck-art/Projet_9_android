@@ -63,12 +63,7 @@ class RealEstateManagerViewModel(
             RealEstateManagerModel.getDefaultSellers().forEach { seller ->
                 sellerNameDao.insert(seller)
             }
-            RealEstateManagerModel.getDefaultRealEstates().forEach { estate ->
-                realEstateDao.insert(estate)
-            }
-            RealEstateManagerModel.getDefaultImages().forEach { image ->
-                imageDao.insert(image)
-            }
+            RealEstateManagerModel.insertDefaultRealEstates(realEstateDao, imageDao)
         }
     }
 
