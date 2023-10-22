@@ -105,6 +105,12 @@ class EstateDetailsActivity : AppCompatActivity() {
             pauseButton.visibility = View.GONE
         }
 
+        val mapButton: ImageButton = findViewById(R.id.btn_map)
+
+        mapButton.setOnClickListener {
+
+        }
+
 
     }
 }
