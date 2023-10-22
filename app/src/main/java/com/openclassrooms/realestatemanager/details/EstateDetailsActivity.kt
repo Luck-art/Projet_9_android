@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.details
 
 import EstateDetailsAdapter
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
+import com.openclassrooms.realestatemanager.map.EstateMapActivity
 import com.openclassrooms.realestatemanager.models.EstateDetailsModel
 import com.openclassrooms.realestatemanager.view_models.EstateDetailsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -108,8 +110,11 @@ class EstateDetailsActivity : AppCompatActivity() {
         val mapButton: ImageButton = findViewById(R.id.btn_map)
 
         mapButton.setOnClickListener {
-
+            val intent = Intent(this, EstateMapActivity::class.java)
+            // Ne pas oublier de rajouter l'adresse
+            startActivity(intent)
         }
+
 
 
     }
