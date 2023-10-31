@@ -1,3 +1,4 @@
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.map
 
 
 class RealEstateManagerViewModel(
+    private val context: Context,
     private val realEstateDao: RealEstateDao,
     private val imageDao: ImagesDao,
     private val sellerNameDao: SellerNameDao
@@ -34,7 +36,7 @@ class RealEstateManagerViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            initializeDatabase()
+            initializeDatabase(context)
         }
     }
 
@@ -58,12 +60,12 @@ class RealEstateManagerViewModel(
     }
 
 
-    private suspend fun initializeDatabase() {
+    private suspend fun initializeDatabase(context: Context) {
         if (realEstateDao.getRowCount() == 0) {
             RealEstateManagerModel.getDefaultSellers().forEach { seller ->
                 sellerNameDao.insert(seller)
             }
-            RealEstateManagerModel.insertDefaultRealEstates(realEstateDao, imageDao)
+            RealEstateManagerModel.insertDefaultRealEstates(realEstateDao, imageDao, context)
         }
     }
 
