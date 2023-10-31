@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.database.tables
 
+import android.location.Address
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -10,5 +11,8 @@ data class RealEstate(
     val img: String,
     val name: String,
     val description : String,
-    val price: Int
+    val address: String,
+    val price: Int,
+    val latitude: Double? = null,
+    val longitude: Double? = null
 )

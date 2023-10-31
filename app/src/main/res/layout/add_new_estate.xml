@@ -25,6 +25,12 @@
         android:layout_height="wrap_content"
         android:hint="Description" />
 
+    <EditText
+        android:id="@+id/editAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Address" />
+
 
     <EditText
         android:id="@+id/editPrice"

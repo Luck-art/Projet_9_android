@@ -1,10 +1,13 @@
 package com.openclassrooms.realestatemanager.models
 
+import android.content.Context
+import android.location.Geocoder
 import com.openclassrooms.realestatemanager.database.dao.ImagesDao
 import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.database.tables.Media
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.database.tables.SellerName
+import java.util.Locale
 
 object RealEstateManagerModel {
     fun getDefaultSellers(): List<SellerName> {
@@ -14,13 +17,39 @@ object RealEstateManagerModel {
         )
     }
 
-    fun insertDefaultRealEstates(dao: RealEstateDao, imageDao: ImagesDao) {
+    fun getCoordinatesFromAddress(context: Context, addressString: String): Pair<Double, Double> {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        try {
+            val addressList: List<android.location.Address>? = geocoder.getFromLocationName(addressString, 1)
+            if (!addressList.isNullOrEmpty()) {
+                val address = addressList[0]
+                return Pair(address.latitude, address.longitude)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return Pair(0.0, 0.0)
+    }
+
+
+
+    fun insertDefaultRealEstates(dao: RealEstateDao, imageDao: ImagesDao, context: Context) {
+
+
+        val (latitude, longitude) = getCoordinatesFromAddress(context, "2620 Main St, Santa Monica, CA 90405")
+        val (latitude2, longitude2) = getCoordinatesFromAddress(context, "6801 Hollywood Blvd, Los Angeles, CA 90028")
+        val (latitude3, longitude3) = getCoordinatesFromAddress(context, "30 Rockefeller Plaza, New York, NY 10112")
+
+
         val id1 = dao.insert(
             RealEstate(
                 img = "https://managecasa.com/wp-content/uploads/2021/02/shutterstock_1731900589-e1612637876218-995x460.jpg",
                 name = "Tall house",
-                description = "17 beautiful av, California",
-                price = 15000
+                description = "the very tall house",
+                address = "2620 Main St, Santa Monica, CA 90405",
+                price = 15000,
+                latitude = latitude,
+                longitude = longitude,
             )
         )
         imageDao.insert(
@@ -56,15 +85,18 @@ object RealEstateManagerModel {
             RealEstate(
                 img = "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600",
                 name = "Modern house",
-                description = "25 beautiful av, California",
-                price = 15000
+                description = "modern style",
+                address = "6801 Hollywood Blvd, Los Angeles, CA 90028",
+                price = 15000,
+                latitude = latitude2,
+                longitude = longitude2,
             )
         )
         imageDao.insert(
             Media(
                 0,
                 "https://images.pexels.com/photos/323776/pexels-photo-323776.jpeg?auto=compress&cs=tinysrgb&w=600",
-                "Modern house, California",
+                "modern house",
                 realEstateId = id2,
                 type = "image"
             ),
@@ -91,9 +123,12 @@ object RealEstateManagerModel {
         val id3 = dao.insert(
             RealEstate(
                 img = "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600",
-                name = "Modern house",
-                description = "25 beautiful av, California",
-                price = 15000
+                name = "Sweet home",
+                description = "sweety !",
+                address = "30 Rockefeller Plaza, New York, NY 10112",
+                price = 15000,
+                latitude = latitude3,
+                longitude = longitude3,
             )
         )
         imageDao.insert(
