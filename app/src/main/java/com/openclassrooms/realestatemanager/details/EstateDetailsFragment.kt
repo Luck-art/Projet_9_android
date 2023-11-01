@@ -33,6 +33,16 @@ class EstateDetailsFragment : Fragment() {
     lateinit var playButton: ImageButton
     lateinit var pauseButton: ImageButton
 
+    companion object {
+        fun newInstance(estate_id: Long): EstateDetailsFragment{
+            val args = Bundle()
+            args.putLong("estate_id", estate_id)
+            val fragment = EstateDetailsFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

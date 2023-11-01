@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
@@ -20,6 +21,7 @@ import com.openclassrooms.realestatemanager.LogInActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.details.EstateDetailsActivity
+import com.openclassrooms.realestatemanager.details.EstateDetailsFragment
 import com.openclassrooms.realestatemanager.estate_manager.logic.SearchFilter
 
 
@@ -122,10 +124,21 @@ class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment
         finish()
     }
 
+
     override fun onItemClicked(realEstate: RealEstate) {
-        val intent = Intent(this, EstateDetailsActivity::class.java)
-        intent.putExtra("estate_id", realEstate.id)
-        startActivity(intent)
+        val isTablet = findViewById<View>(R.id.fragment_container_detail) != null
+        if(isTablet) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_detail, EstateDetailsFragment.newInstance(
+                    estate_id = realEstate.id,
+                ))
+                .commitAllowingStateLoss()
+
+        } else {
+            val intent = Intent(this, EstateDetailsActivity::class.java)
+            intent.putExtra("estate_id", realEstate.id)
+            startActivity(intent)
+        }
     }
 
 }
