@@ -9,12 +9,19 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
-import com.openclassrooms.realestatemanager.estate_manager.RealEstateManagerActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
 
 class AddNewEstate(
 ) {
-    fun showAddPropertyDialog(viewModel: RealEstateManagerViewModel, context: Context, realEstate: RealEstate?) {
+    fun showAddPropertyDialog(
+        viewModel: RealEstateManagerViewModel,
+        context: Context,
+        realEstate: RealEstate?
+    ) {
         val builder = AlertDialog.Builder(context)
         val inflater = LayoutInflater.from(context)
         val dialogLayout = inflater.inflate(R.layout.add_new_estate, null)
@@ -56,31 +63,45 @@ class AddNewEstate(
             if (img.isNotBlank() && name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && price > 0) {
                 try {
                     val geocoder = Geocoder(context, Locale.getDefault())
-                    val addressList: List<android.location.Address>? = geocoder.getFromLocationName(address, 1)
 
-                    if (addressList != null && !addressList.isEmpty()) {
-                        val returnedAddress: android.location.Address = addressList[0]
-                        val latitude = returnedAddress.latitude
-                        val longitude = returnedAddress.longitude
+                    GlobalScope.launch(Dispatchers.IO) {
+                        //
+                        val addressList: List<android.location.Address>? = geocoder.getFromLocationName(address, 1)
+                        withContext(Dispatchers.Main) {
+                            if (addressList != null && !addressList.isEmpty()) {
+                                val returnedAddress: android.location.Address = addressList[0]
+                                val latitude = returnedAddress.latitude
+                                val longitude = returnedAddress.longitude
 
-                        val newEstate = RealEstate(0, img, name, description, address, price,latitude = latitude, longitude = longitude)
-
-                        if (realEstate == null) {
-                            viewModel.addNewRealEstate(newEstate)
-                        } else {
-                            viewModel.editRealEstate(
-                                realEstate.copy(
-                                    img = img,
-                                    name = name,
-                                    description = description,
-                                    address = address,
-                                    price = price,
+                                val newEstate = RealEstate(
+                                    0,
+                                    img,
+                                    name,
+                                    description,
+                                    address,
+                                    price,
+                                    latitude = latitude,
+                                    longitude = longitude
                                 )
-                            )
+
+                                if (realEstate == null) {
+                                    viewModel.addNewRealEstate(newEstate)
+                                } else {
+                                    viewModel.editRealEstate(
+                                        realEstate.copy(
+                                            img = img,
+                                            name = name,
+                                            description = description,
+                                            address = address,
+                                            price = price,
+                                        )
+                                    )
+                                }
+                                dialog.dismiss()
+                            } else {
+                                print("Adresse non trouvée")
+                            }
                         }
-                        dialog.dismiss()
-                    } else {
-                        print("Adresse non trouvée")
                     }
                 } catch (e: Exception) {
                     print("Erreur lors du géocodage: ${e.message}")

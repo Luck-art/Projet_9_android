@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.EditText
 import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
 
-class SearchFilter(private val adapter: RealEstateManagerAdapter) {
+class SearchFilter(val onTextChanged: (String) -> Unit) {
 
     private var isSearchBarVisible = false
 
@@ -20,7 +20,7 @@ class SearchFilter(private val adapter: RealEstateManagerAdapter) {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    adapter.filterItems(s.toString())
+                    onTextChanged(s.toString())
                 }
 
                 override fun afterTextChanged(s: Editable?) {
