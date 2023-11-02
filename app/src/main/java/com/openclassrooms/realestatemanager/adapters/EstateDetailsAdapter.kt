@@ -3,17 +3,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.Media
+import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.models.EstateDetailsModel
 
 class EstateDetailsAdapter(
+    private val currentEstate: RealEstate,
     private val mediaItems: List<Media>,
     private val onItemClicked: (Media) -> Unit
 ) : RecyclerView.Adapter<EstateDetailsAdapter.ViewHolder>() {
+
 
     interface OnItemClickListener {
         fun onItemClick(url: String)
@@ -49,6 +53,7 @@ class EstateDetailsAdapter(
             holder.videoView.setVideoURI(videoUri)
             holder.videoView.seekTo(1)
         }
+
     }
 
     override fun getItemCount() = mediaItems.size

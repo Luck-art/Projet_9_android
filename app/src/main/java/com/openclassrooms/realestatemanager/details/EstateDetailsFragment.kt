@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
+import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.map.EstateMapActivity
 import com.openclassrooms.realestatemanager.models.EstateDetailsModel
 import com.openclassrooms.realestatemanager.view_models.EstateDetailsViewModel
@@ -59,50 +61,74 @@ class EstateDetailsFragment : Fragment() {
         val priceTextView = view.findViewById<TextView>(R.id.estate_price)
         val imageView = view.findViewById<ImageView>(R.id.estate_imageview)
         val imagesRecyclerView = view.findViewById<RecyclerView>(R.id.image_list)
+        val statusTextView: TextView = view.findViewById(R.id.estate_status)
+        Log.d("DEBUG", "Status TextView: $statusTextView")
+
+
         imagesRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         playButton = view.findViewById(R.id.playButton)
         pauseButton = view.findViewById(R.id.pauseButton)
 
-        lifecycleScope.launchWhenStarted {
-            callViewModel.state.collect { viewState ->
-                viewState?.realEstate?.let {
-                    textView.text = it.name
-                    descriptionTextView.text = it.description
-                    priceTextView.text = it.price.toString()
-                    Glide.with(this@EstateDetailsFragment)
-                        .load(it.img)
-                        .into(imageView)
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        callViewModel.state.collect { viewState ->
+                viewState?.let { vs ->
+                    vs.realEstate?.let {
+                        textView.text = it.name
+                        descriptionTextView.text = it.description
+                        priceTextView.text = it.price.toString()
+                        Glide.with(this@EstateDetailsFragment)
+                            .load(it.img)
+                            .into(imageView)
 
-                    val adapter = EstateDetailsAdapter(mediaItems = viewState.medias) { mediaItem ->
-                        if (mediaItem.type == "video") {
-                            view.findViewById<ImageView>(R.id.main_display_image).visibility = View.GONE
-                            val videoView = view.findViewById<VideoView>(R.id.main_display_video)
-                            videoView.visibility = View.VISIBLE
-                            val videoUri = Uri.parse(mediaItem.uri)
-                            videoView.setVideoURI(videoUri)
-                            videoView.start()
+                        vs.realEstate?.let { estate ->
+                            if (estate.sended) {
+                                statusTextView.text = "À vendre"
+                            } else {
+                                Log.d("DEBUG", "Status TextView: $statusTextView")
 
-                            playButton.visibility = View.VISIBLE
-                            pauseButton.visibility = View.GONE
-                        } else {
-                            view.findViewById<VideoView>(R.id.main_display_video).visibility = View.GONE
-                            val imageView = view.findViewById<ImageView>(R.id.main_display_image)
-                            imageView.visibility = View.VISIBLE
-                            Glide.with(this@EstateDetailsFragment)
-                                .load(mediaItem.uri)
-                                .into(imageView)
-
-                            playButton.visibility = View.GONE
-                            pauseButton.visibility = View.GONE
+                                statusTextView.text = "Vendu" // ligne 85
+                            }
                         }
                     }
 
 
-                    imagesRecyclerView.adapter = adapter
+                    val estateValue = vs.realEstate
+                    if (estateValue != null) {
+                        val currentEstate: RealEstate = estateValue
+
+                        val adapter = EstateDetailsAdapter(currentEstate = currentEstate, mediaItems = vs.medias) { mediaItem ->
+                            if (mediaItem.type == "video") {
+                                view.findViewById<ImageView>(R.id.main_display_image).visibility = View.GONE
+                                val videoView = view.findViewById<VideoView>(R.id.main_display_video)
+                                videoView.visibility = View.VISIBLE
+                                val videoUri = Uri.parse(mediaItem.uri)
+                                videoView.setVideoURI(videoUri)
+                                videoView.start()
+
+                                playButton.visibility = View.VISIBLE
+                                pauseButton.visibility = View.GONE
+                            } else {
+                                view.findViewById<VideoView>(R.id.main_display_video).visibility = View.GONE
+                                val imageView = view.findViewById<ImageView>(R.id.main_display_image)
+                                imageView.visibility = View.VISIBLE
+                                Glide.with(this@EstateDetailsFragment)
+                                    .load(mediaItem.uri)
+                                    .into(imageView)
+
+                                playButton.visibility = View.GONE
+                                pauseButton.visibility = View.GONE
+                            }
+                        }
+                        imagesRecyclerView.adapter = adapter
+
+                    } else {
+
+                    }
                 }
             }
         }
+
 
 
 

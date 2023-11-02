@@ -50,6 +50,7 @@ object RealEstateManagerModel {
                 price = 15000,
                 latitude = latitude,
                 longitude = longitude,
+                sended = true,
             )
         )
         imageDao.insert(
@@ -90,6 +91,7 @@ object RealEstateManagerModel {
                 price = 15000,
                 latitude = latitude2,
                 longitude = longitude2,
+                sended = false,
             )
         )
         imageDao.insert(
@@ -129,6 +131,7 @@ object RealEstateManagerModel {
                 price = 15000,
                 latitude = latitude3,
                 longitude = longitude3,
+                sended = false
             )
         )
         imageDao.insert(

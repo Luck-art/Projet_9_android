@@ -25,6 +25,7 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>,private val
         val estateTextView: TextView = view.findViewById(R.id.estate_name)
         val estateDesciptionView: TextView = view.findViewById(R.id.estate_description)
         val estatePriceView: TextView = view.findViewById(R.id.estate_price)
+        val estateSendedView: TextView = view.findViewById(R.id.estate_sended)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -47,6 +48,13 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>,private val
         holder.estateTextView.text = item.name
         holder.estateDesciptionView.text = item.description
         holder.estatePriceView.text = item.price.toString()
+        if (item.sended) {
+            holder.estateSendedView.text = "À vendre"
+        } else {
+            holder.estateSendedView.text = "Vendu"
+        }
+
+
 
         Glide.with(holder.estateImageView.context)
             .load(item.img)

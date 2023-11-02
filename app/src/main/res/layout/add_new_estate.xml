@@ -39,6 +39,26 @@
         android:hint="Price"
         android:inputType="number" />
 
+    <RadioGroup
+        android:id="@+id/radioGroupSended"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButtonOnSale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="for sale" />
+
+        <RadioButton
+            android:id="@+id/radioButtonSold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sold" />
+    </RadioGroup>
+
+
     <Button
         android:id="@+id/buttonAddEstate"
         android:layout_width="wrap_content"

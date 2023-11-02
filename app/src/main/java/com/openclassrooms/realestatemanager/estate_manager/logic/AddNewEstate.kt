@@ -6,6 +6,8 @@ import android.location.Geocoder
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
@@ -32,6 +34,8 @@ class AddNewEstate(
         val editDescription = dialogLayout.findViewById<EditText>(R.id.editDescription)
         val editAddress = dialogLayout.findViewById<EditText>(R.id.editAddress)
         val editPrice = dialogLayout.findViewById<EditText>(R.id.editPrice)
+        val radioGroupSended: RadioGroup = dialogLayout.findViewById(R.id.radioGroupSended)
+        val radioButtonOnSale: RadioButton = dialogLayout.findViewById(R.id.radioButtonOnSale)
         val buttonAddEstate = dialogLayout.findViewById<Button>(R.id.buttonAddEstate)
 
         realEstate?.img?.let {
@@ -49,6 +53,13 @@ class AddNewEstate(
         realEstate?.price?.let {
             editPrice.setText(it.toString())
         }
+        realEstate?.sended?.let { isOnSale ->
+            if (isOnSale) {
+                radioButtonOnSale.isChecked = true
+            } else {
+                dialogLayout.findViewById<RadioButton>(R.id.radioButtonSold).isChecked = true
+            }
+        }
 
         builder.setView(dialogLayout)
 
@@ -60,6 +71,7 @@ class AddNewEstate(
             val description = editDescription.text.toString()
             val address = editAddress.text.toString()
             val price = editPrice.text.toString().toIntOrNull() ?: 0
+            val isOnSale = radioButtonOnSale.isChecked
 
             if (img.isNotBlank() && name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && price > 0) {
                 try {
@@ -81,6 +93,7 @@ class AddNewEstate(
                                     description,
                                     address,
                                     price,
+                                    sended = isOnSale,
                                     latitude = latitude,
                                     longitude = longitude
                                 )
@@ -95,6 +108,7 @@ class AddNewEstate(
                                             description = description,
                                             address = address,
                                             price = price,
+                                            sended = isOnSale,
                                         )
                                     )
                                 }
