@@ -155,8 +155,13 @@ class EstateDetailsFragment : Fragment() {
 
         mapButton.setOnClickListener {
             val intent = Intent(requireContext(), EstateMapActivity::class.java)
-            val estateAddress = callViewModel.state.value?.realEstate?.address
-            intent.putExtra("ESTATE_ADDRESS", estateAddress)
+            val estate = callViewModel.state.value?.realEstate
+            if (estate != null) {
+                intent.putExtra("ESTATE_LAT", estate.latitude)
+            }
+            if (estate != null) {
+                intent.putExtra("ESTATE_LNG", estate.longitude)
+            }
             startActivity(intent)
         }
 
