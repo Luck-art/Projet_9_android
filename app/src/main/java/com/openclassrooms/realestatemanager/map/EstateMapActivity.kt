@@ -29,7 +29,7 @@ class EstateMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val address = "Address estate" // récupérer avec les extras
+        val address = intent.getStringExtra("ESTATE_ADDRESS") ?: "Default Address"
         try {
             val addressList: List<Address>? = geocoder!!.getFromLocationName(address, 1)
             if (!addressList.isNullOrEmpty()) {
