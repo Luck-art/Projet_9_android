@@ -87,7 +87,7 @@ class EstateDetailsFragment : Fragment() {
                             } else {
                                 Log.d("DEBUG", "Status TextView: $statusTextView")
 
-                                statusTextView.text = "Vendu" // ligne 85
+                                statusTextView.text = "Vendu"
                             }
                         }
                     }
