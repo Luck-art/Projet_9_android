@@ -18,11 +18,20 @@
 
         <activity android:name="com.openclassrooms.realestatemanager.other.MainActivity"
             android:exported="true">
+
         </activity>
 
         <activity android:name="com.openclassrooms.realestatemanager.other.SecondActivity" />
 
-        <activity android:name="com.openclassrooms.realestatemanager.estate_manager.RealEstateManagerActivity"/>
+        <activity android:name="com.openclassrooms.realestatemanager.estate_manager.RealEstateManagerActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
 
         <activity android:name=".details.EstateDetailsActivity"/>
 
@@ -31,10 +40,6 @@
 
         <activity android:name="com.openclassrooms.realestatemanager.LogInActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity android:name="com.openclassrooms.realestatemanager.CreateAccountActivity" />

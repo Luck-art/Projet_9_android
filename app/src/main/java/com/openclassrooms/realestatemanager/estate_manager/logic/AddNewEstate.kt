@@ -3,12 +3,16 @@ package com.openclassrooms.realestatemanager.estate_manager.logic
 import RealEstateManagerViewModel
 import android.content.Context
 import android.location.Geocoder
+import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
+import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.estate_manager.RealEstateManagerActivity
@@ -23,13 +27,15 @@ class AddNewEstate(
     fun showAddPropertyDialog(
         viewModel: RealEstateManagerViewModel,
         context: Context,
-        realEstate: RealEstate?
+        realEstate: RealEstate?,
+        pickPhoto: suspend () -> Uri?,
     ) {
         val builder = AlertDialog.Builder(context)
         val inflater = LayoutInflater.from(context)
         val dialogLayout = inflater.inflate(R.layout.add_new_estate, null)
 
-        val editImage = dialogLayout.findViewById<EditText>(R.id.editImageUrl)
+        val photoContainer = dialogLayout.findViewById<View>(R.id.photoContainer)
+        val selectedPhoto = dialogLayout.findViewById<ImageView>(R.id.selectedPhoto)
         val editName = dialogLayout.findViewById<EditText>(R.id.editName)
         val editDescription = dialogLayout.findViewById<EditText>(R.id.editDescription)
         val editAddress = dialogLayout.findViewById<EditText>(R.id.editAddress)
@@ -38,8 +44,21 @@ class AddNewEstate(
         val radioButtonOnSale: RadioButton = dialogLayout.findViewById(R.id.radioButtonOnSale)
         val buttonAddEstate = dialogLayout.findViewById<Button>(R.id.buttonAddEstate)
 
+        var imageUri : Uri? = null
+
         realEstate?.img?.let {
-            editImage.setText(it)
+            Glide.with(context)
+                .load(it)
+                .into(selectedPhoto)
+        }
+        photoContainer.setOnClickListener {
+            GlobalScope.launch(Dispatchers.Main) {
+                imageUri = pickPhoto()
+                imageUri?.let {
+                    selectedPhoto.setImageURI(it)
+                }
+            }
+
         }
         realEstate?.name?.let {
             editName.setText(it)
@@ -66,14 +85,14 @@ class AddNewEstate(
         val dialog = builder.create()
 
         buttonAddEstate.setOnClickListener {
-            val img = editImage.text.toString()
+            val img = imageUri
             val name = editName.text.toString()
             val description = editDescription.text.toString()
             val address = editAddress.text.toString()
             val price = editPrice.text.toString().toIntOrNull() ?: 0
             val isOnSale = radioButtonOnSale.isChecked
 
-            if (img.isNotBlank() && name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && price > 0) {
+            if (img != null && name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && price > 0) {
                 try {
                     val geocoder = Geocoder(context, Locale.getDefault())
 
@@ -88,11 +107,11 @@ class AddNewEstate(
 
                                 val newEstate = RealEstate(
                                     0,
-                                    img,
-                                    name,
-                                    description,
-                                    address,
-                                    price,
+                                    img = img.toString(),
+                                    name = name,
+                                    description = description,
+                                    address = address,
+                                    price = price,
                                     sended = isOnSale,
                                     latitude = latitude,
                                     longitude = longitude
@@ -103,7 +122,7 @@ class AddNewEstate(
                                 } else {
                                     viewModel.editRealEstate(
                                         realEstate.copy(
-                                            img = img,
+                                            img = img.toString(),
                                             name = name,
                                             description = description,
                                             address = address,

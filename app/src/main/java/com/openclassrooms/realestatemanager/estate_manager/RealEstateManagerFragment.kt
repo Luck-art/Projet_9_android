@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.estate_manager
 
 import RealEstateManagerViewModel
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +39,7 @@ import com.openclassrooms.realestatemanager.details.EstateDetailsActivity
 import com.openclassrooms.realestatemanager.estate_manager.logic.AddNewEstate
 import com.openclassrooms.realestatemanager.estate_manager.logic.SearchFilter
 import com.openclassrooms.realestatemanager.models.DialogState
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -53,6 +57,19 @@ class RealEstateManagerFragment : Fragment() {
     private var isInEditMode = false
 
     private lateinit var adapter: RealEstateManagerAdapter
+
+    var pickMediaCompletable : CompletableDeferred<Uri?>? = null
+    val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        // Callback is invoked after the user selects a media item or closes the
+        // photo picker.
+        if (uri != null) {
+            Log.d("PhotoPicker", "Selected URI: $uri")
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+
+        pickMediaCompletable?.complete(uri)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -77,7 +94,20 @@ class RealEstateManagerFragment : Fragment() {
                 lifecycleScope.launch {
                     selectedRealEstate.collect { realEstate ->
                         if (realEstate != null) {
-                            addNewEstate.showAddPropertyDialog(callViewModel, requireContext(), realEstate)
+                            addNewEstate.showAddPropertyDialog(
+                                callViewModel,
+                                requireContext(),
+                                realEstate,
+                                pickPhoto = {
+                                    val completable = CompletableDeferred<Uri?>()
+                                    pickMediaCompletable = completable
+
+                                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+
+                                    // attend le resultat et retourne le code à AddNewEstate
+                                    completable.await()
+                                },
+                            )
                         }
                     }
                 }
@@ -133,10 +163,36 @@ class RealEstateManagerFragment : Fragment() {
         callViewModel.showDialog.observe(viewLifecycleOwner) { shouldShow ->
             when(shouldShow) {
                 DialogState.creation -> {
-                    addNewEstate.showAddPropertyDialog(context = requireContext(), viewModel = callViewModel, realEstate = null)
+                    addNewEstate.showAddPropertyDialog(
+                        context = requireContext(),
+                        viewModel = callViewModel,
+                        realEstate = null,
+                        pickPhoto = {
+                            val completable = CompletableDeferred<Uri?>()
+                            pickMediaCompletable = completable
+
+                            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+
+                            // attend le resultat et retourne le code à AddNewEstate
+                            completable.await()
+                        }
+                    )
                 }
                 is DialogState.edit -> {
-                    addNewEstate.showAddPropertyDialog(context = requireContext(), viewModel = callViewModel, realEstate = shouldShow.estate)
+                    addNewEstate.showAddPropertyDialog(
+                        context = requireContext(),
+                        viewModel = callViewModel,
+                        realEstate = shouldShow.estate,
+                        pickPhoto = {
+                            val completable = CompletableDeferred<Uri?>()
+                            pickMediaCompletable = completable
+
+                            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+
+                            // attend le resultat et retourne le code à AddNewEstate
+                            completable.await()
+                        }
+                    )
                 }
                 null -> {}
             }

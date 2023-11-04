@@ -6,12 +6,27 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/editImageUrl"
+    <FrameLayout
+        android:id="@+id/photoContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="image url"
-        android:inputType="textUri"/>
+        android:layout_height="200dp"
+        android:layout_margin="20dp"
+        android:background="#AAAAAA">
+
+        <ImageView
+            android:id="@+id/selectedPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/baseline_add_a_photo_24"/>
+
+    </FrameLayout>
 
     <EditText
         android:id="@+id/editName"
