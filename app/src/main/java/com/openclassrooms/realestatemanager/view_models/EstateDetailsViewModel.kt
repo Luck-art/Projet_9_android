@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class EstateDetailsViewModel(private val estateDao : RealEstateDao, private val savedStateHandle: SavedStateHandle, private val imagesDao: ImagesDao) : ViewModel() {
 
@@ -28,4 +29,12 @@ class EstateDetailsViewModel(private val estateDao : RealEstateDao, private val 
         .flowOn(
         Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    fun insertMedia(media: Media) {
+        viewModelScope.launch(Dispatchers.IO) {
+            imagesDao.insert(media)
+            
+        }
+    }
+
 }
