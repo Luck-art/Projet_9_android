@@ -33,7 +33,7 @@ class EstateDetailsViewModel(private val estateDao : RealEstateDao, private val 
     fun insertMedia(media: Media) {
         viewModelScope.launch(Dispatchers.IO) {
             imagesDao.insert(media)
-            
+
         }
     }
 
