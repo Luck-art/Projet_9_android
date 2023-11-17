@@ -33,9 +33,12 @@ class EstateDetailsAdapter(private var mediaItems: MutableList<Media>) : Recycle
     }
 
     fun addMediaItem(newMedia: Media) {
+        val lastIndex = mediaItems.size
         mediaItems.add(newMedia)
-        notifyItemInserted(mediaItems.size - 1)
+        notifyItemInserted(lastIndex)
+        Log.d("EstateDetailsAdapter", "Nouvel élément ajouté à la position $lastIndex")
     }
+
 
 
     override fun getItemViewType(position: Int): Int {

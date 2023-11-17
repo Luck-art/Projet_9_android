@@ -23,16 +23,17 @@ import kotlinx.coroutines.flow.map
 
 
 class RealEstateManagerViewModel(
+    private val estateDao: RealEstateDao,
     private val context: Context,
     private val realEstateDao: RealEstateDao,
     private val imageDao: ImagesDao,
-    private val sellerNameDao: SellerNameDao
+    private val sellerNameDao: SellerNameDao,
 
 ) : ViewModel() {
     val showDialog = MutableLiveData<DialogState?>(null)
     val isInEditMode = MutableLiveData<Boolean>(false)
     val selectedRealEstate = MutableLiveData<RealEstate?>(null)
-
+    private val deleteEstateLogic: DeleteEstate = DeleteEstate(realEstateDao, viewModelScope)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -118,6 +119,13 @@ class RealEstateManagerViewModel(
         showDialog.value = null
     }
 
+
+
+    fun onDeleteEstateClicked(estateId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            estateDao.deleteEstateById(estateId)
+        }
+    }
 
 
 

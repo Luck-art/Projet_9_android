@@ -13,7 +13,7 @@ interface ImagesDao {
     fun getImagesByRealEstateId(realEstateId: Long): List<Media>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-     fun insert(image: Media)
+     fun insert(image: Media): Long
 
     @Query("SELECT * FROM images WHERE realEstateId = :realEstateId")
     fun observeImagesByRealEstateId(realEstateId: Long): Flow<List<Media>>

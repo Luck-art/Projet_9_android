@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.database.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -28,6 +29,12 @@ import kotlinx.coroutines.flow.Flow
 
         @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
         fun observeOneItem(id : Long): Flow<RealEstate?>
+
+        @Delete
+        suspend fun delete(estate: RealEstate)
+
+        @Query("DELETE FROM real_estate WHERE id = :estateId")
+        suspend fun deleteEstateById(estateId: Long)
 
         @Update
         fun update(realEstate: RealEstate): Unit

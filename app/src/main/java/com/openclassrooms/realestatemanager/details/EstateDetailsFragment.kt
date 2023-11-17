@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.details
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,7 @@ class EstateDetailsFragment : Fragment() {
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
+            Log.d("EstateDetailsFragment", "URI sélectionnée: $uri")
             val estateId = arguments?.getLong("estate_id") ?: 0L
             val newMedia = Media(
                 id = 0,
@@ -44,6 +46,8 @@ class EstateDetailsFragment : Fragment() {
             )
             adapter.addMediaItem(newMedia)
             callViewModel.insertMedia(newMedia)
+        } ?: run {
+            Log.d("EstateDetailsFragment", "Aucun URI reçu")
         }
     }
 
@@ -112,6 +116,7 @@ class EstateDetailsFragment : Fragment() {
                     priceTextView.text = vs.realEstate?.price.toString()
                     Glide.with(this@EstateDetailsFragment).load(vs.realEstate?.img).into(imageView)
                     adapter.updateMediaItems(vs.medias)
+                    Log.d("EstateDetailsFragment", "Mise à jour des éléments de l'adapter")
                 }
             }
         }

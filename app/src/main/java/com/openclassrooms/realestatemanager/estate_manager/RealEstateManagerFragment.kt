@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.estate_manager
 
 import RealEstateManagerViewModel
-import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -10,21 +9,14 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -57,6 +49,10 @@ class RealEstateManagerFragment : Fragment() {
     private var isInEditMode = false
 
     private lateinit var adapter: RealEstateManagerAdapter
+
+    private fun onDeleteEstateClicked(estateId: Long) {
+        callViewModel.onDeleteEstateClicked(estateId)
+    }
 
     var pickMediaCompletable : CompletableDeferred<Uri?>? = null
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -222,6 +218,10 @@ class RealEstateManagerFragment : Fragment() {
         isInEditMode = !isInEditMode
         updateEditModeInAdapter()
     }
+
+
+
+
 
 
 }

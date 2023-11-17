@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 )
 data class Media(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long = 0,
     val uri: String,
     val description: String,
     val realEstateId: Long,
