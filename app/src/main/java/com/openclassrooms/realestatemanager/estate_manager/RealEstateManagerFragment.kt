@@ -153,9 +153,7 @@ class RealEstateManagerFragment : Fragment() {
                 adapter = RealEstateManagerAdapter(
                     dataSet = list,
                     items = list,
-                    onItemClicked = { realEstate, isInEditMode ->
-
-                    },
+                    onItemClicked = ::onEstateItemClicked,
                     isInEditMode = isInEditMode,
                     onDeleteClicked = { estateId -> onDeleteEstateClicked(estateId) }
 
