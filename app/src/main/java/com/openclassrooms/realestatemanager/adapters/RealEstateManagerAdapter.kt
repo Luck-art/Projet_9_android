@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -17,13 +18,13 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import kotlin.reflect.KFunction2
 
-class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private val items: KFunction2<RealEstate, Boolean, Unit>, private val onItemClicked: (RealEstate, Boolean) -> Unit, private var isInEditMode: Boolean = false, private val onDeleteClicked: (Long) -> Unit) :
+class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private val items: List<RealEstate>, private val onItemClicked: (RealEstate, Boolean) -> Unit, private var isInEditMode: Boolean = false, private val onDeleteClicked: (Long) -> Unit) :
     RecyclerView.Adapter<RealEstateManagerAdapter.ViewHolder>() {
 
     private var filteredDataSet: List<RealEstate> = dataSet
 
     fun getItemIdAtPosition(position: Int): Long {
-        return items[position].id
+        return filteredDataSet[position].id
     }
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val estateImageView: ImageView = view.findViewById(R.id.estate_img)
@@ -31,13 +32,14 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private va
         val estateDesciptionView: TextView = view.findViewById(R.id.estate_description)
         val estatePriceView: TextView = view.findViewById(R.id.estate_price)
         val estateSendedView: TextView = view.findViewById(R.id.estate_sended)
-        val deleteButton: Button = itemView.findViewById(R.id.delete_button)
+        val deleteButton: ImageButton = itemView.findViewById(R.id.delete_button)
 
 
 
         init {
             deleteButton.setOnClickListener {
                 val estateId = getItemIdAtPosition(adapterPosition)
+                Log.d("RealEstateManager", "Suppression de l'élément avec ID: $estateId")
                 onDeleteClicked(estateId)
             }
         }

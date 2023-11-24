@@ -100,7 +100,6 @@ class RealEstateManagerFragment : Fragment() {
 
                                     pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
-                                    // attend le resultat et retourne le code à AddNewEstate
                                     completable.await()
                                 },
                             )
@@ -151,10 +150,20 @@ class RealEstateManagerFragment : Fragment() {
 
         lifecycleScope.launchWhenStarted {
             callViewModel.viewState.collect { list ->
-                adapter = RealEstateManagerAdapter(list, ::onEstateItemClicked)
+                adapter = RealEstateManagerAdapter(
+                    dataSet = list,
+                    items = list,
+                    onItemClicked = { realEstate, isInEditMode ->
+
+                    },
+                    isInEditMode = isInEditMode,
+                    onDeleteClicked = { estateId -> onDeleteEstateClicked(estateId) }
+
+                )
                 recyclerView.adapter = adapter
             }
         }
+
 
         callViewModel.showDialog.observe(viewLifecycleOwner) { shouldShow ->
             when(shouldShow) {
@@ -218,10 +227,4 @@ class RealEstateManagerFragment : Fragment() {
         isInEditMode = !isInEditMode
         updateEditModeInAdapter()
     }
-
-
-
-
-
-
 }

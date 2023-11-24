@@ -6,6 +6,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val ViewModelsModule = module {
-    viewModel { RealEstateManagerViewModel(androidContext(), get(), get(), get()) }
+    viewModel { RealEstateManagerViewModel(androidContext(), get(), get(), get(), get()) }
     viewModel { EstateDetailsViewModel(get(), get(), get()) }
 }

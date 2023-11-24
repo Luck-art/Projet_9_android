@@ -7,14 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.database.dao.ImagesDao
 import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.database.dao.SellerNameDao
-import com.openclassrooms.realestatemanager.database.tables.Media
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.models.DialogState
 import com.openclassrooms.realestatemanager.models.RealEstateManagerModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -23,13 +21,13 @@ import kotlinx.coroutines.flow.map
 
 
 class RealEstateManagerViewModel(
-    private val estateDao: RealEstateDao,
+    private val estateDao: Context,
     private val context: Context,
     private val realEstateDao: RealEstateDao,
     private val imageDao: ImagesDao,
     private val sellerNameDao: SellerNameDao,
 
-) : ViewModel() {
+    ) : ViewModel() {
     val showDialog = MutableLiveData<DialogState?>(null)
     val isInEditMode = MutableLiveData<Boolean>(false)
     val selectedRealEstate = MutableLiveData<RealEstate?>(null)
@@ -123,7 +121,7 @@ class RealEstateManagerViewModel(
 
     fun onDeleteEstateClicked(estateId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            estateDao.deleteEstateById(estateId)
+            deleteEstateLogic.deleteEstate(estateId)
         }
     }
 

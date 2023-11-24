@@ -43,6 +43,7 @@ object RealEstateManagerModel {
 
         val id1 = dao.insert(
             RealEstate(
+                id = 0,
                 img = "https://managecasa.com/wp-content/uploads/2021/02/shutterstock_1731900589-e1612637876218-995x460.jpg",
                 name = "Tall house",
                 description = "the very tall house",
@@ -84,6 +85,7 @@ object RealEstateManagerModel {
 
         val id2 = dao.insert(
             RealEstate(
+                id = 1,
                 img = "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600",
                 name = "Modern house",
                 description = "modern style",
@@ -124,6 +126,7 @@ object RealEstateManagerModel {
 
         val id3 = dao.insert(
             RealEstate(
+                id = 2,
                 img = "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600",
                 name = "Sweet home",
                 description = "sweety !",
