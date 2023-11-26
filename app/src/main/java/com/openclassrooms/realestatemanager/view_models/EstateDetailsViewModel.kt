@@ -14,27 +14,27 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class EstateDetailsViewModel(private val estateDao : RealEstateDao, private val savedStateHandle: SavedStateHandle, private val imagesDao: ImagesDao) : ViewModel() {
+class EstateDetailsViewModel(private val estateDao: RealEstateDao, private val savedStateHandle: SavedStateHandle, private val imagesDao: ImagesDao) : ViewModel() {
 
     data class EstateDetailsViewState(val realEstate: RealEstate?, val medias: List<Media>)
 
-
-    val state: StateFlow<EstateDetailsViewState?> =  estateDao.observeOneItem(id = savedStateHandle.get<Long>("estate_id")!!).combine( imagesDao.observeImagesByRealEstateId(realEstateId = savedStateHandle.get<Long>("estate_id")!!)) { estate, medias ->
-        EstateDetailsViewState(estate, medias)
+    private val estateId: Long? = savedStateHandle.get<Long>("estate_id")
+    val state: StateFlow<EstateDetailsViewState?>? = estateId?.let { id ->
+        estateDao.observeOneItem(id).combine(imagesDao.observeImagesByRealEstateId(id)) { estate, medias ->
+            EstateDetailsViewState(estate, medias)
+        }
+            .flowOn(Dispatchers.IO)
+            .stateIn(viewModelScope, SharingStarted.Lazily, null)
     }
-        .flowOn(
-        Dispatchers.IO)
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     fun insertMedia(media: Media) {
         viewModelScope.launch(Dispatchers.IO) {
             imagesDao.insert(media)
-
         }
     }
-
 }

@@ -38,7 +38,6 @@ class EstateDetailsFragment : Fragment() {
             Log.d("EstateDetailsFragment", "URI sélectionnée: $uri")
             val estateId = arguments?.getLong("estate_id") ?: 0L
             val newMedia = Media(
-                id = 0,
                 uri = uri.toString(),
                 description = "",
                 realEstateId = estateId,
@@ -109,7 +108,7 @@ class EstateDetailsFragment : Fragment() {
 
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            callViewModel.state.collect { viewState ->
+            callViewModel.state?.collect { viewState ->
                 viewState?.let { vs ->
                     textView.text = vs.realEstate?.name
                     descriptionTextView.text = vs.realEstate?.description
@@ -136,7 +135,7 @@ class EstateDetailsFragment : Fragment() {
         val mapButton: ImageButton = view.findViewById(R.id.btn_map)
         mapButton.setOnClickListener {
             val intent = Intent(requireContext(), EstateMapActivity::class.java)
-            callViewModel.state.value?.realEstate?.let { estate ->
+            callViewModel.state?.value?.realEstate?.let { estate ->
                 intent.putExtra("ESTATE_LAT", estate.latitude)
                 intent.putExtra("ESTATE_LNG", estate.longitude)
             }
@@ -146,7 +145,7 @@ class EstateDetailsFragment : Fragment() {
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
+        getContent.launch("image/*")
         startActivityForResult(intent, REQUEST_CODE_PICK_MEDIA)
     }
 
