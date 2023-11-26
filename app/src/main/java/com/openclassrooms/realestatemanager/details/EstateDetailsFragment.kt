@@ -145,8 +145,10 @@ class EstateDetailsFragment : Fragment() {
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK)
-        getContent.launch("image/*")
+        getContent.launch("*/*")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
         startActivityForResult(intent, REQUEST_CODE_PICK_MEDIA)
     }
+
 
 }
