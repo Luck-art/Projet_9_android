@@ -14,7 +14,7 @@ import com.openclassrooms.realestatemanager.database.tables.Media
 
 class EstateDetailsAdapter(private var mediaItems: MutableList<Media>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var onItemClicked: ((Media) -> Unit)? = null
+    var onItemClicked: ((Media) -> Unit)? = null
     private var onAddButtonClicked: (() -> Unit)? = null
 
 

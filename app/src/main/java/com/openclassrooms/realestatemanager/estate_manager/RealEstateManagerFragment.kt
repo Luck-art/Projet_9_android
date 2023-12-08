@@ -17,19 +17,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.login.LoginManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
-import com.openclassrooms.realestatemanager.LogInActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
-import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
-import com.openclassrooms.realestatemanager.details.EstateDetailsActivity
 import com.openclassrooms.realestatemanager.estate_manager.logic.AddNewEstate
-import com.openclassrooms.realestatemanager.estate_manager.logic.SearchFilter
 import com.openclassrooms.realestatemanager.models.DialogState
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.first
@@ -154,10 +145,9 @@ class RealEstateManagerFragment : Fragment() {
                     dataSet = list,
                     items = list,
                     onItemClicked = ::onEstateItemClicked,
-                    isInEditMode = isInEditMode,
-                    onDeleteClicked = { estateId -> onDeleteEstateClicked(estateId) }
+                    isInEditMode = isInEditMode
 
-                )
+                ) { estateId -> onDeleteEstateClicked(estateId) }
                 recyclerView.adapter = adapter
             }
         }

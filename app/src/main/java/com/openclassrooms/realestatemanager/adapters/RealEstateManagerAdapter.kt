@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,12 +15,11 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
-import kotlin.reflect.KFunction2
 
 class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private val items: List<RealEstate>, private val onItemClicked: (RealEstate, Boolean) -> Unit, private var isInEditMode: Boolean = false, private val onDeleteClicked: (Long) -> Unit) :
     RecyclerView.Adapter<RealEstateManagerAdapter.ViewHolder>() {
 
-    private var filteredDataSet: List<RealEstate> = dataSet
+    var filteredDataSet: List<RealEstate> = dataSet
 
     fun getItemIdAtPosition(position: Int): Long {
         return filteredDataSet[position].id
