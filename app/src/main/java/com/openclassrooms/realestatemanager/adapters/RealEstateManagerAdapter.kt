@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestListener
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 
-class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private val items: List<RealEstate>, private val onItemClicked: (RealEstate, Boolean) -> Unit, private var isInEditMode: Boolean = false, private val onDeleteClicked: (Long) -> Unit) :
+class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private val items: List<RealEstate>, val onItemClicked: (RealEstate, Boolean) -> Unit, private var isInEditMode: Boolean = false, private val onDeleteClicked: (Long) -> Unit) :
     RecyclerView.Adapter<RealEstateManagerAdapter.ViewHolder>() {
 
     var filteredDataSet: List<RealEstate> = dataSet

@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager
 
-import android.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,13 @@ import com.openclassrooms.realestatemanager.database.tables.Media
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers.eq
+import org.mockito.Mockito
+import org.mockito.Mockito.verify
+import org.mockito.kotlin.mock
 import java.util.Arrays
+
 
 
 class EstateDetailsAdapterTest {
@@ -27,8 +32,9 @@ class EstateDetailsAdapterTest {
         val mockGlide: Glide = Mockito.mock(Glide::class.java)
 
         Mockito.`when`(mockLayoutInflater.inflate(anyInt(), eq(mockParent), eq(false))).thenReturn(mockView)
-        Mockito.`when`(mockView.findViewById(R.id.thumbnail_image)).thenReturn(mockImageView)
-        Mockito.`when`(mockView.findViewById(R.id.thumbnail_video)).thenReturn(mockVideoView)
+        Mockito.`when`(mockView.findViewById<ImageView>(R.id.thumbnail_image)).thenReturn(mockImageView)
+
+        Mockito.`when`(mockView.findViewById<VideoView>(R.id.thumbnail_video)).thenReturn(mockVideoView)
     }
 
     @Test
@@ -52,15 +58,14 @@ class EstateDetailsAdapterTest {
     fun setOnItemClickedListener_triggersCorrectly() {
         val adapter = EstateDetailsAdapter(ArrayList())
         val testMedia = Media(description = "", id = 1, uri = "", realEstateId = 1, type = "")
+        val mockListener: (Media) -> Unit = mock()
+        adapter.setOnItemClickedListener(mockListener)
+        adapter.onItemClicked?.invoke(testMedia)
+        verify(mockListener).invoke(eq(testMedia))
 
-        val mockListener: EstateDetailsAdapter.OnItemClickedListener = Mockito.mock(
-            EstateDetailsAdapter.OnItemClickedListener::class.java
-        )
         adapter.setOnItemClickedListener(mockListener)
 
-        adapter.onItemClicked(testMedia)
-
-        Mockito.verify(mockListener).onItemClicked(eq(testMedia))
+        adapter.onItemClicked?.let { it(testMedia) }
     }
 
 

@@ -3,16 +3,11 @@ package com.openclassrooms.realestatemanager;
 
 
 import android.view.ViewGroup
-import com.google.common.base.Verify.verify
 import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.mockito.Mockito.*
 
 import org.junit.Assert.*
@@ -53,7 +48,7 @@ class RealEstateManagerAdapterTest {
 
     @Test
     fun onBindViewHolder_bindsDataCorrectly() {
-        val mockEstate = RealEstate()
+        val mockEstate = RealEstate(description = "", id = 1, img = "", name = "", address = "", price = 120000, latitude = 2.0, longitude = 2.0, sended = false)
         val viewHolder = mock(RealEstateManagerAdapter.ViewHolder::class.java)
         adapter.onBindViewHolder(viewHolder, 0)
         assertEquals(mockEstate.name, viewHolder.estateTextView.text.toString())
@@ -61,7 +56,7 @@ class RealEstateManagerAdapterTest {
 
     @Test
     fun onClick_onItem_callsOnItemClicked() {
-        val mockEstate = RealEstate()
+        val mockEstate = RealEstate(description = "", id = 1, img = "", name = "", address = "", price = 120000, latitude = 2.0, longitude = 2.0, sended = false)
         val viewHolder = adapter.onCreateViewHolder(mock(ViewGroup::class.java), 0)
         viewHolder.itemView.performClick()
         verify(adapter.onItemClicked).invoke(mockEstate, false)
