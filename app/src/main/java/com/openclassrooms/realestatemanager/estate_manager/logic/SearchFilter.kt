@@ -35,22 +35,16 @@ class SearchFilter(
             setPadding(padding, padding, padding, padding)
         }
 
-        // Créer le RangeSlider pour le prix
         val priceRangeSlider = RangeSlider(context).apply {
-            // Configurer le priceRangeSlider ici
         }
         linearLayout.addView(priceRangeSlider)
 
-        // Créer le RangeSlider pour la surface
         val surfaceRangeSlider = RangeSlider(context).apply {
-            // Configurer le surfaceRangeSlider ici
         }
         linearLayout.addView(surfaceRangeSlider)
 
-        // Ajouter le LinearLayout au builder
         builder.setView(linearLayout)
 
-        // Définir les boutons de la boîte de dialogue
         builder.setPositiveButton("OK") { _, _ ->
             val selectedMinPrice = priceRangeSlider.values[0]
             val selectedMaxPrice = priceRangeSlider.values[1]
@@ -60,7 +54,6 @@ class SearchFilter(
         }
         builder.setNegativeButton("Annuler", null)
 
-        // Afficher la boîte de dialogue
         builder.create().show()
     }
 
