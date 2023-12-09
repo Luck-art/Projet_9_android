@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.estate_manager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
@@ -20,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.openclassrooms.realestatemanager.LogInActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
-import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.details.EstateDetailsActivity
 import com.openclassrooms.realestatemanager.details.EstateDetailsFragment
@@ -90,7 +88,7 @@ class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment
         }
 
         searchIcon.setOnClickListener {
-            searchFilter.showPriceFilterDialog()
+            searchFilter.showFilterDialog()
         }
 
 

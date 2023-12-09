@@ -6,6 +6,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.Surface
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -42,6 +43,8 @@ class AddNewEstate(
         val radioGroupSended: RadioGroup = dialogLayout.findViewById(R.id.radioGroupSended)
         val radioButtonOnSale: RadioButton = dialogLayout.findViewById(R.id.radioButtonOnSale)
         val buttonAddEstate = dialogLayout.findViewById<Button>(R.id.buttonAddEstate)
+        val editSurface = dialogLayout.findViewById<EditText>(R.id.editSurface)
+        val editRooms = dialogLayout.findViewById<EditText>(R.id.editRooms)
 
         var imageUri: Uri? = null
 
@@ -71,6 +74,12 @@ class AddNewEstate(
         realEstate?.price?.let {
             editPrice.setText(it.toString())
         }
+        realEstate?.surface?.let {
+            editSurface.setText(it.toString())
+        }
+        realEstate?.rooms?.let {
+            editRooms.setText(it.toString())
+        }
         realEstate?.sended?.let { isOnSale ->
             if (isOnSale) {
                 radioButtonOnSale.isChecked = true
@@ -89,6 +98,8 @@ class AddNewEstate(
             val description = editDescription.text.toString()
             val address = editAddress.text.toString()
             val price = editPrice.text.toString().toIntOrNull() ?: 0
+            val surface = editSurface.text.toString().toDouble()
+            val rooms = editRooms.text.toString().toIntOrNull() ?: 0
             val isOnSale = radioButtonOnSale.isChecked
 
             val geocoder = Geocoder(context, Locale.getDefault())
@@ -100,6 +111,8 @@ class AddNewEstate(
                     description = description,
                     address = address,
                     price = price,
+                    surface = surface,
+                    rooms = rooms,
                     isOnSale = isOnSale,
                     realEstate = realEstate,
                     viewModel = viewModel,
@@ -124,6 +137,8 @@ class AddNewEstate(
         description: String,
         address: String,
         price: Int,
+        surface: Double,
+        rooms: Int,
         getFromLocationName: (String) -> List<Address>?,
         isOnSale: Boolean,
         realEstate: RealEstate?,
@@ -147,7 +162,9 @@ class AddNewEstate(
                         price = price,
                         sended = isOnSale,
                         latitude = latitude,
-                        longitude = longitude
+                        longitude = longitude,
+                        surface = surface,
+                        rooms = rooms
                     )
 
                     if (realEstate == null) {

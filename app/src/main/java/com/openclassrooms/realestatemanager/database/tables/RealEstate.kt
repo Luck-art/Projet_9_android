@@ -15,5 +15,7 @@ data class RealEstate(
     val price: Int,
     val latitude: Double? = null,
     val longitude: Double? = null,
+    val surface: Double? = null,
+    val rooms: Int,
     val sended : Boolean = true,
 )

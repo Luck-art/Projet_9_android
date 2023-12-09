@@ -53,6 +53,20 @@
         android:hint="Price"
         android:inputType="number" />
 
+    <EditText
+        android:id="@+id/editSurface"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Surface"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editRooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Rooms"
+        android:inputType="number" />
+
     <RadioGroup
         android:id="@+id/radioGroupSended"
         android:layout_width="match_parent"
