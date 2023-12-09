@@ -9,7 +9,9 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.room.Update
 import androidx.sqlite.db.SupportSQLiteQuery
+import com.openclassrooms.realestatemanager.database.tables.Media
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
+import com.openclassrooms.realestatemanager.database.tables.SellerName
 import kotlinx.coroutines.flow.Flow
 
 
@@ -45,8 +47,9 @@ import kotlinx.coroutines.flow.Flow
         @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms")
         fun getFilteredRealEstates(minPrice: Double, maxPrice: Double, minSurface: Double, maxSurface: Double): Flow<List<RealEstate>>
 
-        @RawQuery()
+        @RawQuery(observedEntities = [RealEstate::class, Media::class, SellerName::class])
         fun filter(query: SupportSQLiteQuery): Flow<List<RealEstate>>
+
 
         @Update
         fun update(realEstate: RealEstate): Unit

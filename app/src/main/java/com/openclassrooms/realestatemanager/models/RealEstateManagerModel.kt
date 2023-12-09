@@ -51,6 +51,8 @@ object RealEstateManagerModel {
                 price = 15000,
                 latitude = latitude,
                 longitude = longitude,
+                surface = 2.5,
+                rooms = 6,
                 sended = true,
             )
         )
@@ -93,6 +95,8 @@ object RealEstateManagerModel {
                 price = 15000,
                 latitude = latitude2,
                 longitude = longitude2,
+                surface = 2.0,
+                rooms = 5,
                 sended = false,
             )
         )
@@ -134,6 +138,8 @@ object RealEstateManagerModel {
                 price = 15000,
                 latitude = latitude3,
                 longitude = longitude3,
+                surface = 2.5,
+                rooms = 6,
                 sended = false
             )
         )

@@ -11,7 +11,7 @@ import java.util.Locale
 
 class EstateMapActivity : AppCompatActivity() {
 
-    private var geocoder: Geocoder? = null
+    private var geocoder: Geocoder = Geocoder(this, Locale.getDefault())
     private lateinit var estateMapAdapter: EstateMapAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +22,7 @@ class EstateMapActivity : AppCompatActivity() {
         val lng = intent.getDoubleExtra("ESTATE_LNG", 0.0)
         geocoder = Geocoder(this, Locale.getDefault())
 
-        estateMapAdapter = EstateMapAdapter(this, lat, lng)
+        estateMapAdapter = EstateMapAdapter(this, lat, lng, geocoder)
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(estateMapAdapter)
