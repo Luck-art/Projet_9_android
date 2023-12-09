@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.estate_manager.logic
 
 import android.content.Context
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.slider.RangeSlider
 import com.openclassrooms.realestatemanager.R
@@ -19,12 +20,13 @@ class SearchFilter(
     private val onUpdateUI: (List<RealEstate>) -> Unit
 ) {
 
+    private var minPrice: Float = 0f
+    private var maxPrice: Float = 1000000f
+
     fun showFilterDialog() {
-        // Créer un AlertDialog.Builder et définir son titre
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Filtrer les propriétés")
 
-        // Créer un LinearLayout pour contenir les RangeSliders
         val linearLayout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             layoutParams = LinearLayout.LayoutParams(
@@ -35,9 +37,23 @@ class SearchFilter(
             setPadding(padding, padding, padding, padding)
         }
 
-        val priceRangeSlider = RangeSlider(context).apply {
+        val priceLabel = TextView(context).apply {
+            text = context.getString(R.string.price_filter_label)
         }
+        linearLayout.addView(priceLabel)
+
+        val priceRangeSlider = RangeSlider(context).apply {
+            valueFrom = minPrice
+            valueTo = maxPrice
+            setValues(minPrice, maxPrice)
+        }
+
         linearLayout.addView(priceRangeSlider)
+
+        val surfaceLabel = TextView(context).apply {
+            text = context.getString(R.string.surface_filter_label)
+        }
+        linearLayout.addView(surfaceLabel)
 
         val surfaceRangeSlider = RangeSlider(context).apply {
         }
@@ -65,6 +81,25 @@ class SearchFilter(
             }
         }
     }
+
+    fun fetchPriceRangeAndShowDialog() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val minPriceValue = realEstateDao.getMinPrice()?.toFloat() ?: 0f
+            val maxPriceValue = realEstateDao.getMaxPrice()?.toFloat() ?: 1000000f
+
+            withContext(Dispatchers.Main) {
+                minPrice = minPriceValue
+                maxPrice = maxPriceValue
+                showFilterDialog()
+            }
+        }
+    }
+
+    fun updatePriceRange(minPrice: Int, maxPrice: Int) {
+        this.minPrice = minPrice.toFloat()
+        this.maxPrice = maxPrice.toFloat()
+    }
+
 }
 
 

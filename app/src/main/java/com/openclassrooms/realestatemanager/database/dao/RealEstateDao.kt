@@ -41,6 +41,12 @@ import kotlinx.coroutines.flow.Flow
         @Delete
         suspend fun delete(estate: RealEstate)
 
+        @Query("SELECT MIN(price) FROM real_estate")
+        fun getMinPrice(): Int?
+
+        @Query("SELECT MAX(price) FROM real_estate")
+        fun getMaxPrice(): Int?
+
         @Query("DELETE FROM real_estate WHERE id = :estateId")
         suspend fun deleteEstateById(estateId: Long)
 

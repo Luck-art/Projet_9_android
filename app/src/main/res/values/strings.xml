@@ -4,4 +4,6 @@
     <string name="cancel">Cancel</string>
     <string name="open_drawer" />
     <string name="close_drawer" />
+    <string name="price_filter_label">Price filter</string>
+    <string name="surface_filter_label">Surface filter</string>
 </resources>

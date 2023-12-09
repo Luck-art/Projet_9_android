@@ -19,16 +19,25 @@ import com.google.firebase.auth.FirebaseAuth
 import com.openclassrooms.realestatemanager.LogInActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
+import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.details.EstateDetailsActivity
 import com.openclassrooms.realestatemanager.details.EstateDetailsFragment
 import com.openclassrooms.realestatemanager.estate_manager.logic.SearchFilter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+
 
 
 class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment.Listener {
 
     lateinit var burgerMenu: ImageView
     lateinit var drawerLayout: DrawerLayout
+    private lateinit var realEstateDao: RealEstateDao
+    private lateinit var searchFilter: SearchFilter
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -115,6 +124,20 @@ class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment
             }
         }
     }
+
+    fun fetchPriceRange() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val minPrice = realEstateDao.getMinPrice() ?: 0
+            val maxPrice = realEstateDao.getMaxPrice() ?: 1000000
+
+            withContext(Dispatchers.Main) {
+
+                searchFilter.updatePriceRange(minPrice, maxPrice)
+            }
+        }
+    }
+
+
 
 
     private fun logout() {
