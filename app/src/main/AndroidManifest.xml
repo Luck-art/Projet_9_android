@@ -58,5 +58,11 @@
             android:value="AIzaSyCuYYJ5kpqlBqDrdwUh_2UiD7RA6PVuhvs"/>
 
 
+
+        <provider
+            android:name=".provider.ItemContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:exported="true"/>
+
     </application>
 </manifest>

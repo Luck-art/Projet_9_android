@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.database.dao
 
+import android.database.Cursor
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -17,6 +18,9 @@ import kotlinx.coroutines.flow.Flow
 
         @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
         fun getOneItem(id : Long): RealEstate?
+
+        @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
+        fun getOneItemCursor(id : Long): Cursor?
 
         @Query("SELECT * FROM real_estate WHERE name = :name")
         fun getRealEstateByName(name: String): RealEstate
