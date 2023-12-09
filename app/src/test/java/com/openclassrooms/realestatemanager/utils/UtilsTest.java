@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class UtilsTest {
 
     @Test
@@ -25,6 +28,33 @@ public class UtilsTest {
         int dollar = 100;
         float result = Utils.convertDollarToEuro(dollar);
         assert result == 81.0;
+    }
+
+    @Test
+    public void getTodayDate() {
+        Calendar now =  Calendar.getInstance();
+
+
+        int day = now.get(Calendar.DATE);
+        String dayString = "";
+        if(day <= 9) {
+            dayString = "0" + day;
+        } else {
+            dayString = "" + day;
+        }
+
+        int month = now.get(Calendar.MONTH) + 1 ; //MONTH START BY 0 IN CALENDAR
+        String monthString = "";
+        if(month <= 9) {
+            monthString = "0" + month;
+        } else {
+            monthString = "" + month;
+        }
+
+        String year = "" + now.get(Calendar.YEAR);
+
+        String result = Utils.getTodayDate();
+        assertEquals(result, dayString + "/" + monthString + "/" + year);
     }
 
 
