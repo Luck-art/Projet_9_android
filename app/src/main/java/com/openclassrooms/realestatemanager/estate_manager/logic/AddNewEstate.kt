@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.estate_manager.logic
 
 import RealEstateManagerViewModel
 import android.content.Context
+import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.view.LayoutInflater
@@ -15,11 +16,9 @@ import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
-import com.openclassrooms.realestatemanager.estate_manager.RealEstateManagerActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.Locale
 
 class AddNewEstate(
@@ -44,7 +43,7 @@ class AddNewEstate(
         val radioButtonOnSale: RadioButton = dialogLayout.findViewById(R.id.radioButtonOnSale)
         val buttonAddEstate = dialogLayout.findViewById<Button>(R.id.buttonAddEstate)
 
-        var imageUri : Uri? = null
+        var imageUri: Uri? = null
 
         realEstate?.img?.let {
             Glide.with(context)
@@ -92,56 +91,23 @@ class AddNewEstate(
             val price = editPrice.text.toString().toIntOrNull() ?: 0
             val isOnSale = radioButtonOnSale.isChecked
 
-            if (img != null && name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && price > 0) {
-                try {
-                    val geocoder = Geocoder(context, Locale.getDefault())
+            val geocoder = Geocoder(context, Locale.getDefault())
 
-                    GlobalScope.launch(Dispatchers.IO) {
-                        //
-                        val addressList: List<android.location.Address>? = geocoder.getFromLocationName(address, 1)
-                        withContext(Dispatchers.Main) {
-                            if (addressList != null && !addressList.isEmpty()) {
-                                val returnedAddress: android.location.Address = addressList[0]
-                                val latitude = returnedAddress.latitude
-                                val longitude = returnedAddress.longitude
-
-                                val newEstate = RealEstate(
-                                    0,
-                                    img = img.toString(),
-                                    name = name,
-                                    description = description,
-                                    address = address,
-                                    price = price,
-                                    sended = isOnSale,
-                                    latitude = latitude,
-                                    longitude = longitude
-                                )
-
-                                if (realEstate == null) {
-                                    viewModel.addNewRealEstate(newEstate)
-                                } else {
-                                    viewModel.editRealEstate(
-                                        realEstate.copy(
-                                            img = img.toString(),
-                                            name = name,
-                                            description = description,
-                                            address = address,
-                                            price = price,
-                                            sended = isOnSale,
-                                        )
-                                    )
-                                }
-                                dialog.dismiss()
-                            } else {
-                                print("Adresse non trouvée")
-                            }
-                        }
+            GlobalScope.launch(Dispatchers.Main) {
+                createNewEstate(
+                    img = img.toString(),
+                    name = name,
+                    description = description,
+                    address = address,
+                    price = price,
+                    isOnSale = isOnSale,
+                    realEstate = realEstate,
+                    viewModel = viewModel,
+                    dialog = dialog,
+                    getFromLocationName = {
+                        geocoder.getFromLocationName(address, 1)
                     }
-                } catch (e: Exception) {
-                    print("Erreur lors du géocodage: ${e.message}")
-                }
-            } else {
-                print("error")
+                )
             }
         }
 
@@ -150,6 +116,64 @@ class AddNewEstate(
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    internal fun createNewEstate(
+        img: String?,
+        name: String,
+        description: String,
+        address: String,
+        price: Int,
+        getFromLocationName: (String) -> List<Address>?,
+        isOnSale: Boolean,
+        realEstate: RealEstate?,
+        viewModel: RealEstateManagerViewModel,
+        dialog: AlertDialog,
+    ) {
+        if (img != null && name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && price > 0) {
+            try {
+                val addressList: List<Address>? = getFromLocationName(address)
+                if (addressList != null && !addressList.isEmpty()) {
+                    val returnedAddress: Address = addressList[0]
+                    val latitude = returnedAddress.latitude
+                    val longitude = returnedAddress.longitude
+
+                    val newEstate = RealEstate(
+                        0,
+                        img = img,
+                        name = name,
+                        description = description,
+                        address = address,
+                        price = price,
+                        sended = isOnSale,
+                        latitude = latitude,
+                        longitude = longitude
+                    )
+
+                    if (realEstate == null) {
+                        viewModel.addNewRealEstate(newEstate)
+                    } else {
+                        viewModel.editRealEstate(
+                            realEstate.copy(
+                                img = img.toString(),
+                                name = name,
+                                description = description,
+                                address = address,
+                                price = price,
+                                sended = isOnSale,
+                            )
+                        )
+                    }
+                    dialog.dismiss()
+                } else {
+                    print("Adresse non trouvée")
+                }
+            } catch (e: Exception) {
+                print("Erreur lors du géocodage: ${e.message}")
+            }
+        } else {
+            print("error")
+        }
     }
 }
 
