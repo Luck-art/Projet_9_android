@@ -6,7 +6,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Update
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import kotlinx.coroutines.flow.Flow
 
@@ -39,6 +41,12 @@ import kotlinx.coroutines.flow.Flow
 
         @Query("DELETE FROM real_estate WHERE id = :estateId")
         suspend fun deleteEstateById(estateId: Long)
+
+        @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice")
+        fun getRealEstatesByPriceRange(minPrice: Double, maxPrice: Double): Flow<List<RealEstate>>
+
+        @RawQuery()
+        fun filter(query: SupportSQLiteQuery): Flow<List<RealEstate>>
 
         @Update
         fun update(realEstate: RealEstate): Unit

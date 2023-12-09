@@ -1,35 +1,51 @@
 package com.openclassrooms.realestatemanager.estate_manager.logic
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import android.view.View
-import android.widget.EditText
-import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
+import android.content.Context
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.slider.RangeSlider
+import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
+import com.openclassrooms.realestatemanager.database.tables.RealEstate
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class SearchFilter(val onTextChanged: (String) -> Unit) {
+class SearchFilter(
+    val context: Context,
+    private val realEstateDao: RealEstateDao,
+    private val onUpdateUI: (List<RealEstate>) -> Unit
+) {
 
-    private var isSearchBarVisible = false
+    fun showPriceFilterDialog() {
+        val rangeSlider = RangeSlider(context)
 
-    fun toggleSearchBar(searchEditText: EditText) {
-        Log.d("toggleSearchBar", "Method Called")
-        if (searchEditText.visibility == View.GONE) {
-            searchEditText.visibility = View.VISIBLE
-            searchEditText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        val dialog = AlertDialog.Builder(context)
+            .setTitle("Filtrer par Prix")
+            .setView(rangeSlider)
+            .setPositiveButton("OK") { _, _ ->
+                if (rangeSlider.values.size >= 2) {
+                    val selectedMinPrice = rangeSlider.values[0]
+                    val selectedMaxPrice = rangeSlider.values[1]
+                    onPriceRangeSelected(selectedMinPrice, selectedMaxPrice)
                 }
+            }
+            .setNegativeButton("Annuler", null)
+            .create()
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    onTextChanged(s.toString())
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                }
-            })
-        } else {
-            searchEditText.visibility = View.GONE
-        }
+        dialog.show()
     }
 
+    private fun onPriceRangeSelected(minPrice: Float, maxPrice: Float) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val filteredEstates = realEstateDao.getRealEstatesByPriceRange(minPrice.toDouble(), maxPrice.toDouble()).first()
+            withContext(Dispatchers.Main) {
+                onUpdateUI(filteredEstates)
+            }
+        }
+    }
 }
+
+
+
 

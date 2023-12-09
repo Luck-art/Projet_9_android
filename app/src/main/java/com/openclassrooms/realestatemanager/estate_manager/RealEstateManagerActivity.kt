@@ -19,6 +19,8 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.openclassrooms.realestatemanager.LogInActivity
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
+import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.details.EstateDetailsActivity
 import com.openclassrooms.realestatemanager.details.EstateDetailsFragment
@@ -74,16 +76,25 @@ class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment
             getListFragment()?.showSelectEstateDialog()
         }
 
-        val searchFilter by lazy { SearchFilter(
-            onTextChanged = {
-                getListFragment()?.onFilterTextChanged(it)
-            }
-        ) }
+        val realEstateDao = RealEstateManagerDatabase.getDatabase(this).realEstateDao()
+
+
+        val searchFilter by lazy {
+            SearchFilter(
+                context = this,
+                realEstateDao = realEstateDao,
+                onUpdateUI = { realEstates ->
+                    // Mettez à jour votre interface utilisateur ici avec les biens filtrés
+                }
+            )
+        }
 
         searchIcon.setOnClickListener {
-            Log.d("SearchIcon", "Icon clicked")
-            searchFilter.toggleSearchBar(searchEditText)
+            searchFilter.showPriceFilterDialog()
         }
+
+
+
 
         burgerMenu.setOnClickListener {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
