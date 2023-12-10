@@ -50,8 +50,9 @@ import kotlinx.coroutines.flow.Flow
         @Query("DELETE FROM real_estate WHERE id = :estateId")
         suspend fun deleteEstateById(estateId: Long)
 
-        @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms")
-        fun getFilteredRealEstates(minPrice: Double, maxPrice: Double, minSurface: Double, maxSurface: Double): Flow<List<RealEstate>>
+        @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms BETWEEN :minRooms AND :maxRooms")
+        fun getFilteredRealEstates(minPrice: Double, maxPrice: Double, minSurface: Double, maxSurface: Double, minRooms: Double, maxRooms: Double): Flow<List<RealEstate>>
+
 
         @RawQuery(observedEntities = [RealEstate::class, Media::class, SellerName::class])
         fun filter(query: SupportSQLiteQuery): Flow<List<RealEstate>>

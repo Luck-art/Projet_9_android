@@ -66,16 +66,18 @@ class SearchFilter(
             val selectedMaxPrice = priceRangeSlider.values[1]
             val selectedMinSurface = surfaceRangeSlider.values[0]
             val selectedMaxSurface = surfaceRangeSlider.values[1]
-            onFilterSelected(selectedMinPrice, selectedMaxPrice, selectedMinSurface, selectedMaxSurface)
+            val selectedMinRooms = surfaceRangeSlider.values[0]
+            val selectedMaxRooms = surfaceRangeSlider.values[1]
+            onFilterSelected(selectedMinPrice, selectedMaxPrice, selectedMinSurface, selectedMaxSurface, selectedMinRooms, selectedMaxRooms)
         }
         builder.setNegativeButton("Annuler", null)
 
         builder.create().show()
     }
 
-    private fun onFilterSelected(minPrice: Float, maxPrice: Float, minSurface: Float, maxSurface: Float) {
+    private fun onFilterSelected(minPrice: Float, maxPrice: Float, minSurface: Float, maxSurface: Float, minRooms: Float, maxRooms: Float) {
         CoroutineScope(Dispatchers.IO).launch {
-            val filteredEstates = realEstateDao.getFilteredRealEstates(minPrice.toDouble(), maxPrice.toDouble(), minSurface.toDouble(), maxSurface.toDouble()).first()
+            val filteredEstates = realEstateDao.getFilteredRealEstates(minPrice.toDouble(), maxPrice.toDouble(), minSurface.toDouble(), maxSurface.toDouble(), minRooms.toDouble(), maxRooms.toDouble()).first()
             withContext(Dispatchers.Main) {
                 onUpdateUI(filteredEstates)
             }
