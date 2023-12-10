@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.details
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -64,6 +65,7 @@ class EstateDetailsFragment : Fragment() {
         return inflater.inflate(R.layout.estate_detail, container, false)
     }
 
+    @SuppressLint("CutPasteId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val textView = view.findViewById<TextView>(R.id.estate_name)
@@ -86,21 +88,36 @@ class EstateDetailsFragment : Fragment() {
         pauseButton = view.findViewById(R.id.pauseButton)
 
         adapter.setOnItemClickedListener { mediaItem ->
-            if (mediaItem.type == "video") {
-                imageView.visibility = View.GONE
-                videoView.visibility = View.VISIBLE
-                videoView.setVideoURI(Uri.parse(mediaItem.uri))
-                videoView.start()
-                playButton.visibility = View.VISIBLE
-                pauseButton.visibility = View.GONE
-            } else {
-                videoView.visibility = View.GONE
-                imageView.visibility = View.VISIBLE
-                Glide.with(this).load(mediaItem.uri).into(imageView)
-                playButton.visibility = View.GONE
-                pauseButton.visibility = View.GONE
+            // Référence à l'ImageView et au VideoView au milieu.
+            val imageViewToBeUpdated = view.findViewById<ImageView>(R.id.main_display_image) // Remplacez par l'ID réel de votre ImageView.
+            val videoViewToBeUpdated = view.findViewById<VideoView>(R.id.main_display_video) // Remplacez par l'ID réel de votre VideoView.
+
+            // Référence aux boutons de contrôle.
+            val playButton = view.findViewById<ImageButton>(R.id.playButton)
+            val pauseButton = view.findViewById<ImageButton>(R.id.pauseButton)
+
+            when (mediaItem.type) {
+                "video" -> {
+                    imageViewToBeUpdated.visibility = View.GONE // Cachez l'ImageView.
+                    videoViewToBeUpdated.visibility = View.VISIBLE // Montrez le VideoView.
+                    videoViewToBeUpdated.setVideoURI(Uri.parse(mediaItem.uri))
+                    videoViewToBeUpdated.start()
+
+                    playButton.visibility = View.VISIBLE // Montrez le bouton de lecture.
+                    pauseButton.visibility = View.GONE // Cachez le bouton de pause.
+                }
+                "image" -> {
+                    videoViewToBeUpdated.visibility = View.GONE // Cachez le VideoView.
+                    imageViewToBeUpdated.visibility = View.VISIBLE // Montrez l'ImageView.
+                    Glide.with(this).load(mediaItem.uri).into(imageViewToBeUpdated)
+
+                    playButton.visibility = View.GONE // Cachez le bouton de lecture.
+                    pauseButton.visibility = View.GONE // Cachez le bouton de pause.
+                }
             }
         }
+
+
 
         adapter.setOnAddButtonClickedListener {
             openGallery()

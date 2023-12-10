@@ -98,7 +98,17 @@ class AddNewEstate(
             val description = editDescription.text.toString()
             val address = editAddress.text.toString()
             val price = editPrice.text.toString().toIntOrNull() ?: 0
-            val surface = editSurface.text.toString().toDouble()
+            val surfaceText = editSurface.text.toString()
+            val surface = if (surfaceText.isNotEmpty()) {
+                try {
+                    surfaceText.toDouble()
+                } catch (e: NumberFormatException) {
+                    0.0
+                }
+            } else {
+                0.0
+            }
+
             val rooms = editRooms.text.toString().toIntOrNull() ?: 0
             val isOnSale = radioButtonOnSale.isChecked
 

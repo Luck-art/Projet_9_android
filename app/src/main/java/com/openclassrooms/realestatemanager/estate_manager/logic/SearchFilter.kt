@@ -79,8 +79,8 @@ class SearchFilter(
             val selectedMaxPrice = priceRangeSlider.values[1]
             val selectedMinSurface = surfaceRangeSlider.values[0]
             val selectedMaxSurface = surfaceRangeSlider.values[1]
-            val selectedMinRooms = surfaceRangeSlider.values[0]
-            val selectedMaxRooms = surfaceRangeSlider.values[1]
+            val selectedMinRooms = roomsRangeSlider.values[0]
+            val selectedMaxRooms = roomsRangeSlider.values[1]
             onFilterSelected(selectedMinPrice, selectedMaxPrice, selectedMinSurface, selectedMaxSurface, selectedMinRooms, selectedMaxRooms)
         }
         builder.setNegativeButton("Annuler", null)
@@ -106,11 +106,11 @@ class SearchFilter(
             withContext(Dispatchers.Main) {
                 showFilterDialog(
                     minPrice = 0f,
-                    maxPrice = maxPriceValue,
+                    maxPrice = maxPriceValue + 1.0f,
                     minSurface = 0f,
-                    maxSurface = maxSurface,
+                    maxSurface = maxSurface + 1.0f,
                     minRooms = 1f,
-                    maxRooms = maxRooms
+                    maxRooms = maxRooms + 1.0f,
                 )
             }
         }
