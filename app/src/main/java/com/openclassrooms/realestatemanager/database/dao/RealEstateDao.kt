@@ -47,8 +47,21 @@ import kotlinx.coroutines.flow.Flow
         @Query("SELECT MAX(price) FROM real_estate")
         fun getMaxPrice(): Int?
 
+        @Query("SELECT MIN(surface) FROM real_estate")
+        fun getMinSurface(): Int?
+
+        @Query("SELECT MAX(surface) FROM real_estate")
+        fun getMaxSurface(): Int?
+
+        @Query("SELECT MIN(rooms) FROM real_estate")
+        fun getMinRooms(): Int?
+
+        @Query("SELECT MAX(rooms) FROM real_estate")
+        fun getMaxRooms(): Int?
+
         @Query("DELETE FROM real_estate WHERE id = :estateId")
         suspend fun deleteEstateById(estateId: Long)
+
 
         @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms BETWEEN :minRooms AND :maxRooms")
         fun getFilteredRealEstates(minPrice: Double, maxPrice: Double, minSurface: Double, maxSurface: Double, minRooms: Double, maxRooms: Double): Flow<List<RealEstate>>

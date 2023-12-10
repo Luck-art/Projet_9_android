@@ -28,15 +28,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
-
+import org.koin.android.ext.android.inject
 
 
 class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment.Listener {
 
     lateinit var burgerMenu: ImageView
     lateinit var drawerLayout: DrawerLayout
-    private lateinit var realEstateDao: RealEstateDao
+    private val realEstateDao: RealEstateDao by inject()
     private lateinit var searchFilter: SearchFilter
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -83,7 +82,6 @@ class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment
             getListFragment()?.showSelectEstateDialog()
         }
 
-        val realEstateDao = RealEstateManagerDatabase.getDatabase(this).realEstateDao()
 
 
         val searchFilter by lazy {
@@ -91,13 +89,13 @@ class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment
                 context = this,
                 realEstateDao = realEstateDao,
                 onUpdateUI = { realEstates ->
-                    // Mettez à jour votre interface utilisateur ici avec les biens filtrés
+                    getListFragment()?.onFilterNewItems(realEstates)
                 }
             )
         }
 
         searchIcon.setOnClickListener {
-            searchFilter.showFilterDialog()
+            searchFilter.fetchPriceRangeAndShowDialog()
         }
 
 
@@ -124,20 +122,6 @@ class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment
             }
         }
     }
-
-    fun fetchPriceRange() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val minPrice = realEstateDao.getMinPrice() ?: 0
-            val maxPrice = realEstateDao.getMaxPrice() ?: 1000000
-
-            withContext(Dispatchers.Main) {
-
-                searchFilter.updatePriceRange(minPrice, maxPrice)
-            }
-        }
-    }
-
-
 
 
     private fun logout() {

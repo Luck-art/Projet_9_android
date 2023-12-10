@@ -20,10 +20,9 @@ class SearchFilter(
     private val onUpdateUI: (List<RealEstate>) -> Unit
 ) {
 
-    private var minPrice: Float = 0f
-    private var maxPrice: Float = 1000000f
 
-    fun showFilterDialog() {
+
+    fun showFilterDialog(minPrice : Float, maxPrice : Float, minSurface: Float, maxSurface: Float, minRooms: Float, maxRooms: Float) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Filtrer les propriétés")
 
@@ -47,7 +46,6 @@ class SearchFilter(
             valueTo = maxPrice
             setValues(minPrice, maxPrice)
         }
-
         linearLayout.addView(priceRangeSlider)
 
         val surfaceLabel = TextView(context).apply {
@@ -56,8 +54,23 @@ class SearchFilter(
         linearLayout.addView(surfaceLabel)
 
         val surfaceRangeSlider = RangeSlider(context).apply {
+            valueFrom = minSurface
+            valueTo = maxSurface
+            setValues(minSurface, maxSurface)
         }
         linearLayout.addView(surfaceRangeSlider)
+
+        val roomsLabel = TextView(context).apply {
+            text = context.getString(R.string.rooms_filter_label)
+        }
+        linearLayout.addView(roomsLabel)
+
+        val roomsRangeSlider = RangeSlider(context).apply {
+            valueFrom = minRooms
+            valueTo = maxRooms
+            setValues(minRooms, maxRooms)
+        }
+        linearLayout.addView(roomsRangeSlider)
 
         builder.setView(linearLayout)
 
@@ -86,20 +99,21 @@ class SearchFilter(
 
     fun fetchPriceRangeAndShowDialog() {
         CoroutineScope(Dispatchers.IO).launch {
-            val minPriceValue = realEstateDao.getMinPrice()?.toFloat() ?: 0f
             val maxPriceValue = realEstateDao.getMaxPrice()?.toFloat() ?: 1000000f
+            val maxSurface = realEstateDao.getMaxSurface()?.toFloat() ?: 1000f
+            val maxRooms = realEstateDao.getMaxRooms()?.toFloat() ?: 6f
 
             withContext(Dispatchers.Main) {
-                minPrice = minPriceValue
-                maxPrice = maxPriceValue
-                showFilterDialog()
+                showFilterDialog(
+                    minPrice = 0f,
+                    maxPrice = maxPriceValue,
+                    minSurface = 0f,
+                    maxSurface = maxSurface,
+                    minRooms = 1f,
+                    maxRooms = maxRooms
+                )
             }
         }
-    }
-
-    fun updatePriceRange(minPrice: Int, maxPrice: Int) {
-        this.minPrice = minPrice.toFloat()
-        this.maxPrice = maxPrice.toFloat()
     }
 
 }

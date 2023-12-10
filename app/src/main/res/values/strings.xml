@@ -6,4 +6,5 @@
     <string name="close_drawer" />
     <string name="price_filter_label">Price filter</string>
     <string name="surface_filter_label">Surface filter</string>
+    <string name="rooms_filter_label">Rooms filter</string>
 </resources>

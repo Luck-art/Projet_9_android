@@ -58,6 +58,10 @@ class RealEstateManagerFragment : Fragment() {
         pickMediaCompletable?.complete(uri)
     }
 
+    fun onFilterNewItems(realEstates: List<RealEstate>) {
+        adapter.onNewItems(realEstates)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.edit_estate -> {

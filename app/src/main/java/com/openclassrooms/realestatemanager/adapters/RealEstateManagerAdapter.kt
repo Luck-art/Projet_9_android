@@ -116,6 +116,10 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private va
         notifyDataSetChanged()
     }
 
+    fun onNewItems(items: List<RealEstate>) {
+        filteredDataSet = items
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount() = filteredDataSet.size
 }
