@@ -88,31 +88,29 @@ class EstateDetailsFragment : Fragment() {
         pauseButton = view.findViewById(R.id.pauseButton)
 
         adapter.setOnItemClickedListener { mediaItem ->
-            // Référence à l'ImageView et au VideoView au milieu.
-            val imageViewToBeUpdated = view.findViewById<ImageView>(R.id.main_display_image) // Remplacez par l'ID réel de votre ImageView.
-            val videoViewToBeUpdated = view.findViewById<VideoView>(R.id.main_display_video) // Remplacez par l'ID réel de votre VideoView.
+            val imageViewToBeUpdated = view.findViewById<ImageView>(R.id.main_display_image)
+            val videoViewToBeUpdated = view.findViewById<VideoView>(R.id.main_display_video)
 
-            // Référence aux boutons de contrôle.
             val playButton = view.findViewById<ImageButton>(R.id.playButton)
             val pauseButton = view.findViewById<ImageButton>(R.id.pauseButton)
 
             when (mediaItem.type) {
                 "video" -> {
-                    imageViewToBeUpdated.visibility = View.GONE // Cachez l'ImageView.
-                    videoViewToBeUpdated.visibility = View.VISIBLE // Montrez le VideoView.
+                    imageViewToBeUpdated.visibility = View.GONE
+                    videoViewToBeUpdated.visibility = View.VISIBLE
                     videoViewToBeUpdated.setVideoURI(Uri.parse(mediaItem.uri))
                     videoViewToBeUpdated.start()
 
-                    playButton.visibility = View.VISIBLE // Montrez le bouton de lecture.
-                    pauseButton.visibility = View.GONE // Cachez le bouton de pause.
+                    playButton.visibility = View.VISIBLE
+                    pauseButton.visibility = View.GONE
                 }
                 "image" -> {
-                    videoViewToBeUpdated.visibility = View.GONE // Cachez le VideoView.
-                    imageViewToBeUpdated.visibility = View.VISIBLE // Montrez l'ImageView.
+                    videoViewToBeUpdated.visibility = View.GONE
+                    imageViewToBeUpdated.visibility = View.VISIBLE
                     Glide.with(this).load(mediaItem.uri).into(imageViewToBeUpdated)
 
-                    playButton.visibility = View.GONE // Cachez le bouton de lecture.
-                    pauseButton.visibility = View.GONE // Cachez le bouton de pause.
+                    playButton.visibility = View.GONE
+                    pauseButton.visibility = View.GONE 
                 }
             }
         }
