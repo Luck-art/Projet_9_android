@@ -6,13 +6,15 @@
         android:id="@+id/thumbnail_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:visibility="visible" />
 
     <VideoView
         android:id="@+id/thumbnail_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+
 
     <ImageButton
         android:id="@+id/play_button"

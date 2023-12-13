@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +22,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.estate_manager.logic.AddNewEstate
+import com.openclassrooms.realestatemanager.estate_manager.logic.SpacesItemDecoration
 import com.openclassrooms.realestatemanager.models.DialogState
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.first
@@ -47,8 +49,7 @@ class RealEstateManagerFragment : Fragment() {
 
     var pickMediaCompletable : CompletableDeferred<Uri?>? = null
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        // Callback is invoked after the user selects a media item or closes the
-        // photo picker.
+
         if (uri != null) {
             Log.d("PhotoPicker", "Selected URI: $uri")
         } else {
@@ -135,7 +136,13 @@ class RealEstateManagerFragment : Fragment() {
         }
 
 
+        val spaceInPixels = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            8f,
+            resources.displayMetrics
+        ).toInt()
 
+        realEstateRecyclerView.addItemDecoration(SpacesItemDecoration(spaceInPixels))
 
 
 

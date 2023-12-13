@@ -16,6 +16,7 @@ class EstateDetailsAdapter(private var mediaItems: MutableList<Media>) : Recycle
 
     var onItemClicked: ((Media) -> Unit)? = null
     private var onAddButtonClicked: (() -> Unit)? = null
+    private var selectedPosition = RecyclerView.NO_POSITION
 
 
     companion object {
@@ -59,6 +60,15 @@ class EstateDetailsAdapter(private var mediaItems: MutableList<Media>) : Recycle
         when (holder) {
             is ViewHolder -> {
                 val mediaItem = mediaItems[position]
+                val params = holder.itemView.layoutParams
+                if (position == selectedPosition) {
+                    params.width = ViewGroup.LayoutParams.MATCH_PARENT
+                    params.height = ViewGroup.LayoutParams.MATCH_PARENT
+                } else {
+                    params.width = holder.itemView.context.resources.getDimensionPixelSize(R.dimen.thumbnail_width)
+                    params.height = holder.itemView.context.resources.getDimensionPixelSize(R.dimen.thumbnail_height)
+                }
+                holder.itemView.layoutParams = params
                 with(holder) {
                     if (mediaItem.type == "image") {
                         imageView.visibility = View.VISIBLE

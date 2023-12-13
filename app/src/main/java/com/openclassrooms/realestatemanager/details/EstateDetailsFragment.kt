@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.details
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -84,6 +85,7 @@ class EstateDetailsFragment : Fragment() {
         imagesRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         imagesRecyclerView.adapter = adapter
 
+
         playButton = view.findViewById(R.id.playButton)
         pauseButton = view.findViewById(R.id.pauseButton)
 
@@ -110,7 +112,7 @@ class EstateDetailsFragment : Fragment() {
                     Glide.with(this).load(mediaItem.uri).into(imageViewToBeUpdated)
 
                     playButton.visibility = View.GONE
-                    pauseButton.visibility = View.GONE 
+                    pauseButton.visibility = View.GONE
                 }
             }
         }
