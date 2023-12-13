@@ -18,16 +18,11 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.openclassrooms.realestatemanager.LogInActivity
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
 import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.details.EstateDetailsActivity
 import com.openclassrooms.realestatemanager.details.EstateDetailsFragment
 import com.openclassrooms.realestatemanager.estate_manager.logic.SearchFilter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
 

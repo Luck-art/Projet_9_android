@@ -48,19 +48,18 @@ class LogInActivity : AppCompatActivity() {
 
         auth = Firebase.auth
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.app_name))
+            .requestIdToken("426097529879-2ln72eo1n4g4ajuppmufojdahmhn8tbm.apps.googleusercontent.com") // Remplacez "YOUR_CLIENT_ID_HERE" par votre ID client OAuth 2.0
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-            callbackManager = CallbackManager.Factory.create()
+
+        callbackManager = CallbackManager.Factory.create()
 
         val googleSignInButton = findViewById<SignInButton>(R.id.googleSignInButton)
         val facebookLoginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
         val emailLoginButton = findViewById<Button>(R.id.emailLoginButton)
 
-
-        // Google
 
         if (googleSignInButton != null) {
             googleSignInButton.setOnClickListener {
@@ -71,7 +70,6 @@ class LogInActivity : AppCompatActivity() {
             Log.e("LogInActivity", "googleSignInButton is null")
         }
 
-        // Facebook
 
         facebookLoginButton.setReadPermissions("email", "public_profile")
         FacebookSdk.setApplicationId("1231913224148121");
