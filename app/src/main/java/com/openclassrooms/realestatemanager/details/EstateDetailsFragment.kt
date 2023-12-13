@@ -72,7 +72,7 @@ class EstateDetailsFragment : Fragment() {
         val descriptionTextView = view.findViewById<TextView>(R.id.estate_description)
         val priceTextView = view.findViewById<TextView>(R.id.estate_price)
         val imageView = view.findViewById<ImageView>(R.id.estate_imageview)
-        val statusTextView = view.findViewById<TextView>(R.id.estate_status)
+        //val statusTextView = view.findViewById<TextView>(R.id.estate_status)
         val videoView = view.findViewById<VideoView>(R.id.main_display_video)
 
         val addButton: ImageView? = view.findViewById(R.id.add_button)
@@ -121,6 +121,9 @@ class EstateDetailsFragment : Fragment() {
             openGallery()
         }
 
+        val surfaceTextView = view.findViewById<TextView>(R.id.estate_surface)
+        val addressTextView = view.findViewById<TextView>(R.id.estate_address)
+        val roomsTextView = view.findViewById<TextView>(R.id.estate_rooms)
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             callViewModel.state?.collect { viewState ->
@@ -130,6 +133,9 @@ class EstateDetailsFragment : Fragment() {
                     priceTextView.text = vs.realEstate?.price.toString()
                     Glide.with(this@EstateDetailsFragment).load(vs.realEstate?.img).into(imageView)
                     adapter.updateMediaItems(vs.medias)
+                    surfaceTextView.text = "Surface: ${vs.realEstate?.surface} m²"
+                    addressTextView.text = "Adresse: ${vs.realEstate?.address}"
+                    roomsTextView.text = "Rooms: ${vs.realEstate?.rooms}"
                     Log.d("EstateDetailsFragment", "Mise à jour des éléments de l'adapter")
                 }
             }

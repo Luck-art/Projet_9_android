@@ -60,8 +60,6 @@ class LogInActivity : AppCompatActivity() {
         val emailLoginButton = findViewById<Button>(R.id.emailLoginButton)
 
 
-        // Google
-
         if (googleSignInButton != null) {
             googleSignInButton.setOnClickListener {
                 val signInIntent = googleSignInClient.signInIntent
@@ -71,7 +69,6 @@ class LogInActivity : AppCompatActivity() {
             Log.e("LogInActivity", "googleSignInButton is null")
         }
 
-        // Facebook
 
         facebookLoginButton.setReadPermissions("email", "public_profile")
         FacebookSdk.setApplicationId("1231913224148121");
