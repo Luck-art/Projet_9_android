@@ -20,6 +20,10 @@ public class Utils {
         return (int) Math.round(dollars * 0.812);
     }
 
+    public static int convertEuroToDollar(int euros){
+        return (int) Math.round(euros * 0.812);
+    }
+
 
     public static String getTodayDate(){
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");

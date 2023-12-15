@@ -3,14 +3,15 @@
   <component name="AndroidTestResultsUserPreferences">
     <option name="androidTestResultsTableState">
       <map>
-        <entry key="-1938122554">
+        <entry key="1451159780">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="R5CR6190PVX" value="120" />
                   <entry key="Tests" value="360" />
-                  <entry key="Xiaomi Redmi Note 9S" value="120" />
+                  <entry key="samsung&#10; SM-G781B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

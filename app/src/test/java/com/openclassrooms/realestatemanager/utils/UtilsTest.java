@@ -43,7 +43,7 @@ public class UtilsTest {
             dayString = "" + day;
         }
 
-        int month = now.get(Calendar.MONTH) + 1 ; //MONTH START BY 0 IN CALENDAR
+        int month = now.get(Calendar.MONTH) + 1 ;
         String monthString = "";
         if(month <= 9) {
             monthString = "0" + month;
