@@ -9,6 +9,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.test.InstrumentationRegistry
 import androidx.test.espresso.Espresso.onView
@@ -93,6 +94,9 @@ class AddEstateAndroidTest {
             )
         )
         frameLayout.perform(click())
+
+        // check if it has a photo
+        onView(withId(R.id.selectedPhoto)).check(matches(hasDrawable()))
 
         val appCompatEditText = onView(
             allOf(
@@ -291,6 +295,16 @@ class AddEstateAndroidTest {
                 return parent is ViewGroup && parentMatcher.matches(parent)
                         && view == parent.getChildAt(position)
             }
+        }
+    }
+
+    fun hasDrawable() = object : TypeSafeMatcher<View>() {
+        override fun describeTo(description: Description) {
+            description.appendText("ImageView has a drawable")
+        }
+
+        override fun matchesSafely(view: View): Boolean {
+            return view is ImageView && view.drawable != null
         }
     }
 }

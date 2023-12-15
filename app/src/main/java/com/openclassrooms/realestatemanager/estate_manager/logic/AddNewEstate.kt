@@ -63,8 +63,6 @@ class AddNewEstate(
                 }
             }
         }
-        onView(withId(R.id.img1)).check(matches(CustomMatcher.hasDrawable()));
-
 
         realEstate?.name?.let {
             editName.setText(it)
