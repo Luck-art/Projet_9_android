@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.icu.text.NumberFormat
 import android.icu.util.Currency
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -27,6 +28,10 @@ class SearchFilter(
     private val onUpdateUI: (List<RealEstate>) -> Unit
 ) {
 
+    companion object {
+        val PRICE_ID = View.generateViewId()
+        val SURFACE_ID = View.generateViewId()
+    }
 
     fun showFilterDialog(
         minPrice: Float,
@@ -55,6 +60,7 @@ class SearchFilter(
         linearLayout.addView(priceLabel)
 
         val priceRangeSlider = RangeSlider(context).apply {
+            id = PRICE_ID
             valueFrom = minPrice
             valueTo = maxPrice
             setValues(minPrice, maxPrice)
@@ -106,6 +112,7 @@ class SearchFilter(
         linearLayout.addView(surfaceLabel)
 
         val surfaceRangeSlider = RangeSlider(context).apply {
+            id = SURFACE_ID
             valueFrom = minSurface
             valueTo = maxSurface
             setValues(minSurface, maxSurface)
@@ -256,6 +263,7 @@ class SearchFilter(
             }
         }
     }
+
 
 }
 

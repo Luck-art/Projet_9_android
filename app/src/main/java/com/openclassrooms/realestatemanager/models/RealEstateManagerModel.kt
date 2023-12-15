@@ -92,7 +92,7 @@ object RealEstateManagerModel {
                 name = "Modern house",
                 description = "modern style",
                 address = "6801 Hollywood Blvd, Los Angeles, CA 90028",
-                price = 15000,
+                price = 30000,
                 latitude = latitude2,
                 longitude = longitude2,
                 surface = 2.0,

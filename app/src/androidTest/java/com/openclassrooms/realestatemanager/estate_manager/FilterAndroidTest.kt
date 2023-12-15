@@ -3,23 +3,36 @@ package com.openclassrooms.realestatemanager.estate_manager
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.ViewAssertions.*
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.NoMatchingViewException
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
+import androidx.test.espresso.ViewAssertion
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
+import androidx.test.espresso.matcher.ViewMatchers.withClassName
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.google.android.material.slider.RangeSlider
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.estate_manager.logic.SearchFilter
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.TypeSafeMatcher
-import org.hamcrest.core.IsInstanceOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -31,6 +44,14 @@ class FilterAndroidTest {
 
     @Test
     fun filterAndroidTest() {
+
+        onView(
+            allOf(
+                withId(R.id.realEstateRecyclerView),
+                isDisplayed()
+            )
+        ).check(RecyclerViewItemCountAssertion((2)))
+
         val appCompatImageView = onView(
             allOf(
                 withId(R.id.search_estate),
@@ -49,6 +70,16 @@ class FilterAndroidTest {
         )
         appCompatImageView.perform(click())
 
+        onView(
+            allOf(
+                withId(SearchFilter.PRICE_ID),
+            )
+        ).perform(setRangeSliderValue(
+            maxValue = 20000f
+        ))
+
+        waitFor(2_000)
+
         val materialButton = onView(
             allOf(
                 withId(android.R.id.button1), withText("OK"),
@@ -63,179 +94,14 @@ class FilterAndroidTest {
         )
         materialButton.perform(scrollTo(), click())
 
-        val appCompatImageView2 = onView(
-            allOf(
-                withId(R.id.search_estate),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.my_toolbar),
-                        childAtPosition(
-                            withClassName(`is`("android.widget.LinearLayout")),
-                            0
-                        )
-                    ),
-                    2
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatImageView2.perform(click())
+        waitFor(2_000)
 
-        val materialButton2 = onView(
-            allOf(
-                withId(android.R.id.button1), withText("OK"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(androidx.appcompat.R.id.buttonPanel),
-                        0
-                    ),
-                    3
-                )
-            )
-        )
-        materialButton2.perform(scrollTo(), click())
-
-        val appCompatImageView3 = onView(
-            allOf(
-                withId(R.id.search_estate),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.my_toolbar),
-                        childAtPosition(
-                            withClassName(`is`("android.widget.LinearLayout")),
-                            0
-                        )
-                    ),
-                    2
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatImageView3.perform(click())
-
-        val materialButton3 = onView(
-            allOf(
-                withId(android.R.id.button1), withText("OK"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(androidx.appcompat.R.id.buttonPanel),
-                        0
-                    ),
-                    3
-                )
-            )
-        )
-        materialButton3.perform(scrollTo(), click())
-
-        val appCompatImageView4 = onView(
-            allOf(
-                withId(R.id.search_estate),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.my_toolbar),
-                        childAtPosition(
-                            withClassName(`is`("android.widget.LinearLayout")),
-                            0
-                        )
-                    ),
-                    2
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatImageView4.perform(click())
-
-        val materialButton4 = onView(
-            allOf(
-                withId(android.R.id.button1), withText("OK"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(androidx.appcompat.R.id.buttonPanel),
-                        0
-                    ),
-                    3
-                )
-            )
-        )
-        materialButton4.perform(scrollTo(), click())
-
-        val appCompatImageView5 = onView(
-            allOf(
-                withId(R.id.search_estate),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.my_toolbar),
-                        childAtPosition(
-                            withClassName(`is`("android.widget.LinearLayout")),
-                            0
-                        )
-                    ),
-                    2
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatImageView5.perform(click())
-
-        val materialButton5 = onView(
-            allOf(
-                withId(android.R.id.button1), withText("OK"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(androidx.appcompat.R.id.buttonPanel),
-                        0
-                    ),
-                    3
-                )
-            )
-        )
-        materialButton5.perform(scrollTo(), click())
-
-        val appCompatImageView6 = onView(
-            allOf(
-                withId(R.id.search_estate),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.my_toolbar),
-                        childAtPosition(
-                            withClassName(`is`("android.widget.LinearLayout")),
-                            0
-                        )
-                    ),
-                    2
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatImageView6.perform(click())
-
-        val materialButton6 = onView(
-            allOf(
-                withId(android.R.id.button1), withText("OK"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(androidx.appcompat.R.id.buttonPanel),
-                        0
-                    ),
-                    3
-                )
-            )
-        )
-        materialButton6.perform(scrollTo(), click())
-
-        val recyclerView = onView(
+        onView(
             allOf(
                 withId(R.id.realEstateRecyclerView),
-                withParent(
-                    allOf(
-                        withId(R.id.fragment_container_list),
-                        withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout::class.java))
-                    )
-                ),
                 isDisplayed()
             )
-        )
-        recyclerView.check(matches(isDisplayed()))
+        ).check(RecyclerViewItemCountAssertion((1)))
     }
 
     private fun childAtPosition(
@@ -255,4 +121,68 @@ class FilterAndroidTest {
             }
         }
     }
+
+
+    class RecyclerViewItemCountAssertion : ViewAssertion {
+        private val matcher: Matcher<Int>
+
+        constructor(expectedCount: Int) {
+            matcher = `is`(expectedCount)
+        }
+
+        constructor(matcher: Matcher<Int>) {
+            this.matcher = matcher
+        }
+
+        override fun check(view: View, noViewFoundException: NoMatchingViewException?) {
+            if (noViewFoundException != null) {
+                throw noViewFoundException
+            }
+            val recyclerView = view as RecyclerView
+            val adapter = recyclerView.adapter
+            assertThat(adapter!!.itemCount, matcher)
+        }
+    }
+
+
+    fun setRangeSliderValue(minValue: Float? = null, maxValue: Float? = null): ViewAction {
+        return object : ViewAction {
+            override fun getDescription(): String {
+                return "Set Slider value to min:$minValue max:$maxValue"
+            }
+
+            override fun getConstraints(): Matcher<View> {
+                return ViewMatchers.isAssignableFrom(RangeSlider::class.java)
+            }
+
+            override fun perform(uiController: UiController?, view: View) {
+                val seekBar = view as RangeSlider
+                val actualValues = seekBar.values
+                val newMin = minValue ?: actualValues[0]
+                val newMax = maxValue ?: actualValues[1]
+                seekBar.values = listOf(newMin, newMax)
+            }
+        }
+    }
+
+    private fun waitFor(duration: Int) {
+        onView(isRoot()).perform(waitForAction(duration.toLong()))
+    }
+
+    fun waitForAction(millis: Long): ViewAction {
+        return object : ViewAction {
+            override fun getConstraints(): Matcher<View> {
+                return isRoot()
+            }
+
+            override fun getDescription(): String {
+                return "Wait for $millis milliseconds."
+            }
+
+            override fun perform(uiController: UiController, view: View) {
+                uiController.loopMainThreadForAtLeast(millis)
+            }
+        }
+    }
+
 }
