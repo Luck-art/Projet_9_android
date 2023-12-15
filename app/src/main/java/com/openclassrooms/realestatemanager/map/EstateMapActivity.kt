@@ -11,7 +11,7 @@ import java.util.Locale
 
 class EstateMapActivity : AppCompatActivity() {
 
-    private var geocoder: Geocoder = Geocoder(this, Locale.getDefault())
+    lateinit var geocoder: Geocoder
     private lateinit var estateMapAdapter: EstateMapAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
