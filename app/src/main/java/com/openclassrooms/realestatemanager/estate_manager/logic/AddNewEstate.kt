@@ -57,11 +57,15 @@ class AddNewEstate(
             GlobalScope.launch(Dispatchers.Main) {
                 imageUri = pickPhoto()
                 imageUri?.let {
-                    selectedPhoto.setImageURI(it)
+                    Glide.with(context)
+                        .load(it)
+                        .into(selectedPhoto)
                 }
             }
-
         }
+        onView(withId(R.id.img1)).check(matches(CustomMatcher.hasDrawable()));
+
+
         realEstate?.name?.let {
             editName.setText(it)
         }

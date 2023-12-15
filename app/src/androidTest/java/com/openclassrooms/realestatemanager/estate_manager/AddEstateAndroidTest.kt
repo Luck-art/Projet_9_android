@@ -1,25 +1,40 @@
 package com.openclassrooms.realestatemanager.estate_manager
 
 
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.Intent
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
+import androidx.test.InstrumentationRegistry
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers.isInternal
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.rule.GrantPermissionRule
 import com.openclassrooms.realestatemanager.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.not
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.File
+
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -29,8 +44,14 @@ class AddEstateAndroidTest {
     @JvmField
     var mActivityScenarioRule = ActivityScenarioRule(RealEstateManagerActivity::class.java)
 
+    @Rule
+    @JvmField
+    val readStoragePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+
     @Test
     fun addEstateAndroidTest() {
+        Intents.init()
+
         val appCompatImageView = onView(
             allOf(
                 withId(R.id.add_estate),
@@ -49,6 +70,15 @@ class AddEstateAndroidTest {
         )
         appCompatImageView.perform(click())
 
+        val resultData = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+            data = Uri.parse("https://www.picsum.photos/300/300")
+        }
+        intending(not(isInternal())).respondWith(
+            Instrumentation.ActivityResult(
+                Activity.RESULT_OK,
+                resultData
+            )
+        )
         val frameLayout = onView(
             allOf(
                 withId(R.id.photoContainer),
@@ -108,8 +138,6 @@ class AddEstateAndroidTest {
             )
         )
         appCompatEditText3.perform(replaceText("23 av de l'église, Rome"), closeSoftKeyboard())
-
-        pressBack()
 
         val appCompatEditText4 = onView(
             allOf(
