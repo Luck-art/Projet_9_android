@@ -2,7 +2,8 @@ package com.openclassrooms.realestatemanager.details
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Rect
+import android.icu.text.NumberFormat
+import android.icu.util.Currency
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -13,19 +14,19 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.VideoView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.adapters.EstateDetailsAdapter
+import com.openclassrooms.realestatemanager.adapters.EstateDetailsAdapter.Companion.REQUEST_CODE_PICK_MEDIA
 import com.openclassrooms.realestatemanager.database.tables.Media
 import com.openclassrooms.realestatemanager.map.EstateMapActivity
 import com.openclassrooms.realestatemanager.view_models.EstateDetailsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.activity.result.contract.ActivityResultContracts
-import com.openclassrooms.realestatemanager.adapters.EstateDetailsAdapter
-import com.openclassrooms.realestatemanager.adapters.EstateDetailsAdapter.Companion.REQUEST_CODE_PICK_MEDIA
 
 class EstateDetailsFragment : Fragment() {
 
@@ -127,12 +128,17 @@ class EstateDetailsFragment : Fragment() {
         val addressTextView = view.findViewById<TextView>(R.id.estate_address)
         val roomsTextView = view.findViewById<TextView>(R.id.estate_rooms)
 
+        val priceFormatter: NumberFormat = NumberFormat.getCurrencyInstance().apply {
+            maximumFractionDigits = 0
+            currency = Currency.getInstance("EUR")
+        }
+
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             callViewModel.state?.collect { viewState ->
                 viewState?.let { vs ->
                     textView.text = vs.realEstate?.name
                     descriptionTextView.text = vs.realEstate?.description
-                    priceTextView.text = vs.realEstate?.price.toString()
+                    priceTextView.text = vs.realEstate?.price?.let { priceFormatter.format(it) }
                     Glide.with(this@EstateDetailsFragment).load(vs.realEstate?.img).into(imageView)
                     adapter.updateMediaItems(vs.medias)
                     surfaceTextView.text = "Surface: ${vs.realEstate?.surface} m²"
