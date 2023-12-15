@@ -95,7 +95,7 @@ class AddNewEstate(
         val dialog = builder.create()
 
         buttonAddEstate.setOnClickListener {
-            val img = imageUri
+            val img = imageUri ?: realEstate?.img
             val name = editName.text.toString()
             val description = editDescription.text.toString()
             val address = editAddress.text.toString()
