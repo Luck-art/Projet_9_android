@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.adapters
 
 import android.graphics.drawable.Drawable
+import android.icu.text.NumberFormat
+import android.icu.util.Currency
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +22,12 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private va
     RecyclerView.Adapter<RealEstateManagerAdapter.ViewHolder>() {
 
     var filteredDataSet: List<RealEstate> = dataSet
+
+
+    private val priceFormatter: NumberFormat = NumberFormat.getCurrencyInstance().apply {
+        maximumFractionDigits = 0
+        currency = Currency.getInstance("EUR")
+    }
 
     fun getItemIdAtPosition(position: Int): Long {
         return filteredDataSet[position].id
@@ -62,7 +70,7 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private va
         }
         holder.estateTextView.text = item.name
         holder.estateDesciptionView.text = item.description
-        holder.estatePriceView.text = item.price.toString()
+        holder.estatePriceView.text = item.price?.let { priceFormatter.format(it) }
         if (item.sended) {
             holder.estateSendedView.text = "À vendre"
         } else {
