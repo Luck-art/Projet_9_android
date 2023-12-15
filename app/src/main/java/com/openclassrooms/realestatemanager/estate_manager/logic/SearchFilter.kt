@@ -1,6 +1,12 @@
 package com.openclassrooms.realestatemanager.estate_manager.logic
 
 import android.content.Context
+import android.graphics.Color
+import android.icu.text.NumberFormat
+import android.icu.util.Currency
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -13,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.roundToInt
 
 class SearchFilter(
     val context: Context,
@@ -21,8 +28,14 @@ class SearchFilter(
 ) {
 
 
-
-    fun showFilterDialog(minPrice : Float, maxPrice : Float, minSurface: Float, maxSurface: Float, minRooms: Float, maxRooms: Float) {
+    fun showFilterDialog(
+        minPrice: Float,
+        maxPrice: Float,
+        minSurface: Float,
+        maxSurface: Float,
+        minRooms: Float,
+        maxRooms: Float
+    ) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Filtrer les propriétés")
 
@@ -48,6 +61,45 @@ class SearchFilter(
         }
         linearLayout.addView(priceRangeSlider)
 
+        val priceFormatter: NumberFormat = NumberFormat.getCurrencyInstance().apply {
+            maximumFractionDigits = 0
+            currency = Currency.getInstance("EUR")
+        }
+
+        linearLayout.addView(FrameLayout(context).apply {
+            val minText = TextView(context).apply {
+                setTextColor(Color.BLACK)
+            }
+            val maxText = TextView(context).apply {
+                setTextColor(Color.BLACK)
+            }
+            // the listener
+            priceRangeSlider.addOnChangeListener(RangeSlider.OnChangeListener { rangeSlider, _, _ ->
+                minText.text = priceFormatter.format(rangeSlider.values[0])
+                maxText.text = priceFormatter.format(rangeSlider.values[1])
+            })
+            // the initial value
+            minText.text = priceFormatter.format(priceRangeSlider.values[0])
+            maxText.text = priceFormatter.format(priceRangeSlider.values[1])
+
+            addView(
+                minText,
+                FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    gravity = Gravity.START
+                })
+            addView(
+                maxText,
+                FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    gravity = Gravity.END
+                })
+        })
+
         val surfaceLabel = TextView(context).apply {
             text = context.getString(R.string.surface_filter_label)
         }
@@ -59,6 +111,40 @@ class SearchFilter(
             setValues(minSurface, maxSurface)
         }
         linearLayout.addView(surfaceRangeSlider)
+
+        linearLayout.addView(FrameLayout(context).apply {
+            val minText = TextView(context).apply {
+                setTextColor(Color.BLACK)
+            }
+            val maxText = TextView(context).apply {
+                setTextColor(Color.BLACK)
+            }
+            // the listener
+            surfaceRangeSlider.addOnChangeListener(RangeSlider.OnChangeListener { rangeSlider, _, _ ->
+                minText.text = rangeSlider.values[0].roundToInt().toString()
+                maxText.text = rangeSlider.values[1].roundToInt().toString()
+            })
+            // the initial value
+            minText.text = surfaceRangeSlider.values[0].roundToInt().toString()
+            maxText.text = surfaceRangeSlider.values[1].roundToInt().toString()
+
+            addView(
+                minText,
+                FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    gravity = Gravity.START
+                })
+            addView(
+                maxText,
+                FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    gravity = Gravity.END
+                })
+        })
 
         val roomsLabel = TextView(context).apply {
             text = context.getString(R.string.rooms_filter_label)
@@ -72,6 +158,40 @@ class SearchFilter(
         }
         linearLayout.addView(roomsRangeSlider)
 
+        linearLayout.addView(FrameLayout(context).apply {
+            val minText = TextView(context).apply {
+                setTextColor(Color.BLACK)
+            }
+            val maxText = TextView(context).apply {
+                setTextColor(Color.BLACK)
+            }
+            // the listener
+            roomsRangeSlider.addOnChangeListener(RangeSlider.OnChangeListener { rangeSlider, _, _ ->
+                minText.text = rangeSlider.values[0].roundToInt().toString()
+                maxText.text = rangeSlider.values[1].roundToInt().toString()
+            })
+            // the initial value
+            minText.text = roomsRangeSlider.values[0].roundToInt().toString()
+            maxText.text = roomsRangeSlider.values[1].roundToInt().toString()
+
+            addView(
+                minText,
+                FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    gravity = Gravity.START
+                })
+            addView(
+                maxText,
+                FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    gravity = Gravity.END
+                })
+        })
+
         builder.setView(linearLayout)
 
         builder.setPositiveButton("OK") { _, _ ->
@@ -81,16 +201,37 @@ class SearchFilter(
             val selectedMaxSurface = surfaceRangeSlider.values[1]
             val selectedMinRooms = roomsRangeSlider.values[0]
             val selectedMaxRooms = roomsRangeSlider.values[1]
-            onFilterSelected(selectedMinPrice, selectedMaxPrice, selectedMinSurface, selectedMaxSurface, selectedMinRooms, selectedMaxRooms)
+            onFilterSelected(
+                selectedMinPrice,
+                selectedMaxPrice,
+                selectedMinSurface,
+                selectedMaxSurface,
+                selectedMinRooms,
+                selectedMaxRooms
+            )
         }
         builder.setNegativeButton("Annuler", null)
 
         builder.create().show()
     }
 
-    private fun onFilterSelected(minPrice: Float, maxPrice: Float, minSurface: Float, maxSurface: Float, minRooms: Float, maxRooms: Float) {
+    private fun onFilterSelected(
+        minPrice: Float,
+        maxPrice: Float,
+        minSurface: Float,
+        maxSurface: Float,
+        minRooms: Float,
+        maxRooms: Float
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
-            val filteredEstates = realEstateDao.getFilteredRealEstates(minPrice.toDouble(), maxPrice.toDouble(), minSurface.toDouble(), maxSurface.toDouble(), minRooms.toDouble(), maxRooms.toDouble()).first()
+            val filteredEstates = realEstateDao.getFilteredRealEstates(
+                minPrice.toDouble(),
+                maxPrice.toDouble(),
+                minSurface.toDouble(),
+                maxSurface.toDouble(),
+                minRooms.toDouble(),
+                maxRooms.toDouble()
+            ).first()
             withContext(Dispatchers.Main) {
                 onUpdateUI(filteredEstates)
             }
