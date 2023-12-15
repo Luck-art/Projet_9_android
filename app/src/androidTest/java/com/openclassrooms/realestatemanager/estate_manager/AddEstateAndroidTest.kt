@@ -98,6 +98,8 @@ class AddEstateAndroidTest {
         // check if it has a photo
         onView(withId(R.id.selectedPhoto)).check(matches(hasDrawable()))
 
+        val name = "church ${System.currentTimeMillis()}"
+
         val appCompatEditText = onView(
             allOf(
                 withId(R.id.editName),
@@ -111,7 +113,7 @@ class AddEstateAndroidTest {
                 isDisplayed()
             )
         )
-        appCompatEditText.perform(replaceText("church"), closeSoftKeyboard())
+        appCompatEditText.perform(replaceText(name), closeSoftKeyboard())
 
         val appCompatEditText2 = onView(
             allOf(
@@ -266,18 +268,12 @@ class AddEstateAndroidTest {
         )
         materialButton.perform(click())
 
-        val viewGroup = onView(
+        //final check - the name should be in the list
+        onView(
             allOf(
-                withParent(
-                    allOf(
-                        withId(R.id.realEstateRecyclerView),
-                        withParent(withId(R.id.fragment_container_list))
-                    )
-                ),
-                isDisplayed()
+                withText(name),
             )
-        )
-        viewGroup.check(matches(isDisplayed()))
+        ).check(matches(isDisplayed()))
     }
 
     private fun childAtPosition(
