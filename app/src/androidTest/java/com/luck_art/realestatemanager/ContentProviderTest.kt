@@ -42,7 +42,9 @@ class ContentProviderTest {
                 price = 100,
                 latitude = null,
                 longitude = null,
-                sended = false
+                sended = false,
+                rooms = 0,
+                surface = 100.0,
             )
         )
 
@@ -75,7 +77,9 @@ class ContentProviderTest {
                 price = 100,
                 latitude = null,
                 longitude = null,
-                sended = false
+                sended = false,
+                rooms = 0,
+                surface = 100.0,
             )
         )
 
