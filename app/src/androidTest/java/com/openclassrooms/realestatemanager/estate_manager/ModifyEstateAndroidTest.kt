@@ -3,9 +3,9 @@ package com.openclassrooms.realestatemanager.estate_manager
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -64,20 +64,22 @@ class ModifyEstateAndroidTest {
             .atPosition(0)
         materialTextView.perform(click())
 
-        val frameLayout = onView(
+        val newName = "new name ${System.currentTimeMillis()}"
+
+        val appCompatEditText = onView(
             allOf(
-                withId(R.id.photoContainer),
+                withId(R.id.editName),
                 childAtPosition(
                     childAtPosition(
                         withId(androidx.appcompat.R.id.custom),
                         0
                     ),
-                    0
+                    1
                 ),
                 isDisplayed()
             )
         )
-        frameLayout.perform(click())
+        appCompatEditText.perform(replaceText(newName), closeSoftKeyboard())
 
         val materialButton = onView(
             allOf(
@@ -94,7 +96,12 @@ class ModifyEstateAndroidTest {
         )
         materialButton.perform(click())
 
-        pressBack()
+        //final check - the name should be in the list
+        onView(
+            allOf(
+                withText(newName),
+            )
+        ).check(matches(isDisplayed()))
     }
 
     private fun childAtPosition(
@@ -112,6 +119,16 @@ class ModifyEstateAndroidTest {
                 return parent is ViewGroup && parentMatcher.matches(parent)
                         && view == parent.getChildAt(position)
             }
+        }
+    }
+
+    fun hasDrawable() = object : TypeSafeMatcher<View>() {
+        override fun describeTo(description: Description) {
+            description.appendText("ImageView has a drawable")
+        }
+
+        override fun matchesSafely(view: View): Boolean {
+            return view is ImageView && view.drawable != null
         }
     }
 }
