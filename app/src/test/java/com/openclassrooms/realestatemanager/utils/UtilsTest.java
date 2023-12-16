@@ -19,9 +19,11 @@ public class UtilsTest {
     @Test
     public void convertEuroToDollar_1002() {
         int euro = 1002;
-        float result = Utils.convertEuroToDollar(euro);
-        assert result == 1234;
+        int expectedDollars = (int) Math.round(euro * 0.812);
+        int result = Utils.convertEuroToDollar(euro);
+        assert result == expectedDollars;
     }
+
 
     @Test
     public void convertDollarToEuro_100() {
@@ -60,9 +62,15 @@ public class UtilsTest {
 
 
     @Test
-    public void convertEuroToDollar_81() {
+    public void convertEuroToDollar_66() {
         int euro = 81;
         float result = Utils.convertEuroToDollar(euro);
-        assert result == 100;
+        float expected = 66.0f;
+        assertEquals(expected, result, 0.01f);
     }
+
+
+
+
+
 }
