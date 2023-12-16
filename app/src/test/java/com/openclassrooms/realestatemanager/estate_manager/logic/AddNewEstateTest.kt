@@ -43,6 +43,8 @@ class AddNewEstateTest {
             isOnSale = false,
             realEstate = existingRealEstate,
             viewModel = viewModel,
+            rooms = 6,
+            surface = 250.0,
             dialog = dialog,
         )
 
@@ -84,6 +86,8 @@ class AddNewEstateTest {
             isOnSale = false,
             realEstate = existingRealEstate,
             viewModel = viewModel,
+            rooms = 5,
+            surface = 250.0,
             dialog = dialog,
         )
 
@@ -114,6 +118,8 @@ class AddNewEstateTest {
             isOnSale = false,
             realEstate = existingRealEstate,
             viewModel = viewModel,
+            rooms = 8,
+            surface = 300.0,
             dialog = dialog,
         )
 
@@ -136,6 +142,8 @@ class AddNewEstateTest {
             price = 1_000,
             latitude = 10.0,
             longitude = 20.0,
+            rooms = 6,
+            surface = 250.0,
             sended = false
 
         )
@@ -160,6 +168,8 @@ class AddNewEstateTest {
             isOnSale = false,
             realEstate = existingRealEstate,
             viewModel = viewModel,
+            rooms = 6,
+            surface = 250.0,
             dialog = dialog,
         )
 
