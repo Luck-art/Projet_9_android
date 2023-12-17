@@ -27,6 +27,39 @@
 
     </FrameLayout>
 
+    <LinearLayout
+        android:id="@+id/checkBoxGroupTypeEstate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkBoxHouse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="House" />
+
+            <CheckBox
+                android:id="@+id/checkBoxLoft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loft" />
+
+            <CheckBox
+                android:id="@+id/checkBoxApartment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apartment" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <EditText
         android:id="@+id/editName"
         android:layout_width="match_parent"
@@ -67,6 +100,72 @@
         android:hint="Rooms"
         android:inputType="number" />
 
+    <EditText
+        android:id="@+id/estateAgent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Estate Agent"
+        android:inputType="number" />
+
+    <LinearLayout
+        android:id="@+id/checkBoxGroupPointsOfInterest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkBoxSchool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="School" />
+
+            <CheckBox
+                android:id="@+id/checkBoxShops"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shop" />
+
+            <CheckBox
+                android:id="@+id/checkBoxRestaurants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Restaurant" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkBoxPark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Park" />
+
+            <CheckBox
+                android:id="@+id/checkBoxGym"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gymnast" />
+
+            <CheckBox
+                android:id="@+id/checkBoxFastFood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fast food" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <RadioGroup
         android:id="@+id/radioGroupSended"
         android:layout_width="match_parent"
@@ -85,6 +184,20 @@
             android:layout_height="wrap_content"
             android:text="sold" />
     </RadioGroup>
+
+    <EditText
+        android:id="@+id/editTextSaleDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Sale date"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/editTextSoldDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Sold date"
+        android:visibility="gone" />
 
 
     <Button

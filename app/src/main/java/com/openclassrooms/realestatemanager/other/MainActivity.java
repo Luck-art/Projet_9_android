@@ -29,9 +29,10 @@ public class MainActivity extends AppCompatActivity {
         this.textViewMain.setText("Le premier bien immobilier enregistré vaut ");
     }
 
+
     private void configureTextViewQuantity(){
-        float quantity = Utils.convertDollarToEuro(100);
+        float quantity = Utils.convertDollarToEuro(100); // Problème : Résultat de conversion stocké dans un int au lieu d'un flottant.
         this.textViewQuantity.setTextSize(20);
-        this.textViewQuantity.setText(quantity + "" + "$");
+        this.textViewQuantity.setText(quantity + "" + "$"); // Problème : Affichage de la quantité sans indication de devise.
     }
 }

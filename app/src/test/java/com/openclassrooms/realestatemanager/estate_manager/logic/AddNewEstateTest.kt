@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.estate_manager.logic
 
 import RealEstateManagerViewModel
 import android.location.Address
-import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import org.junit.Test

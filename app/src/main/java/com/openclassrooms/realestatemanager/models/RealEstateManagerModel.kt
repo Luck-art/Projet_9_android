@@ -7,6 +7,8 @@ import com.openclassrooms.realestatemanager.database.dao.RealEstateDao
 import com.openclassrooms.realestatemanager.database.tables.Media
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.database.tables.SellerName
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 object RealEstateManagerModel {
@@ -40,11 +42,14 @@ object RealEstateManagerModel {
         val (latitude2, longitude2) = getCoordinatesFromAddress(context, "6801 Hollywood Blvd, Los Angeles, CA 90028")
         val (latitude3, longitude3) = getCoordinatesFromAddress(context, "30 Rockefeller Plaza, New York, NY 10112")
 
+        val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+
 
         val id1 = dao.insert(
             RealEstate(
                 id = 0,
                 img = "https://managecasa.com/wp-content/uploads/2021/02/shutterstock_1731900589-e1612637876218-995x460.jpg",
+                estate_type = "House",
                 name = "Tall house",
                 description = "the very tall house",
                 address = "2620 Main St, Santa Monica, CA 90405",
@@ -53,6 +58,10 @@ object RealEstateManagerModel {
                 longitude = longitude,
                 surface = 2.5,
                 rooms = 6,
+                estate_agent = "Lucas",
+                point_interest = listOf("House", "School", "Park", "Restaurant", "Gymnast"),
+                date_sale = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(currentDate),
+                date_sold = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(currentDate),
                 sended = true,
             )
         )
@@ -89,6 +98,7 @@ object RealEstateManagerModel {
             RealEstate(
                 id = 1,
                 img = "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600",
+                estate_type = "House",
                 name = "Modern house",
                 description = "modern style",
                 address = "6801 Hollywood Blvd, Los Angeles, CA 90028",
@@ -97,6 +107,10 @@ object RealEstateManagerModel {
                 longitude = longitude2,
                 surface = 2.0,
                 rooms = 5,
+                estate_agent = "Lucas",
+                point_interest = listOf("House", "School", "Park", "Restaurant", "Gymnast"),
+                date_sale = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(currentDate),
+                date_sold = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(currentDate),
                 sended = false,
             )
         )
@@ -132,6 +146,7 @@ object RealEstateManagerModel {
             RealEstate(
                 id = 2,
                 img = "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600",
+                estate_type = "Apartment",
                 name = "Sweet home",
                 description = "sweety !",
                 address = "30 Rockefeller Plaza, New York, NY 10112",
@@ -140,6 +155,10 @@ object RealEstateManagerModel {
                 longitude = longitude3,
                 surface = 2.5,
                 rooms = 6,
+                estate_agent = "Lucas",
+                point_interest = listOf("House", "School", "Park", "Restaurant", "Fast food"),
+                date_sale = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(currentDate),
+                date_sold = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(currentDate),
                 sended = false
             )
         )

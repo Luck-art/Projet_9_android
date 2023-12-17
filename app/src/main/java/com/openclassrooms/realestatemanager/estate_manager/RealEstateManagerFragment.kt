@@ -10,6 +10,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.RadioGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -114,7 +118,19 @@ class RealEstateManagerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.real_estate_manager, container, false)
+        val rootView = inflater.inflate(R.layout.real_estate_manager, container, false)
+        realEstateRecyclerView = rootView.findViewById(R.id.realEstateRecyclerView)
+
+
+        val addNewEstateLayout = inflater.inflate(R.layout.add_new_estate, container, false)
+
+        val radioGroupSended = addNewEstateLayout.findViewById<RadioGroup>(R.id.radioGroupSended)
+
+        val addNewEstateContainer = rootView.findViewById<FrameLayout>(R.id.addNewEstateContainer)
+
+        addNewEstateContainer.addView(addNewEstateLayout)
+
+        return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -207,6 +223,24 @@ class RealEstateManagerFragment : Fragment() {
 
             }
         }
+
+        val radioGroupSended = view.findViewById<RadioGroup>(R.id.radioGroupSended)
+        val editTextSaleDate = view.findViewById<EditText>(R.id.editTextSaleDate)
+        val editTextSoldDate = view.findViewById<EditText>(R.id.editTextSoldDate)
+
+        radioGroupSended.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.radioButtonOnSale -> {
+                    editTextSaleDate.visibility = View.VISIBLE
+                    editTextSoldDate.visibility = View.GONE
+                }
+                R.id.radioButtonSold -> {
+                    editTextSaleDate.visibility = View.GONE
+                    editTextSoldDate.visibility = View.VISIBLE
+                }
+            }
+        }
+
 
     }
 

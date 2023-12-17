@@ -6,20 +6,24 @@ import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.view.LayoutInflater
-import android.view.Surface
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
+import com.google.android.material.internal.CheckableGroup
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class AddNewEstate(
@@ -36,14 +40,28 @@ class AddNewEstate(
 
         val photoContainer = dialogLayout.findViewById<View>(R.id.photoContainer)
         val selectedPhoto = dialogLayout.findViewById<ImageView>(R.id.selectedPhoto)
+        val checkBoxHouse: CheckBox = dialogLayout.findViewById(R.id.checkBoxHouse)
+        val checkBoxLoft: CheckBox = dialogLayout.findViewById(R.id.checkBoxLoft)
+        val checkBoxApartment: CheckBox = dialogLayout.findViewById(R.id.checkBoxApartment)
+        val selectedEstateTypes = mutableListOf<String>()
         val editName = dialogLayout.findViewById<EditText>(R.id.editName)
         val editDescription = dialogLayout.findViewById<EditText>(R.id.editDescription)
         val editAddress = dialogLayout.findViewById<EditText>(R.id.editAddress)
         val editPrice = dialogLayout.findViewById<EditText>(R.id.editPrice)
+        val checkBoxSchool: CheckBox = dialogLayout.findViewById(R.id.checkBoxSchool)
+        val checkBoxShops: CheckBox = dialogLayout.findViewById(R.id.checkBoxShops)
+        val checkBoxRestaurants: CheckBox = dialogLayout.findViewById(R.id.checkBoxRestaurants)
+        val checkBoxGym: CheckBox = dialogLayout.findViewById(R.id.checkBoxGym)
+        val checkBoxFastFood: CheckBox = dialogLayout.findViewById(R.id.checkBoxFastFood)
+        val checkBoxPark: CheckBox = dialogLayout.findViewById(R.id.checkBoxPark)
+        val selectedPointsOfInterest = mutableListOf<String>()
+        val editEstateAgent = dialogLayout.findViewById<EditText>(R.id.estateAgent)
         val radioGroupSended: RadioGroup = dialogLayout.findViewById(R.id.radioGroupSended)
         val radioButtonOnSale: RadioButton = dialogLayout.findViewById(R.id.radioButtonOnSale)
         val buttonAddEstate = dialogLayout.findViewById<Button>(R.id.buttonAddEstate)
         val editSurface = dialogLayout.findViewById<EditText>(R.id.editSurface)
+        val editDateSold = dialogLayout.findViewById<EditText>(R.id.editTextSoldDate)
+        val editDateSale = dialogLayout.findViewById<EditText>(R.id.editTextSaleDate)
         val editRooms = dialogLayout.findViewById<EditText>(R.id.editRooms)
 
         var imageUri: Uri? = null
@@ -63,7 +81,23 @@ class AddNewEstate(
                 }
             }
         }
-
+        realEstate?.estate_type?.let { type ->
+            when (type) {
+                "House" -> checkBoxHouse.isChecked = true
+                "Loft" -> checkBoxLoft.isChecked = true
+                "Apartment" -> checkBoxApartment.isChecked = true
+            }
+        }
+        realEstate?.point_interest?.forEach { point ->
+            when (point) {
+                "School" -> checkBoxSchool.isChecked = true
+                "Shops" -> checkBoxShops.isChecked = true
+                "Restaurant" -> checkBoxRestaurants.isChecked = true
+                "Gymnast" -> checkBoxGym.isChecked = true
+                "Fast food" -> checkBoxFastFood.isChecked = true
+                "Park" -> checkBoxPark.isChecked = true
+            }
+        }
         realEstate?.name?.let {
             editName.setText(it)
         }
@@ -81,6 +115,9 @@ class AddNewEstate(
         }
         realEstate?.rooms?.let {
             editRooms.setText(it.toString())
+        }
+        realEstate?.estate_agent?.let {
+            editEstateAgent.setText(it.toString())
         }
         realEstate?.sended?.let { isOnSale ->
             if (isOnSale) {
@@ -101,6 +138,18 @@ class AddNewEstate(
             val address = editAddress.text.toString()
             val price = editPrice.text.toString().toIntOrNull() ?: 0
             val surfaceText = editSurface.text.toString()
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val dateSale: Date? = try {
+                dateFormat.parse(editDateSale.text.toString())
+            } catch (e: ParseException) {
+                null
+            }
+
+            val dateSold: Date? = try {
+                dateFormat.parse(editDateSold.text.toString())
+            } catch (e: ParseException) {
+                null
+            }
             val surface = if (surfaceText.isNotEmpty()) {
                 try {
                     surfaceText.toDouble()
@@ -110,31 +159,64 @@ class AddNewEstate(
             } else {
                 0.0
             }
-
+            val estateAgent = editEstateAgent.text.toString()
             val rooms = editRooms.text.toString().toIntOrNull() ?: 0
             val isOnSale = radioButtonOnSale.isChecked
-
             val geocoder = Geocoder(context, Locale.getDefault())
 
             GlobalScope.launch(Dispatchers.Main) {
-                createNewEstate(
-                    img = img.toString(),
-                    name = name,
-                    description = description,
-                    address = address,
-                    price = price,
-                    surface = surface,
-                    rooms = rooms,
-                    isOnSale = isOnSale,
-                    realEstate = realEstate,
-                    viewModel = viewModel,
-                    dialog = dialog,
-                    getFromLocationName = {
-                        geocoder.getFromLocationName(address, 1)
+                if (dateSold != null) {
+                    if (dateSale != null) {
+                        createNewEstate(
+                            img = img.toString(),
+                            estate_type = selectedEstateTypes,
+                            pointsOfInterest = selectedPointsOfInterest,
+                            name = name,
+                            description = description,
+                            address = address,
+                            price = price,
+                            surface = surface,
+                            rooms = rooms,
+                            estateAgent = estateAgent,
+                            isOnSale = isOnSale,
+                            realEstate = realEstate,
+                            viewModel = viewModel,
+                            dialog = dialog,
+                            dateSold = dateSold,
+                            dateSale = dateSale,
+                            getFromLocationName = {
+                                geocoder.getFromLocationName(address, 1)
+                            }
+                        )
                     }
-                )
+                }
             }
         }
+
+        checkBoxHouse.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedEstateTypes.add("House")
+            } else {
+                selectedEstateTypes.remove("House")
+            }
+        }
+
+        checkBoxLoft.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedEstateTypes.add("Loft")
+            } else {
+                selectedEstateTypes.remove("Loft")
+            }
+        }
+
+        checkBoxApartment.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedEstateTypes.add("Apartment")
+            } else {
+                selectedEstateTypes.remove("Apartment")
+            }
+        }
+
 
 
         builder.setNegativeButton(context.getString(R.string.cancel)) { dialogInterface, _ ->
@@ -145,18 +227,23 @@ class AddNewEstate(
 
     internal fun createNewEstate(
         img: String?,
+        estate_type: List<String>,
+        pointsOfInterest: List<String>,
         name: String,
         description: String,
         address: String,
         price: Int,
         surface: Double,
         rooms: Int,
+        estateAgent: String,
+        dateSale: Date,
+        dateSold: Date,
         getFromLocationName: (String) -> List<Address>?,
         isOnSale: Boolean,
         realEstate: RealEstate?,
         viewModel: RealEstateManagerViewModel,
         dialog: AlertDialog,
-    ) {
+    ){
         if (img != null && name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && price > 0) {
             try {
                 val addressList: List<Address>? = getFromLocationName(address)
@@ -168,6 +255,8 @@ class AddNewEstate(
                     val newEstate = RealEstate(
                         0,
                         img = img,
+                        estate_type = estate_type.joinToString(", "),
+                        point_interest = pointsOfInterest,
                         name = name,
                         description = description,
                         address = address,
@@ -176,7 +265,10 @@ class AddNewEstate(
                         latitude = latitude,
                         longitude = longitude,
                         surface = surface,
-                        rooms = rooms
+                        rooms = rooms,
+                        estate_agent = estateAgent,
+                        date_sale = dateSale,
+                        date_sold = dateSold,
                     )
 
                     if (realEstate == null) {

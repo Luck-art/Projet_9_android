@@ -2,8 +2,6 @@ package com.luck_art.realestatemanager
 
 import android.content.ContentResolver
 import android.content.ContentUris
-import android.content.ContentValues
-import android.net.Uri
 import androidx.room.Room.inMemoryDatabaseBuilder
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
