@@ -10,6 +10,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.net.toUri
 import androidx.test.InstrumentationRegistry
 import androidx.test.espresso.Espresso.onView
@@ -94,6 +95,9 @@ class AddEstateAndroidTest {
             )
         )
         frameLayout.perform(click())
+
+
+        Thread.sleep(3000)
 
         // check if it has a photo
         onView(withId(R.id.selectedPhoto)).check(matches(hasDrawable()))
@@ -279,7 +283,6 @@ class AddEstateAndroidTest {
     private fun childAtPosition(
         parentMatcher: Matcher<View>, position: Int
     ): Matcher<View> {
-
         return object : TypeSafeMatcher<View>() {
             override fun describeTo(description: Description) {
                 description.appendText("Child at position $position in parent ")
@@ -294,13 +297,27 @@ class AddEstateAndroidTest {
         }
     }
 
-    fun hasDrawable() = object : TypeSafeMatcher<View>() {
-        override fun describeTo(description: Description) {
-            description.appendText("ImageView has a drawable")
-        }
+    fun hasDrawable(): Matcher<View> {
+        return object : TypeSafeMatcher<View>() {
+            override fun describeTo(description: Description) {
+                description.appendText("ImageView or AppCompatImageView has a drawable")
+            }
 
-        override fun matchesSafely(view: View): Boolean {
+            override fun matchesSafely(view: View): Boolean {
+                if (view is ImageView) {
+                    return view.drawable != null
+                } else if (view is AppCompatImageView) {
+                    return view.drawable != null
+                }
+                return false
+            }
+        }
+    }
+
+
+
+    fun matchesSafely(view: View): Boolean {
             return view is ImageView && view.drawable != null
         }
     }
-}
+

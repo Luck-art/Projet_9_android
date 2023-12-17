@@ -25,6 +25,8 @@ class EstateDetailsAdapter(private var mediaItems: MutableList<Media>) : Recycle
         const val VIEW_TYPE_ADD = 1
     }
 
+
+
     fun setOnItemClickedListener(listener: (Media) -> Unit) {
         onItemClicked = listener
     }

@@ -7,11 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Projet_9_android.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Projet_9_android.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Projet_9_android.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Projet_9_android.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Projet_9_android.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Projet_9_android.app.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/perso.Projet_9_android.iml" filepath="$PROJECT_DIR$/.idea/modules/perso.Projet_9_android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/perso.Projet_9_android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/perso.Projet_9_android.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/perso.Projet_9_android.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/perso.Projet_9_android.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/perso.Projet_9_android.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/perso.Projet_9_android.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/perso.Projet_9_android.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/perso.Projet_9_android.app.unitTest.iml" />
     </modules>
   </component>
 </project>
