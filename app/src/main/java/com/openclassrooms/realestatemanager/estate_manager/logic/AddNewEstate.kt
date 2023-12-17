@@ -127,6 +127,23 @@ class AddNewEstate(
             }
         }
 
+        val editTextSaleDate = dialogLayout.findViewById<EditText>(R.id.editTextSaleDate)
+        val editTextSoldDate = dialogLayout.findViewById<EditText>(R.id.editTextSoldDate)
+
+        radioGroupSended.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.radioButtonOnSale -> {
+                    editTextSaleDate.visibility = View.VISIBLE
+                    editTextSoldDate.visibility = View.GONE
+                }
+
+                R.id.radioButtonSold -> {
+                    editTextSaleDate.visibility = View.GONE
+                    editTextSoldDate.visibility = View.VISIBLE
+                }
+            }
+        }
+
         builder.setView(dialogLayout)
 
         val dialog = builder.create()
@@ -165,30 +182,28 @@ class AddNewEstate(
             val geocoder = Geocoder(context, Locale.getDefault())
 
             GlobalScope.launch(Dispatchers.Main) {
-                if (dateSold != null) {
-                    if (dateSale != null) {
-                        createNewEstate(
-                            img = img.toString(),
-                            estate_type = selectedEstateTypes,
-                            pointsOfInterest = selectedPointsOfInterest,
-                            name = name,
-                            description = description,
-                            address = address,
-                            price = price,
-                            surface = surface,
-                            rooms = rooms,
-                            estateAgent = estateAgent,
-                            isOnSale = isOnSale,
-                            realEstate = realEstate,
-                            viewModel = viewModel,
-                            dialog = dialog,
-                            dateSold = dateSold,
-                            dateSale = dateSale,
-                            getFromLocationName = {
-                                geocoder.getFromLocationName(address, 1)
-                            }
-                        )
-                    }
+                if (dateSold != null || dateSale != null) {
+                    createNewEstate(
+                        img = img.toString(),
+                        estate_type = selectedEstateTypes,
+                        pointsOfInterest = selectedPointsOfInterest,
+                        name = name,
+                        description = description,
+                        address = address,
+                        price = price,
+                        surface = surface,
+                        rooms = rooms,
+                        estateAgent = estateAgent,
+                        isOnSale = isOnSale,
+                        realEstate = realEstate,
+                        viewModel = viewModel,
+                        dialog = dialog,
+                        dateSold = dateSold,
+                        dateSale = dateSale,
+                        getFromLocationName = {
+                            geocoder.getFromLocationName(address, 1)
+                        }
+                    )
                 }
             }
         }
@@ -236,14 +251,14 @@ class AddNewEstate(
         surface: Double,
         rooms: Int,
         estateAgent: String,
-        dateSale: Date,
-        dateSold: Date,
+        dateSale: Date?,
+        dateSold: Date?,
         getFromLocationName: (String) -> List<Address>?,
         isOnSale: Boolean,
         realEstate: RealEstate?,
         viewModel: RealEstateManagerViewModel,
         dialog: AlertDialog,
-    ){
+    ) {
         if (img != null && name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && price > 0) {
             try {
                 val addressList: List<Address>? = getFromLocationName(address)

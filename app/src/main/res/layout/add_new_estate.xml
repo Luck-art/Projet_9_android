@@ -1,213 +1,217 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- add_property_dialog.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!-- add_property_dialog.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/photoContainer"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="20dp"
-        android:background="#AAAAAA">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/selectedPhoto"
+        <FrameLayout
+            android:id="@+id/photoContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            />
+            android:layout_height="200dp"
+            android:layout_margin="20dp"
+            android:background="#AAAAAA">
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"/>
+            <ImageView
+                android:id="@+id/selectedPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
 
-    </FrameLayout>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center" />
 
-    <LinearLayout
-        android:id="@+id/checkBoxGroupTypeEstate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        </FrameLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/checkBoxGroupTypeEstate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBoxHouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="House" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxLoft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Loft" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxApartment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apartment" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name" />
+
+        <EditText
+            android:id="@+id/editDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description" />
+
+        <EditText
+            android:id="@+id/editAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address" />
+
+
+        <EditText
+            android:id="@+id/editPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/editSurface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Surface"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/editRooms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Rooms"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/estateAgent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Estate Agent"
+            android:inputType="number" />
+
+        <LinearLayout
+            android:id="@+id/checkBoxGroupPointsOfInterest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBoxSchool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="School" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxShops"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shop" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxRestaurants"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Restaurant" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBoxPark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Park" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxGym"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gymnast" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxFastFood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fast food" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/radioGroupSended"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/checkBoxHouse"
+            <RadioButton
+                android:id="@+id/radioButtonOnSale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="House" />
+                android:text="for sale" />
 
-            <CheckBox
-                android:id="@+id/checkBoxLoft"
+            <RadioButton
+                android:id="@+id/radioButtonSold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loft" />
+                android:text="sold" />
+        </RadioGroup>
 
-            <CheckBox
-                android:id="@+id/checkBoxApartment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Apartment" />
+        <EditText
+            android:id="@+id/editTextSaleDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Sale date"
+            android:visibility="gone" />
 
-        </LinearLayout>
+        <EditText
+            android:id="@+id/editTextSoldDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Sold date"
+            android:visibility="gone" />
+
+
+        <Button
+            android:id="@+id/buttonAddEstate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="OK"
+            android:textColor="#FFFF" />
+
 
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/editName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Name" />
-
-    <EditText
-        android:id="@+id/editDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Description" />
-
-    <EditText
-        android:id="@+id/editAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Address" />
-
-
-    <EditText
-        android:id="@+id/editPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Price"
-        android:inputType="number" />
-
-    <EditText
-        android:id="@+id/editSurface"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Surface"
-        android:inputType="number" />
-
-    <EditText
-        android:id="@+id/editRooms"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Rooms"
-        android:inputType="number" />
-
-    <EditText
-        android:id="@+id/estateAgent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Estate Agent"
-        android:inputType="number" />
-
-    <LinearLayout
-        android:id="@+id/checkBoxGroupPointsOfInterest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/checkBoxSchool"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="School" />
-
-            <CheckBox
-                android:id="@+id/checkBoxShops"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Shop" />
-
-            <CheckBox
-                android:id="@+id/checkBoxRestaurants"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Restaurant" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/checkBoxPark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Park" />
-
-            <CheckBox
-                android:id="@+id/checkBoxGym"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gymnast" />
-
-            <CheckBox
-                android:id="@+id/checkBoxFastFood"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fast food" />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <RadioGroup
-        android:id="@+id/radioGroupSended"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/radioButtonOnSale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="for sale" />
-
-        <RadioButton
-            android:id="@+id/radioButtonSold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="sold" />
-    </RadioGroup>
-
-    <EditText
-        android:id="@+id/editTextSaleDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Sale date"
-        android:visibility="gone" />
-
-    <EditText
-        android:id="@+id/editTextSoldDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Sold date"
-        android:visibility="gone" />
-
-
-    <Button
-        android:id="@+id/buttonAddEstate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FFFF"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_gravity="center"
-        android:text="OK"/>
-
-
-</LinearLayout>
+</ScrollView>

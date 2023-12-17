@@ -43,6 +43,11 @@ class ContentProviderTest {
                 sended = false,
                 rooms = 0,
                 surface = 100.0,
+                estate_type = "",
+                estate_agent = "",
+                point_interest = listOf(),
+                date_sale = null,
+                date_sold = null,
             )
         )
 
@@ -78,6 +83,11 @@ class ContentProviderTest {
                 sended = false,
                 rooms = 0,
                 surface = 100.0,
+                estate_type = "",
+                estate_agent = "",
+                point_interest = listOf(),
+                date_sale = null,
+                date_sold = null,
             )
         )
 
