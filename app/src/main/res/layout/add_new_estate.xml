@@ -30,6 +30,22 @@
 
         </FrameLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose an estate type! :"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+
+            android:layout_marginBottom="8dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
+
         <LinearLayout
             android:id="@+id/checkBoxGroupTypeEstate"
             android:layout_width="match_parent"
@@ -107,8 +123,24 @@
             android:id="@+id/estateAgent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Estate Agent"
-            android:inputType="number" />
+            android:hint="Estate Agent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose an interest points ! "
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Ligne de séparation entre le texte et les CheckBox (optionnel) -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
 
         <LinearLayout
             android:id="@+id/checkBoxGroupPointsOfInterest"

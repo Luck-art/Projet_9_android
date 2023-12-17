@@ -13,6 +13,7 @@ import com.openclassrooms.realestatemanager.database.tables.Media
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.database.tables.SellerName
 
+
 @Database(entities = [RealEstate::class, Media::class, SellerName::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class RealEstateManagerDatabase : RoomDatabase() {

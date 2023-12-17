@@ -210,7 +210,10 @@ class AddNewEstate(
 
         checkBoxHouse.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                selectedEstateTypes.clear()
                 selectedEstateTypes.add("House")
+                checkBoxLoft.isChecked = false
+                checkBoxApartment.isChecked = false
             } else {
                 selectedEstateTypes.remove("House")
             }
@@ -218,7 +221,10 @@ class AddNewEstate(
 
         checkBoxLoft.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                selectedEstateTypes.clear()
                 selectedEstateTypes.add("Loft")
+                checkBoxHouse.isChecked = false
+                checkBoxApartment.isChecked = false
             } else {
                 selectedEstateTypes.remove("Loft")
             }
@@ -226,7 +232,10 @@ class AddNewEstate(
 
         checkBoxApartment.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                selectedEstateTypes.clear()
                 selectedEstateTypes.add("Apartment")
+                checkBoxHouse.isChecked = false
+                checkBoxLoft.isChecked = false
             } else {
                 selectedEstateTypes.remove("Apartment")
             }
