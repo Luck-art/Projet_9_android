@@ -134,7 +134,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"/>
 
-        <!-- Ligne de séparation entre le texte et les CheckBox (optionnel) -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
