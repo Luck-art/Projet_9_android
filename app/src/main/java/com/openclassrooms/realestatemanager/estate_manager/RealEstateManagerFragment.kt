@@ -21,12 +21,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.adapters.RealEstateManagerAdapter
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.estate_manager.logic.AddNewEstate
 import com.openclassrooms.realestatemanager.estate_manager.logic.SpacesItemDecoration
 import com.openclassrooms.realestatemanager.models.DialogState
+import com.openclassrooms.realestatemanager.utils.NetworkStateListener
+import com.openclassrooms.realestatemanager.utils.Utils
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -46,9 +49,9 @@ class RealEstateManagerFragment : Fragment() {
 
     private lateinit var adapter: RealEstateManagerAdapter
 
-    private lateinit var checkBoxHouse: CheckBox
-    private lateinit var checkBoxLoft: CheckBox
-    private lateinit var checkBoxApartment: CheckBox
+      var checkBoxHouse: CheckBox? = null
+      var checkBoxLoft: CheckBox? = null
+      var checkBoxApartment: CheckBox? = null
     private fun onDeleteEstateClicked(estateId: Long) {
         callViewModel.onDeleteEstateClicked(estateId)
     }
@@ -106,9 +109,9 @@ class RealEstateManagerFragment : Fragment() {
                                 },
                             )
                             val estateTypes = realEstate.estate_type.split(", ")
-                            checkBoxHouse.isChecked = estateTypes.contains("House")
-                            checkBoxLoft.isChecked = estateTypes.contains("Loft")
-                            checkBoxApartment.isChecked = estateTypes.contains("Apartment")
+                            checkBoxHouse = requireView().findViewById(R.id.checkBoxHouse)
+                            checkBoxLoft = requireView().findViewById(R.id.checkBoxLoft)
+                            checkBoxApartment = requireView().findViewById(R.id.checkBoxApartment)
                         }
                     }
                 }
@@ -124,7 +127,28 @@ class RealEstateManagerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.real_estate_manager, container, false)
+        val rootView = inflater.inflate(R.layout.real_estate_manager, container, false)
+
+        Utils.checkNetworkAvailability(requireContext(), object : NetworkStateListener {
+            override fun onNetworkAvailable() {
+                // Le réseau est disponible, vous pouvez prendre des mesures ici
+            }
+
+            override fun onNetworkUnavailable() {
+                // Le réseau n'est pas disponible, affichez un message à l'utilisateur
+                showNetworkUnavailableMessage(rootView)
+            }
+        })
+
+        return rootView
+    }
+
+    private fun showNetworkUnavailableMessage(rootView: View) {
+        val snackbar = Snackbar.make(rootView, "Le réseau n'est pas disponible", Snackbar.LENGTH_INDEFINITE)
+        snackbar.setAction("Réessayer") {
+            // Si vous le souhaitez, vous pouvez ajouter une action pour réessayer la connexion ici.
+        }
+        snackbar.show()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

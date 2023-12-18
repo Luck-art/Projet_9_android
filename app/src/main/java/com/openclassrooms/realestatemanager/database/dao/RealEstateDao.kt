@@ -75,11 +75,6 @@ interface RealEstateDao {
         estateType: String?
     ): Flow<List<RealEstate>>
 
-
-
-
-
-
     @RawQuery(observedEntities = [RealEstate::class, Media::class, SellerName::class])
     fun filter(query: SupportSQLiteQuery): Flow<List<RealEstate>>
 

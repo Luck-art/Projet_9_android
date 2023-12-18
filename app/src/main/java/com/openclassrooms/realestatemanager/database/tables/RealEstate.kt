@@ -10,7 +10,7 @@ import java.util.Date
 @TypeConverters(Converters::class)
 data class RealEstate(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long = 0,
     val img: String,
     val estate_type: String,
     val name: String,
@@ -22,7 +22,7 @@ data class RealEstate(
     val surface: Double? = null,
     val rooms: Int,
     val estate_agent: String,
-    var point_interest: List<String>? = null,
+    var point_interest: List<String> = emptyList(),
     var date_sale: Date? = null,
     var date_sold: Date? = null,
     val sended: Boolean = true,

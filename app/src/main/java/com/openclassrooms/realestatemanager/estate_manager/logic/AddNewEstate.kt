@@ -325,7 +325,6 @@ class AddNewEstate(
                     val longitude = returnedAddress.longitude
 
                     val newEstate = RealEstate(
-                        0,
                         img = img,
                         estate_type = estate_type.joinToString(", "),
                         name = name,
