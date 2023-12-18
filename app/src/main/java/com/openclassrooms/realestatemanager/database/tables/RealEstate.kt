@@ -22,7 +22,7 @@ data class RealEstate(
     val surface: Double? = null,
     val rooms: Int,
     val estate_agent: String,
-    var point_interest: List<String> = emptyList(),
+    var point_interest: List<String>,
     var date_sale: Date? = null,
     var date_sold: Date? = null,
     val sended: Boolean = true,

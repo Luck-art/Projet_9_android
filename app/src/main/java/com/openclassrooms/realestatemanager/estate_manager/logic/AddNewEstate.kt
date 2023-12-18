@@ -339,6 +339,7 @@ class AddNewEstate(
                         estate_agent = estateAgent,
                         date_sale = dateSale,
                         date_sold = dateSold,
+                        point_interest = pointsOfInterest
                     )
 
                     if (realEstate == null) {
