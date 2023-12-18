@@ -72,9 +72,9 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private va
         holder.estateDesciptionView.text = item.description
         holder.estatePriceView.text = item.price?.let { priceFormatter.format(it) }
         if (item.sended) {
-            holder.estateSendedView.text = "To sale"
-        } else {
             holder.estateSendedView.text = "It's sold"
+        } else {
+            holder.estateSendedView.text = "To sale"
         }
 
 
