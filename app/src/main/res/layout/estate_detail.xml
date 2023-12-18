@@ -21,7 +21,6 @@
                 android:layout_gravity="center"
                 android:scaleType="centerCrop" />
 
-            <!-- Name, Price, Surface, and Rooms -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,7 +75,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Description -->
             <TextView
                 android:id="@+id/estate_description"
                 android:layout_width="match_parent"
@@ -85,7 +83,6 @@
                 android:layout_marginTop="8dp"
                 android:text="Description" />
 
-            <!-- Adresse -->
             <TextView
                 android:id="@+id/estate_address"
                 android:layout_width="match_parent"
@@ -94,6 +91,63 @@
                 android:gravity="center"
                 android:text="Adresse"
                 android:layout_marginTop="8dp" />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/estate_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Estate type"
+                    android:layout_marginTop="4dp" />
+
+                <TextView
+                    android:id="@+id/estate_agent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Estate agent"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/estate_activities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="Estate Activities" />
+
+
+            <TextView
+                android:id="@+id/estate_date_sale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="Date sale" />
+
+            <TextView
+                android:id="@+id/estate_date_sold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="Date sold" />
+
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -138,6 +192,7 @@
                 android:layout_marginTop="8dp" />
 
         </LinearLayout>
+
     </ScrollView>
 
     <ImageButton

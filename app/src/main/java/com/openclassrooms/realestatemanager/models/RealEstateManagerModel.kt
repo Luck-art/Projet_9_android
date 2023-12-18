@@ -149,7 +149,7 @@ object RealEstateManagerModel {
                 estate_type = "Apartment",
                 name = "Sweet home",
                 description = "sweety !",
-                address = "30 Rockefeller Plaza, New York, NY 10112",
+                address = "2002 4th St, Santa Monica, CA 90405, États-Unis",
                 price = 15000,
                 latitude = latitude3,
                 longitude = longitude3,

@@ -206,6 +206,7 @@ class AddNewEstate(
                     )
                 }
             }
+            dialog.dismiss()
         }
 
         checkBoxHouse.setOnCheckedChangeListener { _, isChecked ->
@@ -238,6 +239,53 @@ class AddNewEstate(
                 checkBoxLoft.isChecked = false
             } else {
                 selectedEstateTypes.remove("Apartment")
+            }
+        }
+
+        checkBoxSchool.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedPointsOfInterest.add("School")
+            } else {
+                selectedPointsOfInterest.remove("School")
+            }
+        }
+
+        checkBoxShops.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedPointsOfInterest.add("Shop")
+            } else {
+                selectedPointsOfInterest.remove("Shop")
+            }
+        }
+
+        checkBoxGym.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedPointsOfInterest.add("Gymnast")
+            } else {
+                selectedPointsOfInterest.remove("Gymnast")
+            }
+        }
+
+        checkBoxRestaurants.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedPointsOfInterest.add("Restaurant")
+            } else {
+                selectedPointsOfInterest.remove("Restaurant")
+            }
+        }
+        checkBoxPark.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedPointsOfInterest.add("Park")
+            } else {
+                selectedPointsOfInterest.remove("Park")
+            }
+        }
+
+        checkBoxFastFood.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedPointsOfInterest.add("Fast food")
+            } else {
+                selectedPointsOfInterest.remove("Fast food")
             }
         }
 

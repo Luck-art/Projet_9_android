@@ -127,7 +127,11 @@ class EstateDetailsFragment : Fragment() {
         val surfaceTextView = view.findViewById<TextView>(R.id.estate_surface)
         val addressTextView = view.findViewById<TextView>(R.id.estate_address)
         val roomsTextView = view.findViewById<TextView>(R.id.estate_rooms)
-
+        val estateTypeTextView = view.findViewById<TextView>(R.id.estate_type)
+        val estateAgentTextView = view.findViewById<TextView>(R.id.estate_agent)
+        val estateActivitiesTextView = view.findViewById<TextView>(R.id.estate_activities)
+        val estateDateSaleTextView = view.findViewById<TextView>(R.id.estate_date_sale)
+        val estateDateSoldTextView = view.findViewById<TextView>(R.id.estate_date_sold)
         val priceFormatter: NumberFormat = NumberFormat.getCurrencyInstance().apply {
             maximumFractionDigits = 0
             currency = Currency.getInstance("EUR")
@@ -144,6 +148,11 @@ class EstateDetailsFragment : Fragment() {
                     surfaceTextView.text = "Surface: ${vs.realEstate?.surface} m²"
                     addressTextView.text = "Adresse: ${vs.realEstate?.address}"
                     roomsTextView.text = "Rooms: ${vs.realEstate?.rooms}"
+                    estateTypeTextView.text = "Estate type: ${vs.realEstate?.estate_type}"
+                    estateAgentTextView.text = "Estate agent: ${vs.realEstate?.estate_agent}"
+                    estateActivitiesTextView.text = "Estate activities: ${vs.realEstate?.point_interest?.joinToString(", ")}"
+                    estateDateSaleTextView.text = "Date sale: ${vs.realEstate?.date_sale}"
+                    estateDateSoldTextView.text = "Date sold: ${vs.realEstate?.date_sold}"
                     Log.d("EstateDetailsFragment", "Mise à jour des éléments de l'adapter")
                 }
             }
