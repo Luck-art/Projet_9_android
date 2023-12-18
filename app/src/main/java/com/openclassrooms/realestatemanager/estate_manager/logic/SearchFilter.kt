@@ -7,6 +7,7 @@ import android.icu.util.Currency
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -28,10 +29,16 @@ class SearchFilter(
     private val onUpdateUI: (List<RealEstate>) -> Unit
 ) {
 
+    private lateinit var soldCheckBox: CheckBox
+    private lateinit var availableCheckBox: CheckBox
+
     companion object {
         val PRICE_ID = View.generateViewId()
         val SURFACE_ID = View.generateViewId()
     }
+
+    private var soldSelected = false
+    private var availableSelected = false
 
     fun showFilterDialog(
         minPrice: Float,
@@ -39,8 +46,12 @@ class SearchFilter(
         minSurface: Float,
         maxSurface: Float,
         minRooms: Float,
-        maxRooms: Float
+        maxRooms: Float,
+        sended: Boolean
     ) {
+
+
+
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Filtrer les propriétés")
 
@@ -54,10 +65,29 @@ class SearchFilter(
             setPadding(padding, padding, padding, padding)
         }
 
+        soldCheckBox = CheckBox(context).apply {
+            text = "Biens vendus"
+            isChecked = soldSelected
+            setOnCheckedChangeListener { _, isChecked -> soldSelected = isChecked }
+        }
+        linearLayout.addView(soldCheckBox)
+
+        availableCheckBox = CheckBox(context).apply {
+            text = "Biens en vente"
+            isChecked = availableSelected
+            setOnCheckedChangeListener { _, isChecked -> availableSelected = isChecked }
+        }
+        linearLayout.addView(availableCheckBox)
+
+        soldSelected = soldCheckBox.isChecked
+        availableSelected = availableCheckBox.isChecked
+
         val priceLabel = TextView(context).apply {
             text = context.getString(R.string.price_filter_label)
         }
         linearLayout.addView(priceLabel)
+
+
 
         val priceRangeSlider = RangeSlider(context).apply {
             id = PRICE_ID
@@ -79,12 +109,10 @@ class SearchFilter(
             val maxText = TextView(context).apply {
                 setTextColor(Color.BLACK)
             }
-            // the listener
             priceRangeSlider.addOnChangeListener(RangeSlider.OnChangeListener { rangeSlider, _, _ ->
                 minText.text = priceFormatter.format(rangeSlider.values[0])
                 maxText.text = priceFormatter.format(rangeSlider.values[1])
             })
-            // the initial value
             minText.text = priceFormatter.format(priceRangeSlider.values[0])
             maxText.text = priceFormatter.format(priceRangeSlider.values[1])
 
@@ -126,12 +154,10 @@ class SearchFilter(
             val maxText = TextView(context).apply {
                 setTextColor(Color.BLACK)
             }
-            // the listener
             surfaceRangeSlider.addOnChangeListener(RangeSlider.OnChangeListener { rangeSlider, _, _ ->
                 minText.text = rangeSlider.values[0].roundToInt().toString()
                 maxText.text = rangeSlider.values[1].roundToInt().toString()
             })
-            // the initial value
             minText.text = surfaceRangeSlider.values[0].roundToInt().toString()
             maxText.text = surfaceRangeSlider.values[1].roundToInt().toString()
 
@@ -172,12 +198,10 @@ class SearchFilter(
             val maxText = TextView(context).apply {
                 setTextColor(Color.BLACK)
             }
-            // the listener
             roomsRangeSlider.addOnChangeListener(RangeSlider.OnChangeListener { rangeSlider, _, _ ->
                 minText.text = rangeSlider.values[0].roundToInt().toString()
                 maxText.text = rangeSlider.values[1].roundToInt().toString()
             })
-            // the initial value
             minText.text = roomsRangeSlider.values[0].roundToInt().toString()
             maxText.text = roomsRangeSlider.values[1].roundToInt().toString()
 
@@ -208,21 +232,48 @@ class SearchFilter(
             val selectedMaxSurface = surfaceRangeSlider.values[1]
             val selectedMinRooms = roomsRangeSlider.values[0]
             val selectedMaxRooms = roomsRangeSlider.values[1]
-            onFilterSelected(
-                selectedMinPrice,
-                selectedMaxPrice,
-                selectedMinSurface,
-                selectedMaxSurface,
-                selectedMinRooms,
-                selectedMaxRooms
-            )
+
+            val estateStatusSelected: Boolean? = when {
+                soldSelected && availableSelected -> null
+                !soldSelected && !availableSelected -> null
+                soldSelected -> true
+                availableSelected -> false
+                else -> null
+            }
+
+            if (estateStatusSelected != null) {
+                onFilterSelected(
+                    selectedMinPrice,
+                    selectedMaxPrice,
+                    selectedMinSurface,
+                    selectedMaxSurface,
+                    selectedMinRooms,
+                    selectedMaxRooms,
+                    estateStatusSelected
+                )
+            } else {
+
+                fetchAllEstates(
+                    selectedMinPrice,
+                    selectedMaxPrice,
+                    selectedMinSurface,
+                    selectedMaxSurface,
+                    selectedMinRooms,
+                    selectedMaxRooms
+                )
+            }
         }
+
+
+
         builder.setNegativeButton("Annuler", null)
 
         builder.create().show()
+
+
     }
 
-    private fun onFilterSelected(
+    private fun fetchAllEstates(
         minPrice: Float,
         maxPrice: Float,
         minSurface: Float,
@@ -231,13 +282,40 @@ class SearchFilter(
         maxRooms: Float
     ) {
         CoroutineScope(Dispatchers.IO).launch {
+            val allEstates = realEstateDao.getFilteredRealEstates(
+                minPrice.toDouble(),
+                maxPrice.toDouble(),
+                minSurface.toDouble(),
+                maxSurface.toDouble(),
+                minRooms.toDouble(),
+                maxRooms.toDouble(),
+                null
+            ).first()
+            withContext(Dispatchers.Main) {
+                onUpdateUI(allEstates)
+            }
+        }
+    }
+
+
+    private fun onFilterSelected(
+        minPrice: Float,
+        maxPrice: Float,
+        minSurface: Float,
+        maxSurface: Float,
+        minRooms: Float,
+        maxRooms: Float,
+        estateStatus: Boolean
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
             val filteredEstates = realEstateDao.getFilteredRealEstates(
                 minPrice.toDouble(),
                 maxPrice.toDouble(),
                 minSurface.toDouble(),
                 maxSurface.toDouble(),
                 minRooms.toDouble(),
-                maxRooms.toDouble()
+                maxRooms.toDouble(),
+                estateStatus
             ).first()
             withContext(Dispatchers.Main) {
                 onUpdateUI(filteredEstates)
@@ -245,11 +323,14 @@ class SearchFilter(
         }
     }
 
+
     fun fetchPriceRangeAndShowDialog() {
         CoroutineScope(Dispatchers.IO).launch {
             val maxPriceValue = realEstateDao.getMaxPrice()?.toFloat() ?: 1000000f
             val maxSurface = realEstateDao.getMaxSurface()?.toFloat() ?: 1000f
             val maxRooms = realEstateDao.getMaxRooms()?.toFloat() ?: 6f
+
+            val estateStatusSelected = true
 
             withContext(Dispatchers.Main) {
                 showFilterDialog(
@@ -259,9 +340,15 @@ class SearchFilter(
                     maxSurface = maxSurface + 1.0f,
                     minRooms = 1f,
                     maxRooms = maxRooms + 1.0f,
+                    sended = estateStatusSelected
                 )
             }
         }
+    }
+
+
+    private fun getEstateStatusFromUI(): Boolean {
+        return false
     }
 
 
