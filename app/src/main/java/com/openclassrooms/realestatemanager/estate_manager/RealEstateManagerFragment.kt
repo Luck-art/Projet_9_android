@@ -131,11 +131,9 @@ class RealEstateManagerFragment : Fragment() {
 
         Utils.checkNetworkAvailability(requireContext(), object : NetworkStateListener {
             override fun onNetworkAvailable() {
-                // Le réseau est disponible, vous pouvez prendre des mesures ici
             }
 
             override fun onNetworkUnavailable() {
-                // Le réseau n'est pas disponible, affichez un message à l'utilisateur
                 showNetworkUnavailableMessage(rootView)
             }
         })
@@ -146,7 +144,6 @@ class RealEstateManagerFragment : Fragment() {
     private fun showNetworkUnavailableMessage(rootView: View) {
         val snackbar = Snackbar.make(rootView, "Le réseau n'est pas disponible", Snackbar.LENGTH_INDEFINITE)
         snackbar.setAction("Réessayer") {
-            // Si vous le souhaitez, vous pouvez ajouter une action pour réessayer la connexion ici.
         }
         snackbar.show()
     }
@@ -211,7 +208,6 @@ class RealEstateManagerFragment : Fragment() {
 
                             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
-                            // attend le resultat et retourne le code à AddNewEstate
                             completable.await()
                         }
                     )
@@ -227,7 +223,6 @@ class RealEstateManagerFragment : Fragment() {
 
                             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
-                            // attend le resultat et retourne le code à AddNewEstate
                             completable.await()
                         }
                     )
