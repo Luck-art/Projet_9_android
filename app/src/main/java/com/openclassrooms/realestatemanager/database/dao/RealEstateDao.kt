@@ -15,73 +15,77 @@ import com.openclassrooms.realestatemanager.database.tables.SellerName
 import kotlinx.coroutines.flow.Flow
 
 
-    @Dao
-    interface RealEstateDao {
-        @Query("SELECT * FROM real_estate")
-        fun getAll(): Flow<List<RealEstate>>
+@Dao
+interface RealEstateDao {
+    @Query("SELECT * FROM real_estate")
+    fun getAll(): Flow<List<RealEstate>>
 
-        @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
-        fun getOneItem(id : Long): RealEstate?
+    @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
+    fun getOneItem(id : Long): RealEstate?
 
-        @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
-        fun getOneItemCursor(id : Long): Cursor?
+    @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
+    fun getOneItemCursor(id : Long): Cursor?
 
-        @Query("SELECT * FROM real_estate WHERE name = :name")
-        fun getRealEstateByName(name: String): RealEstate
+    @Query("SELECT * FROM real_estate WHERE name = :name")
+    fun getRealEstateByName(name: String): RealEstate
 
-        @Insert(onConflict = OnConflictStrategy.IGNORE)
-         fun insert(realEstate: RealEstate): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(realEstate: RealEstate): Long
 
-        @Query("SELECT COUNT(*) FROM real_estate")
-        fun getRowCount(): Int
+    @Query("SELECT COUNT(*) FROM real_estate")
+    fun getRowCount(): Int
 
-        @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
-        fun observeOneItem(id : Long): Flow<RealEstate?>
+    @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
+    fun observeOneItem(id : Long): Flow<RealEstate?>
 
-        @Delete
-        suspend fun delete(estate: RealEstate)
+    @Delete
+    suspend fun delete(estate: RealEstate)
 
-        @Query("SELECT MIN(price) FROM real_estate")
-        fun getMinPrice(): Int?
+    @Query("SELECT MIN(price) FROM real_estate")
+    fun getMinPrice(): Int?
 
-        @Query("SELECT MAX(price) FROM real_estate")
-        fun getMaxPrice(): Int?
+    @Query("SELECT MAX(price) FROM real_estate")
+    fun getMaxPrice(): Int?
 
-        @Query("SELECT MIN(surface) FROM real_estate")
-        fun getMinSurface(): Int?
+    @Query("SELECT MIN(surface) FROM real_estate")
+    fun getMinSurface(): Int?
 
-        @Query("SELECT MAX(surface) FROM real_estate")
-        fun getMaxSurface(): Int?
+    @Query("SELECT MAX(surface) FROM real_estate")
+    fun getMaxSurface(): Int?
 
-        @Query("SELECT MIN(rooms) FROM real_estate")
-        fun getMinRooms(): Int?
+    @Query("SELECT MIN(rooms) FROM real_estate")
+    fun getMinRooms(): Int?
 
-        @Query("SELECT MAX(rooms) FROM real_estate")
-        fun getMaxRooms(): Int?
+    @Query("SELECT MAX(rooms) FROM real_estate")
+    fun getMaxRooms(): Int?
 
-        @Query("DELETE FROM real_estate WHERE id = :estateId")
-        suspend fun deleteEstateById(estateId: Long)
-
-
-        @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms BETWEEN :minRooms AND :maxRooms AND (:isSold IS NULL OR sended = :isSold)")
-        fun getFilteredRealEstates(
-            minPrice: Double, maxPrice: Double,
-            minSurface: Double, maxSurface: Double,
-            minRooms: Double, maxRooms: Double,
-            isSold: Boolean?
-        ): Flow<List<RealEstate>>
+    @Query("DELETE FROM real_estate WHERE id = :estateId")
+    suspend fun deleteEstateById(estateId: Long)
 
 
+    @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms BETWEEN :minRooms AND :maxRooms AND (:isSold IS NULL OR sended = :isSold) AND (:estateType IS NULL OR estate_type = :estateType)")
+    fun getFilteredRealEstates(
+        minPrice: Double,
+        maxPrice: Double,
+        minSurface: Double,
+        maxSurface: Double,
+        minRooms: Double,
+        maxRooms: Double,
+        isSold: Boolean?,
+        estateType: String?
+    ): Flow<List<RealEstate>>
 
 
-        @RawQuery(observedEntities = [RealEstate::class, Media::class, SellerName::class])
-        fun filter(query: SupportSQLiteQuery): Flow<List<RealEstate>>
 
 
-        @Update
-        fun update(realEstate: RealEstate): Unit
 
 
-    }
+    @RawQuery(observedEntities = [RealEstate::class, Media::class, SellerName::class])
+    fun filter(query: SupportSQLiteQuery): Flow<List<RealEstate>>
 
 
+    @Update
+    fun update(realEstate: RealEstate): Unit
+
+
+}

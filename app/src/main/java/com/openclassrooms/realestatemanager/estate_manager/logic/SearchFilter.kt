@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.icu.text.NumberFormat
 import android.icu.util.Currency
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,9 @@ class SearchFilter(
 
     private lateinit var soldCheckBox: CheckBox
     private lateinit var availableCheckBox: CheckBox
+    private lateinit var apartmentCheckBox: CheckBox
+    private lateinit var loftCheckBox: CheckBox
+    private lateinit var houseCheckBox: CheckBox
 
     companion object {
         val PRICE_ID = View.generateViewId()
@@ -39,6 +43,9 @@ class SearchFilter(
 
     private var soldSelected = false
     private var availableSelected = false
+    private var apartmentSelected = false
+    private var loftSelected = false
+    private var houseSelected = false
 
     fun showFilterDialog(
         minPrice: Float,
@@ -86,6 +93,28 @@ class SearchFilter(
             text = context.getString(R.string.price_filter_label)
         }
         linearLayout.addView(priceLabel)
+
+        apartmentCheckBox = CheckBox(context).apply {
+            text = "Apartment"
+            isChecked = apartmentSelected
+            setOnCheckedChangeListener { _, isChecked -> apartmentSelected = isChecked }
+        }
+        linearLayout.addView(apartmentCheckBox)
+
+        loftCheckBox = CheckBox(context).apply {
+            text = "Loft"
+            isChecked = loftSelected
+            setOnCheckedChangeListener { _, isChecked -> loftSelected = isChecked }
+        }
+        linearLayout.addView(loftCheckBox)
+
+        houseCheckBox = CheckBox(context).apply {
+            text = "House"
+            isChecked = houseSelected
+            setOnCheckedChangeListener { _, isChecked -> houseSelected = isChecked }
+        }
+        linearLayout.addView(houseCheckBox)
+
 
 
 
@@ -241,7 +270,23 @@ class SearchFilter(
                 else -> null
             }
 
-            if (estateStatusSelected != null) {
+           val estateType = when {
+                apartmentSelected && availableSelected -> "Appartement"
+                loftSelected && availableSelected-> "Loft"
+                houseSelected && availableSelected-> "Maison"
+                else -> null
+            }
+
+            Log.d("SearchFilter", "selectedMinPrice: $selectedMinPrice")
+            Log.d("SearchFilter", "selectedMaxPrice: $selectedMaxPrice")
+            Log.d("SearchFilter", "selectedMinSurface: $selectedMinSurface")
+            Log.d("SearchFilter", "selectedMaxSurface: $selectedMaxSurface")
+            Log.d("SearchFilter", "selectedMinRooms: $selectedMinRooms")
+            Log.d("SearchFilter", "selectedMaxRooms: $selectedMaxRooms")
+            Log.d("SearchFilter", "estateStatusSelected: $estateStatusSelected")
+            Log.d("SearchFilter", "estateType: $estateType")
+
+            if (estateStatusSelected != null || estateType != null) {
                 onFilterSelected(
                     selectedMinPrice,
                     selectedMaxPrice,
@@ -249,10 +294,10 @@ class SearchFilter(
                     selectedMaxSurface,
                     selectedMinRooms,
                     selectedMaxRooms,
-                    estateStatusSelected
+                    estateStatusSelected,
+                    estateType
                 )
             } else {
-
                 fetchAllEstates(
                     selectedMinPrice,
                     selectedMaxPrice,
@@ -282,6 +327,13 @@ class SearchFilter(
         maxRooms: Float
     ) {
         CoroutineScope(Dispatchers.IO).launch {
+            val estateType = when {
+                apartmentSelected -> "Apartment"
+                loftSelected -> "Loft"
+                houseSelected -> "House"
+                else -> null
+            }
+
             val allEstates = realEstateDao.getFilteredRealEstates(
                 minPrice.toDouble(),
                 maxPrice.toDouble(),
@@ -289,13 +341,15 @@ class SearchFilter(
                 maxSurface.toDouble(),
                 minRooms.toDouble(),
                 maxRooms.toDouble(),
-                null
+                null,
+                estateType
             ).first()
             withContext(Dispatchers.Main) {
                 onUpdateUI(allEstates)
             }
         }
     }
+
 
 
     private fun onFilterSelected(
@@ -305,7 +359,8 @@ class SearchFilter(
         maxSurface: Float,
         minRooms: Float,
         maxRooms: Float,
-        estateStatus: Boolean
+        estateStatus: Boolean?,
+        estateType: String?
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             val filteredEstates = realEstateDao.getFilteredRealEstates(
@@ -315,7 +370,8 @@ class SearchFilter(
                 maxSurface.toDouble(),
                 minRooms.toDouble(),
                 maxRooms.toDouble(),
-                estateStatus
+                estateStatus,
+                estateType
             ).first()
             withContext(Dispatchers.Main) {
                 onUpdateUI(filteredEstates)
@@ -353,8 +409,3 @@ class SearchFilter(
 
 
 }
-
-
-
-
-

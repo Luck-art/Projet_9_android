@@ -328,7 +328,6 @@ class AddNewEstate(
                         0,
                         img = img,
                         estate_type = estate_type.joinToString(", "),
-                        point_interest = pointsOfInterest,
                         name = name,
                         description = description,
                         address = address,

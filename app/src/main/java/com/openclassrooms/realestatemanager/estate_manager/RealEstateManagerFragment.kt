@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.RadioGroup
 import androidx.activity.result.PickVisualMediaRequest
@@ -45,6 +46,9 @@ class RealEstateManagerFragment : Fragment() {
 
     private lateinit var adapter: RealEstateManagerAdapter
 
+    private lateinit var checkBoxHouse: CheckBox
+    private lateinit var checkBoxLoft: CheckBox
+    private lateinit var checkBoxApartment: CheckBox
     private fun onDeleteEstateClicked(estateId: Long) {
         callViewModel.onDeleteEstateClicked(estateId)
     }
@@ -101,6 +105,10 @@ class RealEstateManagerFragment : Fragment() {
                                     completable.await()
                                 },
                             )
+                            val estateTypes = realEstate.estate_type.split(", ")
+                            checkBoxHouse.isChecked = estateTypes.contains("House")
+                            checkBoxLoft.isChecked = estateTypes.contains("Loft")
+                            checkBoxApartment.isChecked = estateTypes.contains("Apartment")
                         }
                     }
                 }
