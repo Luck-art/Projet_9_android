@@ -33,4 +33,10 @@ class EstateMapAdapter(private val context: Context, private val lat: Double, pr
             e.printStackTrace()
         }
     }
+    fun addMarker(estateLat: Double, estateLng: Double, estateName: String) {
+        mMap?.let { map ->
+            val latLng = LatLng(estateLat, estateLng)
+            map.addMarker(MarkerOptions().position(latLng).title(estateName))
+        }
+    }
 }

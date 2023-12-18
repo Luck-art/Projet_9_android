@@ -24,6 +24,22 @@ abstract class RealEstateManagerDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: RealEstateManagerDatabase? = null
+
+        fun getInstance(context: Context): RealEstateManagerDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    RealEstateManagerDatabase::class.java,
+                    "real_estate_manager_database"
+                ).build()
+                INSTANCE = instance
+                instance
+            }
+        }
+
+
     }
+
+
 }
 

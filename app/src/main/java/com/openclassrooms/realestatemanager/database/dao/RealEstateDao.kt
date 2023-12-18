@@ -62,6 +62,10 @@ interface RealEstateDao {
     @Query("DELETE FROM real_estate WHERE id = :estateId")
     suspend fun deleteEstateById(estateId: Long)
 
+    @Query("SELECT * FROM real_estate WHERE latitude BETWEEN :latMin AND :latMax AND longitude BETWEEN :lngMin AND :lngMax")
+    fun getRealEstatesInRadius(latMin: Double, latMax: Double, lngMin: Double, lngMax: Double): List<RealEstate>
+
+
 
     @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms BETWEEN :minRooms AND :maxRooms AND (:isSold IS NULL OR sended = :isSold) AND (:estateType IS NULL OR estate_type = :estateType)")
     fun getFilteredRealEstates(
