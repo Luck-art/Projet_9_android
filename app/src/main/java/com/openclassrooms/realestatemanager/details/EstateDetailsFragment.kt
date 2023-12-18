@@ -151,8 +151,18 @@ class EstateDetailsFragment : Fragment() {
                     estateTypeTextView.text = "Estate type: ${vs.realEstate?.estate_type}"
                     estateAgentTextView.text = "Estate agent: ${vs.realEstate?.estate_agent}"
                     estateActivitiesTextView.text = "Estate activities: ${vs.realEstate?.point_interest?.joinToString(", ")}"
-                    estateDateSaleTextView.text = "Date sale: ${vs.realEstate?.date_sale}"
-                    estateDateSoldTextView.text = "Date sold: ${vs.realEstate?.date_sold}"
+                    if (vs.realEstate?.date_sale == null) {
+                        estateDateSaleTextView.visibility = View.GONE
+                    } else {
+                        estateDateSaleTextView.visibility = View.VISIBLE
+                        estateDateSaleTextView.text = "Date sale: ${vs.realEstate?.date_sale}"
+                    }
+                    if (vs.realEstate?.date_sold == null) {
+                        estateDateSoldTextView.visibility = View.GONE
+                    } else {
+                        estateDateSoldTextView.visibility = View.VISIBLE
+                        estateDateSoldTextView.text = "Date sold: ${vs.realEstate?.date_sold}"
+                    }
                     Log.d("EstateDetailsFragment", "Mise à jour des éléments de l'adapter")
                 }
             }
