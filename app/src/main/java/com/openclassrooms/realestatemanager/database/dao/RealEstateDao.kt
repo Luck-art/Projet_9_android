@@ -67,7 +67,7 @@ interface RealEstateDao {
 
 
 
-    @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms BETWEEN :minRooms AND :maxRooms AND (:isSold IS NULL OR sended = :isSold) AND (:estateType IS NULL OR estate_type = :estateType)")
+    @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms BETWEEN :minRooms AND :maxRooms AND (:isSold IS NULL OR sended = :isSold) AND (:estateType IS NULL OR estate_type = :estateType) AND (:pointOfInterest IS NULL OR point_interest LIKE '%' || :pointOfInterest || '%')")
     fun getFilteredRealEstates(
         minPrice: Double,
         maxPrice: Double,
@@ -76,7 +76,8 @@ interface RealEstateDao {
         minRooms: Double,
         maxRooms: Double,
         isSold: Boolean?,
-        estateType: String?
+        estateType: String?,
+        pointOfInterest: String?
     ): Flow<List<RealEstate>>
 
     @RawQuery(observedEntities = [RealEstate::class, Media::class, SellerName::class])

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.slider.RangeSlider
@@ -35,6 +36,13 @@ class SearchFilter(
     private lateinit var apartmentCheckBox: CheckBox
     private lateinit var loftCheckBox: CheckBox
     private lateinit var houseCheckBox: CheckBox
+    private lateinit var schoolCheckBox: CheckBox
+    private lateinit var parkCheckBox: CheckBox
+    private lateinit var restaurantCheckBox: CheckBox
+    private lateinit var gymnastCheckBox: CheckBox
+    private lateinit var shopCheckBox: CheckBox
+    private lateinit var fastFoodCheckBox: CheckBox
+
 
     companion object {
         val PRICE_ID = View.generateViewId()
@@ -46,6 +54,12 @@ class SearchFilter(
     private var apartmentSelected = false
     private var loftSelected = false
     private var houseSelected = false
+    private var schoolSelected = false
+    private var parkSelected = false
+    private var restaurantSelected = false
+    private var gymnastSelected = false
+    private var shopSelected = false
+    private var fastFoodSelected = false
 
     fun showFilterDialog(
         minPrice: Float,
@@ -62,6 +76,13 @@ class SearchFilter(
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Filtrer les propriétés")
 
+        val scrollView = ScrollView(context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
+
         val linearLayout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             layoutParams = LinearLayout.LayoutParams(
@@ -71,6 +92,15 @@ class SearchFilter(
             val padding = context.resources.getDimensionPixelSize(R.dimen.default_padding)
             setPadding(padding, padding, padding, padding)
         }
+
+        scrollView.addView(linearLayout)
+
+        // sale filter
+
+        val saleLabel = TextView(context).apply {
+            text = context.getString(R.string.sale_filter_label)
+        }
+        linearLayout.addView(saleLabel)
 
         soldCheckBox = CheckBox(context).apply {
             text = "Biens vendus"
@@ -89,10 +119,14 @@ class SearchFilter(
         soldSelected = soldCheckBox.isChecked
         availableSelected = availableCheckBox.isChecked
 
-        val priceLabel = TextView(context).apply {
-            text = context.getString(R.string.price_filter_label)
+
+        // type filter
+
+
+        val typeLabel = TextView(context).apply {
+            text = context.getString(R.string.type_filter_label)
         }
-        linearLayout.addView(priceLabel)
+        linearLayout.addView(typeLabel)
 
         apartmentCheckBox = CheckBox(context).apply {
             text = "Apartment"
@@ -116,7 +150,64 @@ class SearchFilter(
         linearLayout.addView(houseCheckBox)
 
 
+        // interest point filter
 
+
+        val interestLabel = TextView(context).apply {
+            text = context.getString(R.string.interest_filter_label)
+        }
+        linearLayout.addView(interestLabel)
+
+        schoolCheckBox = CheckBox(context).apply {
+            text = "School"
+            isChecked = schoolSelected
+            setOnCheckedChangeListener { _, isChecked -> schoolSelected = isChecked }
+        }
+        linearLayout.addView(schoolCheckBox)
+
+        parkCheckBox = CheckBox(context).apply {
+            text = "Park"
+            isChecked = parkSelected
+            setOnCheckedChangeListener { _, isChecked -> parkSelected = isChecked }
+        }
+        linearLayout.addView(parkCheckBox)
+
+        restaurantCheckBox = CheckBox(context).apply {
+            text = "Restaurant"
+            isChecked = schoolSelected
+            setOnCheckedChangeListener { _, isChecked -> schoolSelected = isChecked }
+        }
+        linearLayout.addView(restaurantCheckBox)
+
+        gymnastCheckBox = CheckBox(context).apply {
+            text = "Sport"
+            isChecked = gymnastSelected
+            setOnCheckedChangeListener { _, isChecked -> gymnastSelected = isChecked }
+        }
+        linearLayout.addView(gymnastCheckBox)
+
+        shopCheckBox = CheckBox(context).apply {
+            text = "Shop"
+            isChecked = shopSelected
+            setOnCheckedChangeListener { _, isChecked -> shopSelected = isChecked }
+        }
+        linearLayout.addView(shopCheckBox)
+
+        fastFoodCheckBox = CheckBox(context).apply {
+            text = "Sport"
+            isChecked = fastFoodSelected
+            setOnCheckedChangeListener { _, isChecked -> fastFoodSelected = isChecked }
+        }
+        linearLayout.addView(fastFoodCheckBox)
+
+
+        // price filter
+
+
+        val priceLabel = TextView(context).apply {
+            text = context.getString(R.string.price_filter_label)
+        }
+        linearLayout.addView(priceLabel)
 
         val priceRangeSlider = RangeSlider(context).apply {
             id = PRICE_ID
@@ -163,6 +254,11 @@ class SearchFilter(
                 })
         })
 
+
+        // surface filter
+
+
+
         val surfaceLabel = TextView(context).apply {
             text = context.getString(R.string.surface_filter_label)
         }
@@ -208,6 +304,11 @@ class SearchFilter(
                 })
         })
 
+
+
+        // rooms filter
+
+
         val roomsLabel = TextView(context).apply {
             text = context.getString(R.string.rooms_filter_label)
         }
@@ -252,7 +353,7 @@ class SearchFilter(
                 })
         })
 
-        builder.setView(linearLayout)
+        builder.setView(scrollView)
 
         builder.setPositiveButton("OK") { _, _ ->
             val selectedMinPrice = priceRangeSlider.values[0]
@@ -277,6 +378,15 @@ class SearchFilter(
                 else -> null
             }
 
+            val selectedPointsOfInterest = mutableListOf<String>()
+            if (schoolSelected) selectedPointsOfInterest.add("School")
+            if (parkSelected) selectedPointsOfInterest.add("Park")
+            if (restaurantSelected) selectedPointsOfInterest.add("Restaurant")
+            if (gymnastSelected) selectedPointsOfInterest.add("Sport")
+            if (shopSelected) selectedPointsOfInterest.add("Shop")
+            if (fastFoodSelected) selectedPointsOfInterest.add("Fast food")
+
+
             Log.d("SearchFilter", "selectedMinPrice: $selectedMinPrice")
             Log.d("SearchFilter", "selectedMaxPrice: $selectedMaxPrice")
             Log.d("SearchFilter", "selectedMinSurface: $selectedMinSurface")
@@ -286,7 +396,7 @@ class SearchFilter(
             Log.d("SearchFilter", "estateStatusSelected: $estateStatusSelected")
             Log.d("SearchFilter", "estateType: $estateType")
 
-            if (estateStatusSelected != null || estateType != null) {
+            if (estateStatusSelected != null || estateType != null || selectedPointsOfInterest.isNotEmpty()) {
                 onFilterSelected(
                     selectedMinPrice,
                     selectedMaxPrice,
@@ -295,7 +405,8 @@ class SearchFilter(
                     selectedMinRooms,
                     selectedMaxRooms,
                     estateStatusSelected,
-                    estateType
+                    estateType,
+                    selectedPointsOfInterest
                 )
             } else {
                 fetchAllEstates(
@@ -304,7 +415,8 @@ class SearchFilter(
                     selectedMinSurface,
                     selectedMaxSurface,
                     selectedMinRooms,
-                    selectedMaxRooms
+                    selectedMaxRooms,
+                    selectedPointsOfInterest
                 )
             }
         }
@@ -324,7 +436,8 @@ class SearchFilter(
         minSurface: Float,
         maxSurface: Float,
         minRooms: Float,
-        maxRooms: Float
+        maxRooms: Float,
+        pointsOfInterest: List<String>
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             val estateType = when {
@@ -342,8 +455,20 @@ class SearchFilter(
                 minRooms.toDouble(),
                 maxRooms.toDouble(),
                 null,
-                estateType
+                estateType,
+                null, // ajouter au sql
             ).first()
+
+            val filteredEstates = if (pointsOfInterest.isNotEmpty()) {
+                allEstates.filter { estate ->
+                    pointsOfInterest.any { interest ->
+                        estate.point_interest.contains(interest)
+                    }
+                }
+            } else {
+                allEstates
+            }
+
             withContext(Dispatchers.Main) {
                 onUpdateUI(allEstates)
             }
@@ -360,7 +485,8 @@ class SearchFilter(
         minRooms: Float,
         maxRooms: Float,
         estateStatus: Boolean?,
-        estateType: String?
+        estateType: String?,
+        pointsOfInterest: List<String>
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             val filteredEstates = realEstateDao.getFilteredRealEstates(
@@ -371,8 +497,20 @@ class SearchFilter(
                 minRooms.toDouble(),
                 maxRooms.toDouble(),
                 estateStatus,
-                estateType
+                estateType,
+                null
             ).first()
+
+            val filteredEstatesResult = if (pointsOfInterest.isNotEmpty()) {
+                filteredEstates.filter { estate ->
+                    pointsOfInterest.any { interest ->
+                        estate.point_interest.contains(interest)
+                    }
+                }
+            } else {
+                filteredEstates
+            }
+
             withContext(Dispatchers.Main) {
                 onUpdateUI(filteredEstates)
             }

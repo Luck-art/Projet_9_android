@@ -5,8 +5,11 @@
     <string name="open_drawer" />
     <string name="close_drawer" />
     <string name="price_filter_label">Price filter</string>
+    <string name="type_filter_label">Type filter</string>
+    <string name="sale_filter_label">Sale filter</string>
     <string name="surface_filter_label">Surface filter</string>
     <string name="rooms_filter_label">Rooms filter</string>
     <string name="default_web_client_id">426097529879-2ln72eo1n4g4ajuppmufojdahmhn8tbm.apps.googleusercontent.com</string>
+    <string name="interest_filter_label">activities</string>
 
 </resources>
