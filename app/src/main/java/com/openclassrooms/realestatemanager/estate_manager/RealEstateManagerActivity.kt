@@ -23,6 +23,7 @@ import com.openclassrooms.realestatemanager.database.tables.RealEstate
 import com.openclassrooms.realestatemanager.details.EstateDetailsActivity
 import com.openclassrooms.realestatemanager.details.EstateDetailsFragment
 import com.openclassrooms.realestatemanager.estate_manager.logic.SearchFilter
+import com.openclassrooms.realestatemanager.map.AroundMeMapActivity
 import org.koin.android.ext.android.inject
 
 
@@ -30,6 +31,7 @@ class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment
 
     lateinit var burgerMenu: ImageView
     lateinit var drawerLayout: DrawerLayout
+    lateinit var buttonMap: View
     private val realEstateDao: RealEstateDao by inject()
     private lateinit var searchFilter: SearchFilter
 
@@ -59,6 +61,7 @@ class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment
             .commitAllowingStateLoss()
 
         burgerMenu = findViewById(R.id.burger_menu)
+        buttonMap = findViewById(R.id.btn_map)
         drawerLayout = findViewById(R.id.drawer_layout)
 
         supportActionBar?.hide()
@@ -115,6 +118,10 @@ class RealEstateManagerActivity : AppCompatActivity(), RealEstateManagerFragment
 
                 else -> false
             }
+        }
+
+        buttonMap.setOnClickListener {
+            startActivity(Intent(this@RealEstateManagerActivity, AroundMeMapActivity::class.java))
         }
     }
 

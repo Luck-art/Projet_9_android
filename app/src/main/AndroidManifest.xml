@@ -48,6 +48,7 @@
         </activity>
 
         <activity android:name="com.openclassrooms.realestatemanager.CreateAccountActivity" />
+        <activity android:name=".map.AroundMeMapActivity" />
 
         <meta-data android:name="com.facebook.sdk.ClientToken" android:value="28d53f45543f0de52d0256beba61af04"/>
         <meta-data

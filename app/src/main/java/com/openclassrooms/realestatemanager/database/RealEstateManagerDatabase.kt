@@ -1,8 +1,6 @@
 package com.openclassrooms.realestatemanager.database
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.openclassrooms.realestatemanager.database.dao.ImagesDao
@@ -20,26 +18,5 @@ abstract class RealEstateManagerDatabase : RoomDatabase() {
     abstract fun realEstateDao(): RealEstateDao
     abstract fun imageDao(): ImagesDao
     abstract fun sellerNameDao(): SellerNameDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: RealEstateManagerDatabase? = null
-
-        fun getInstance(context: Context): RealEstateManagerDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    RealEstateManagerDatabase::class.java,
-                    "real_estate_manager_database"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
-
-
-    }
-
-
 }
 
