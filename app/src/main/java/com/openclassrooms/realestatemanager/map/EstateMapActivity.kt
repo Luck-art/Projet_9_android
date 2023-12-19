@@ -1,12 +1,18 @@
 package com.openclassrooms.realestatemanager.map
 
+import android.content.pm.PackageManager
 import com.openclassrooms.realestatemanager.R
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.openclassrooms.realestatemanager.adapters.EstateMapAdapter
 import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
@@ -20,9 +26,21 @@ class EstateMapActivity : AppCompatActivity() {
     lateinit var geocoder: Geocoder
     private lateinit var estateMapAdapter: EstateMapAdapter
 
+    companion object {
+        const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
+        } else {
+
+        }
 
         val lat = intent.getDoubleExtra("ESTATE_LAT", 0.0)
         val lng = intent.getDoubleExtra("ESTATE_LNG", 0.0)
@@ -37,22 +55,47 @@ class EstateMapActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val nearbyEstates = withContext(Dispatchers.IO) {
-                val radiusInMeters = 8000
-                val latMin = lat - (radiusInMeters / 111000.0)
-                val latMax = lat + (radiusInMeters / 111000.0)
-                val lngMin = lng - (radiusInMeters / (111000.0 * Math.cos(Math.toRadians(lat))))
-                val lngMax = lng + (radiusInMeters / (111000.0 * Math.cos(Math.toRadians(lat))))
-                Log.d("EstateMapActivity", "latMin: $latMin, latMax: $latMax, lngMin: $lngMin, lngMax: $lngMax")
+                val latMin = lat - 0.01
+                val latMax = lat + 0.01
+                val lngMin = lng - 0.01
+                val lngMax = lng + 0.01
                 dao.getRealEstatesInRadius(latMin, latMax, lngMin, lngMax)
             }
 
+            val builder = LatLngBounds.Builder()
             for (estate in nearbyEstates) {
                 val estateLat = estate.latitude ?: 0.0
                 val estateLng = estate.longitude ?: 0.0
                 val estateName = estate.name ?: ""
-                Log.d("EstateMapActivity", "Estate Name: $estateName, Lat: $estateLat, Lng: $estateLng")
+                val latLng = LatLng(estateLat, estateLng)
+                builder.include(latLng)
                 estateMapAdapter.addMarker(estateLat, estateLng, estateName)
             }
+            if (nearbyEstates.isNotEmpty()) {
+                val bounds = builder.build()
+                estateMapAdapter.adjustCameraToBounds(bounds)
+                Log.d("EstateMapActivity", "Nearby Estates: $nearbyEstates")
+
+            }
+
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+
+                } else {
+
+                }
+                return
+            }
+
         }
     }
+
+
 }
