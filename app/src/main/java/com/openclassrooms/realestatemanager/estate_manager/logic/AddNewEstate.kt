@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.estate_manager.logic
 
 import RealEstateManagerViewModel
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
@@ -15,6 +17,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
 import com.google.android.material.internal.CheckableGroup
 import com.openclassrooms.realestatemanager.R
@@ -24,11 +27,42 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 class AddNewEstate(
 ) {
+
+    private fun showDatePickerDialog(editText: EditText) {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            editText.context,
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val selectedCalendar = Calendar.getInstance()
+                selectedCalendar.set(selectedYear, selectedMonth, selectedDay)
+
+                val currentCalendar = Calendar.getInstance()
+                selectedCalendar.set(Calendar.HOUR_OF_DAY, currentCalendar.get(Calendar.HOUR_OF_DAY))
+                selectedCalendar.set(Calendar.MINUTE, currentCalendar.get(Calendar.MINUTE))
+                selectedCalendar.set(Calendar.SECOND, currentCalendar.get(Calendar.SECOND))
+
+                val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+                val formattedDate = dateFormat.format(selectedCalendar.time)
+                editText.setText(formattedDate)
+            },
+            year, month, day
+        )
+        datePickerDialog.show()
+
+    }
+
+
+    @SuppressLint("CutPasteId")
     fun showAddPropertyDialog(
         viewModel: RealEstateManagerViewModel,
         context: Context,
@@ -64,6 +98,20 @@ class AddNewEstate(
         val editDateSold = dialogLayout.findViewById<EditText>(R.id.editTextSoldDate)
         val editDateSale = dialogLayout.findViewById<EditText>(R.id.editTextSaleDate)
         val editRooms = dialogLayout.findViewById<EditText>(R.id.editRooms)
+
+       editDateSale.isFocusable = false
+        editDateSale.isClickable = true
+
+        editDateSale.setOnClickListener {
+            showDatePickerDialog(editDateSale)
+        }
+
+        editDateSold.isFocusable = false
+        editDateSold.isClickable = true
+
+        editDateSold.setOnClickListener {
+            showDatePickerDialog(editDateSold)
+        }
 
         var imageUri: Uri? = null
 
