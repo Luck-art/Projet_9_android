@@ -67,7 +67,9 @@ interface RealEstateDao {
 
 
 
-    @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms BETWEEN :minRooms AND :maxRooms AND (:isSold IS NULL OR sended = :isSold) AND (:estateType IS NULL OR estate_type = :estateType) AND (:pointOfInterest IS NULL OR point_interest LIKE '%' || :pointOfInterest || '%')")
+    @Query("SELECT * FROM real_estate WHERE price BETWEEN :minPrice AND :maxPrice AND surface BETWEEN :minSurface AND :maxSurface AND rooms BETWEEN :minRooms AND :maxRooms AND (:isSold IS NULL OR sended = :isSold) AND (:estateType IS NULL OR estate_type = :estateType)" +
+            "AND (point_interest LIKE '%' || :School || '%' OR :School IS NULL) AND (point_interest LIKE '%' || :Park || '%' OR :Park IS NULL) AND (point_interest LIKE '%' || :Restaurant || '%' OR :Restaurant IS NULL) AND (point_interest LIKE '%' || :Sport || '%' OR :Sport IS NULL)" +
+            "AND (point_interest LIKE '%' || :Shop || '%' OR :Shop IS NULL) AND (point_interest LIKE '%' || :FastFood || '%' OR :FastFood IS NULL)")
     fun getFilteredRealEstates(
         minPrice: Double,
         maxPrice: Double,
@@ -77,7 +79,12 @@ interface RealEstateDao {
         maxRooms: Double,
         isSold: Boolean?,
         estateType: String?,
-        pointOfInterest: String?
+        School: String?,
+        Park: String?,
+        Restaurant: String?,
+        Sport: String?,
+        Shop: String?,
+        FastFood: String?,
     ): Flow<List<RealEstate>>
 
     @RawQuery(observedEntities = [RealEstate::class, Media::class, SellerName::class])

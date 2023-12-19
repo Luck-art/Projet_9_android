@@ -194,7 +194,7 @@ class SearchFilter(
         linearLayout.addView(shopCheckBox)
 
         fastFoodCheckBox = CheckBox(context).apply {
-            text = "Sport"
+            text = "Fast food"
             isChecked = fastFoodSelected
             setOnCheckedChangeListener { _, isChecked -> fastFoodSelected = isChecked }
         }
@@ -456,7 +456,12 @@ class SearchFilter(
                 maxRooms.toDouble(),
                 null,
                 estateType,
-                null, // ajouter au sql
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
             ).first()
 
             val filteredEstates = if (pointsOfInterest.isNotEmpty()) {
@@ -498,7 +503,12 @@ class SearchFilter(
                 maxRooms.toDouble(),
                 estateStatus,
                 estateType,
-                null
+                if (pointsOfInterest.contains("School")) "School" else null,
+                if (pointsOfInterest.contains("Park")) "Park" else null,
+                if (pointsOfInterest.contains("Restaurant")) "Restaurant" else null,
+                if (pointsOfInterest.contains("Sport")) "Sport" else null,
+                if (pointsOfInterest.contains("Shop")) "Shop" else null,
+                if (pointsOfInterest.contains("Fast food")) "Fast food" else null,
             ).first()
 
             val filteredEstatesResult = if (pointsOfInterest.isNotEmpty()) {
