@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.google.android.material.internal.CheckableGroup
@@ -202,7 +203,8 @@ class AddNewEstate(
                         dateSale = dateSale,
                         getFromLocationName = {
                             geocoder.getFromLocationName(address, 1)
-                        }
+                        },
+                        context = context
                     )
                 }
             }
@@ -315,6 +317,7 @@ class AddNewEstate(
         realEstate: RealEstate?,
         viewModel: RealEstateManagerViewModel,
         dialog: AlertDialog,
+        context: Context
     ) {
         if (img != null && name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && price > 0) {
             try {
@@ -357,6 +360,7 @@ class AddNewEstate(
                         )
                     }
                     dialog.dismiss()
+                    Toast.makeText(context, R.string.toast_property_created, Toast.LENGTH_SHORT).show()
                 } else {
                     print("Adresse non trouvée")
                 }
