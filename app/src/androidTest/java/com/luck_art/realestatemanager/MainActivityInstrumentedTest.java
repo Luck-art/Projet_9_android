@@ -2,8 +2,10 @@ package com.luck_art.realestatemanager;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static com.openclassrooms.realestatemanager.utils.Utils.isInternetAvailable;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.View;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -38,6 +40,15 @@ public class MainActivityInstrumentedTest {
 
         boolean isInternetAvailable = isInternetAvailable(ApplicationProvider.getApplicationContext());
         assert isInternetAvailable == true;
+    }
+
+    private boolean isInternetAvailable(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        }
+        return false;
     }
 
     @Test

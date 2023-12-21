@@ -166,6 +166,11 @@ class RealEstateManagerFragment : Fragment() {
             }
         }
 
+        fun updateRealEstate(estate: RealEstate) {
+            callViewModel.updateRealEstate(estate)
+        }
+
+
 
         val spaceInPixels = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,

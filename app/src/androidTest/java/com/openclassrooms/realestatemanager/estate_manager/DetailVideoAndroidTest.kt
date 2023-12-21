@@ -8,10 +8,12 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.rule.GrantPermissionRule
 import com.openclassrooms.realestatemanager.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -19,25 +21,41 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.TypeSafeMatcher
 import org.hamcrest.core.IsInstanceOf
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class PlayVideoAndroidTest {
+class DetailVideoAndroidTest {
 
     @Rule
     @JvmField
     var mActivityScenarioRule = ActivityScenarioRule(RealEstateManagerActivity::class.java)
 
+    @Rule
+    @JvmField
+    val readStoragePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+
+    @Before
+    fun setUp() {
+        Intents.init()
+    }
+
+    @After
+    fun tearDown() {
+        Intents.release()
+    }
+
     @Test
-    fun playVideoAndroidTest() {
+    fun detailVideoAndroidTest() {
         val recyclerView = onView(
             allOf(
                 withId(R.id.realEstateRecyclerView),
                 childAtPosition(
-                    withId(R.id.fragment_container_list),
+                    withClassName(`is`("android.widget.LinearLayout")),
                     0
                 )
             )
@@ -49,7 +67,7 @@ class PlayVideoAndroidTest {
                 withId(R.id.image_list),
                 childAtPosition(
                     withClassName(`is`("android.widget.LinearLayout")),
-                    5
+                    9
                 )
             )
         )
@@ -61,7 +79,7 @@ class PlayVideoAndroidTest {
                 childAtPosition(
                     childAtPosition(
                         withClassName(`is`("android.widget.LinearLayout")),
-                        4
+                        8
                     ),
                     2
                 )
@@ -75,7 +93,7 @@ class PlayVideoAndroidTest {
                 childAtPosition(
                     childAtPosition(
                         withClassName(`is`("android.widget.LinearLayout")),
-                        4
+                        8
                     ),
                     3
                 )
@@ -83,42 +101,24 @@ class PlayVideoAndroidTest {
         )
         appCompatImageButton2.perform(scrollTo(), click())
 
-        val appCompatImageButton3 = onView(
+        val imageButton = onView(
             allOf(
                 withId(R.id.playButton),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.LinearLayout")),
-                        4
-                    ),
-                    2
-                )
-            )
-        )
-        appCompatImageButton3.perform(scrollTo(), click())
-
-        val appCompatImageButton4 = onView(
-            allOf(
-                withId(R.id.pauseButton),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.LinearLayout")),
-                        4
-                    ),
-                    3
-                )
-            )
-        )
-        appCompatImageButton4.perform(scrollTo(), click())
-
-        val videoView = onView(
-            allOf(
-                withId(R.id.main_display_video),
                 withParent(withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout::class.java))),
                 isDisplayed()
             )
         )
-        videoView.check(matches(isDisplayed()))
+        imageButton.check(matches(isDisplayed()))
+
+        val textView = onView(
+            allOf(
+                withId(R.id.estate_address),
+                withText("Adresse: 2620 Main St, Santa Monica, CA 90405"),
+                withParent(withParent(withId(R.id.scrollView))),
+                isDisplayed()
+            )
+        )
+        textView.check(matches(withText("Adresse: 2620 Main St, Santa Monica, CA 90405")))
     }
 
     private fun childAtPosition(

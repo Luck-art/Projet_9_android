@@ -50,8 +50,11 @@ class RealEstateManagerViewModel(
     fun updateRealEstate(estate: RealEstate) {
         viewModelScope.launch(Dispatchers.IO) {
             realEstateDao.update(estate)
+            // Mettez à jour le LiveData selectedRealEstate avec le bien immobilier mis à jour
+            selectedRealEstate.postValue(estate)
         }
     }
+
 
 
     fun selectRealEstateForEditing(estate: RealEstate) {

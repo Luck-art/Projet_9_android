@@ -7,6 +7,7 @@ import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -396,17 +397,27 @@ class AddNewEstate(
                     if (realEstate == null) {
                         viewModel.addNewRealEstate(newEstate)
                     } else {
-                        viewModel.editRealEstate(
-                            realEstate.copy(
-                                img = img.toString(),
-                                name = name,
-                                description = description,
-                                address = address,
-                                price = price,
-                                sended = isOnSale,
-                            )
+                        val updatedRealEstate = realEstate.copy(
+                            img = img.toString(),
+                            estate_type = estate_type.joinToString(", "),
+                            name = name,
+                            description = description,
+                            address = address,
+                            price = price,
+                            sended = isOnSale,
+                            latitude = latitude,
+                            longitude = longitude,
+                            surface = surface,
+                            rooms = rooms,
+                            estate_agent = estateAgent,
+                            date_sale = dateSale,
+                            date_sold = dateSold,
+                            point_interest = pointsOfInterest
                         )
+                        Log.d("Update", "Updated Real Estate: $updatedRealEstate")
+                        viewModel.editRealEstate(updatedRealEstate)
                     }
+
                     dialog.dismiss()
                     Toast.makeText(context, R.string.toast_property_created, Toast.LENGTH_SHORT).show()
                 } else {

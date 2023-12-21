@@ -3,15 +3,16 @@ package com.openclassrooms.realestatemanager.estate_manager
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.rule.GrantPermissionRule
 import com.openclassrooms.realestatemanager.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -19,6 +20,8 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anything
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.TypeSafeMatcher
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,6 +33,20 @@ class ModifyEstateAndroidTest {
     @Rule
     @JvmField
     var mActivityScenarioRule = ActivityScenarioRule(RealEstateManagerActivity::class.java)
+
+    @Rule
+    @JvmField
+    val readStoragePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+
+    @Before
+    fun setUp() {
+        Intents.init()
+    }
+
+    @After
+    fun tearDown() {
+        Intents.release()
+    }
 
     @Test
     fun modifyEstateAndroidTest() {
@@ -61,32 +78,87 @@ class ModifyEstateAndroidTest {
                     )
                 )
             )
-            .atPosition(0)
+            .atPosition(1)
         materialTextView.perform(click())
-
-        val newName = "new name ${System.currentTimeMillis()}"
 
         val appCompatEditText = onView(
             allOf(
-                withId(R.id.editName),
+                withId(R.id.editName), withText("Sweet home"),
                 childAtPosition(
                     childAtPosition(
-                        withId(androidx.appcompat.R.id.custom),
+                        withId(R.id.scrollForAddEstate),
                         0
                     ),
-                    1
+                    4
+                )
+            )
+        )
+        appCompatEditText.perform(scrollTo(), replaceText("Sweet apartment"))
+
+        val appCompatEditText2 = onView(
+            allOf(
+                withId(R.id.editName), withText("Sweet apartment"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.scrollForAddEstate),
+                        0
+                    ),
+                    4
                 ),
                 isDisplayed()
             )
         )
-        appCompatEditText.perform(replaceText(newName), closeSoftKeyboard())
+        appCompatEditText2.perform(closeSoftKeyboard())
 
-        val materialButton = onView(
+        val appCompatEditText3 = onView(
             allOf(
-                withId(R.id.buttonAddEstate), withText("OK"),
+                withId(R.id.editPrice), withText("15000"),
                 childAtPosition(
                     childAtPosition(
-                        withId(androidx.appcompat.R.id.custom),
+                        withId(R.id.scrollForAddEstate),
+                        0
+                    ),
+                    7
+                )
+            )
+        )
+        appCompatEditText3.perform(scrollTo(), replaceText("18000"))
+
+        val appCompatEditText4 = onView(
+            allOf(
+                withId(R.id.editPrice), withText("18000"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.scrollForAddEstate),
+                        0
+                    ),
+                    7
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatEditText4.perform(closeSoftKeyboard())
+
+        val appCompatEditText5 = onView(
+            allOf(
+                withId(R.id.editSurface), withText("2.5"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.scrollForAddEstate),
+                        0
+                    ),
+                    8
+                )
+            )
+        )
+        appCompatEditText5.perform(scrollTo(), replaceText("500"))
+
+        val appCompatEditText6 = onView(
+            allOf(
+                withId(R.id.editSurface), withText("500"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.scrollForAddEstate),
                         0
                     ),
                     8
@@ -94,14 +166,76 @@ class ModifyEstateAndroidTest {
                 isDisplayed()
             )
         )
-        materialButton.perform(click())
+        appCompatEditText6.perform(closeSoftKeyboard())
 
-        //final check - the name should be in the list
-        onView(
+
+        val materialRadioButton = onView(
             allOf(
-                withText(newName),
+                withId(R.id.radioButtonOnSale), withText("for sale"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.radioGroupSended),
+                        childAtPosition(
+                            withClassName(`is`("android.widget.LinearLayout")),
+                            14
+                        )
+                    ),
+                    0
+                )
             )
-        ).check(matches(isDisplayed()))
+        )
+        materialRadioButton.perform(scrollTo(), click())
+
+        val appCompatEditText7 = onView(
+            allOf(
+                withId(R.id.editTextSaleDate),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.scrollForAddEstate),
+                        0
+                    ),
+                    15
+                )
+            )
+        )
+        appCompatEditText7.perform(scrollTo(), click())
+
+        val materialButton = onView(
+            allOf(
+                withId(android.R.id.button1), withText("OK"),
+                childAtPosition(
+                    childAtPosition(
+                        withClassName(`is`("android.widget.ScrollView")),
+                        0
+                    ),
+                    3
+                )
+            )
+        )
+        materialButton.perform(scrollTo(), click())
+
+        val materialButton2 = onView(
+            allOf(
+                withId(R.id.buttonAddEstate), withText("OK"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.scrollForAddEstate),
+                        0
+                    ),
+                    17
+                )
+            )
+        )
+        materialButton2.perform(scrollTo(), click())
+
+        val textView = onView(
+            allOf(
+                withId(R.id.estate_name), withText("Sweet apartment"),
+                withParent(withParent(withId(R.id.realEstateRecyclerView))),
+                isDisplayed()
+            )
+        )
+        textView.check(matches(withText("Sweet apartment")))
     }
 
     private fun childAtPosition(
@@ -119,16 +253,6 @@ class ModifyEstateAndroidTest {
                 return parent is ViewGroup && parentMatcher.matches(parent)
                         && view == parent.getChildAt(position)
             }
-        }
-    }
-
-    fun hasDrawable() = object : TypeSafeMatcher<View>() {
-        override fun describeTo(description: Description) {
-            description.appendText("ImageView has a drawable")
-        }
-
-        override fun matchesSafely(view: View): Boolean {
-            return view is ImageView && view.drawable != null
         }
     }
 }
