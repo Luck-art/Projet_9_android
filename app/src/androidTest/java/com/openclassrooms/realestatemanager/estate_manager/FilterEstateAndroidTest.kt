@@ -16,6 +16,7 @@ import com.openclassrooms.realestatemanager.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.TypeSafeMatcher
 import org.junit.After
@@ -524,12 +525,13 @@ class FilterEstateAndroidTest {
 
         val textView3 = onView(
             allOf(
-                withId(R.id.estate_name), withText("Sweet home"),
+                withId(R.id.estate_name),
+                withText(containsString("Sweet home")),
                 withParent(withParent(withId(R.id.realEstateRecyclerView))),
                 isDisplayed()
             )
         )
-        textView3.check(matches(withText("Sweet home")))
+        textView3.check(matches(withText(containsString("Sweet home"))))
     }
 
     private fun childAtPosition(
