@@ -205,7 +205,7 @@ class AddNewEstate(
             val address = editAddress.text.toString()
             val price = editPrice.text.toString().toIntOrNull() ?: 0
             val surfaceText = editSurface.text.toString()
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
             val dateSale: Date? = try {
                 dateFormat.parse(editDateSale.text.toString())
             } catch (e: ParseException) {
@@ -255,9 +255,9 @@ class AddNewEstate(
                         },
                         context = context
                     )
+                    dialog.dismiss()
                 }
             }
-            dialog.dismiss()
         }
 
         checkBoxHouse.setOnCheckedChangeListener { _, isChecked ->
