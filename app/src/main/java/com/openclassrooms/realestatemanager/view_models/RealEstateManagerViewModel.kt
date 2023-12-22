@@ -119,10 +119,11 @@ class RealEstateManagerViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             realEstateDao.update(estate)
             withContext(Dispatchers.Main) {
-                showDialog.value = null
+                closeDialog()
             }
         }
     }
+
 
 
 

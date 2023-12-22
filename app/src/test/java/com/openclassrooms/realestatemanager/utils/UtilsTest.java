@@ -1,13 +1,26 @@
 package com.openclassrooms.realestatemanager.utils;
 
 import static org.junit.Assert.*;
+import static org.robolectric.Shadows.shadowOf;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
+
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadows.ShadowNetworkInfo;
 
 import java.util.Calendar;
 import java.util.Date;
 
+@RunWith(RobolectricTestRunner.class)
 public class UtilsTest {
+
+
 
     @Test
     public void convertDollarToEuro_1234() {
@@ -69,6 +82,27 @@ public class UtilsTest {
         assertEquals(expected, result, 0.01f);
     }
 
+
+    @Test
+    public void getActiveNetworkInfo_shouldReturnTrueCorrectly() {
+
+          ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            ShadowNetworkInfo shadowOfActiveNetworkInfo = shadowOf(connectivityManager.getActiveNetworkInfo());
+
+        Context context = getApplicationContext();
+
+        shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.CONNECTED);
+        assertTrue(connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting());
+        assertTrue(Utils.checkNetworkAvailability(context));
+
+        shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.CONNECTING);
+        assertTrue(connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting());
+        assertFalse(Utils.checkNetworkAvailability(context));
+
+        shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.DISCONNECTED);
+        assertFalse(connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting());
+        assertFalse(Utils.checkNetworkAvailability(context));
+    }
 
 
 

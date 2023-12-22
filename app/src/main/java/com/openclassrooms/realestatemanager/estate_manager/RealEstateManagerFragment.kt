@@ -127,14 +127,9 @@ class RealEstateManagerFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.real_estate_manager, container, false)
 
-        Utils.checkNetworkAvailability(requireContext(), object : NetworkStateListener {
-            override fun onNetworkAvailable() {
-            }
-
-            override fun onNetworkUnavailable() {
-                showNetworkUnavailableMessage(rootView)
-            }
-        })
+        if (Utils.checkNetworkAvailability(context) == false) {
+            showNetworkUnavailableMessage(rootView)
+        }
 
         return rootView
     }

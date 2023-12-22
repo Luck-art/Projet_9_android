@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 
 import java.text.DateFormat;
@@ -32,7 +31,7 @@ public class Utils {
         return dateFormat.format(new Date());
     }
 
-    public static void checkNetworkAvailability(Context context, NetworkStateListener listener) {
+    public static boolean checkNetworkAvailability(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (connectivityManager != null) {
@@ -40,18 +39,19 @@ public class Utils {
                 NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
                 if (networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                         networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))) {
-                    listener.onNetworkAvailable();
+                    return true;
                 } else {
-                    listener.onNetworkUnavailable();
+                    return false;
                 }
             } else {
                 NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
                 if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-                    listener.onNetworkAvailable();
+                    return true;
                 } else {
-                    listener.onNetworkUnavailable();
+                    return false;
                 }
             }
         }
+        return false;
     }
 }
