@@ -91,7 +91,7 @@ class AddNewEstate(
         realEstate?.point_interest?.forEach { point ->
             when (point) {
                 "School" -> checkBoxSchool.isChecked = true
-                "Shops" -> checkBoxShops.isChecked = true
+                "Shop" -> checkBoxShops.isChecked = true
                 "Restaurant" -> checkBoxRestaurants.isChecked = true
                 "Gymnast" -> checkBoxGym.isChecked = true
                 "Fast food" -> checkBoxFastFood.isChecked = true

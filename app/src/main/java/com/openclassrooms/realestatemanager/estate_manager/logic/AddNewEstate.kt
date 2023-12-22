@@ -35,6 +35,9 @@ import java.util.Locale
 class AddNewEstate(
 ) {
 
+    private var previousDialog: AlertDialog? = null
+
+
     private fun showDatePickerDialog(editText: EditText) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -70,6 +73,11 @@ class AddNewEstate(
         realEstate: RealEstate?,
         pickPhoto: suspend () -> Uri?,
     ) {
+
+        if (previousDialog != null && previousDialog!!.isShowing) {
+            previousDialog?.dismiss()
+        }
+
         val builder = AlertDialog.Builder(context)
         val inflater = LayoutInflater.from(context)
         val dialogLayout = inflater.inflate(R.layout.add_new_estate, null)
@@ -91,6 +99,12 @@ class AddNewEstate(
         val checkBoxFastFood: CheckBox = dialogLayout.findViewById(R.id.checkBoxFastFood)
         val checkBoxPark: CheckBox = dialogLayout.findViewById(R.id.checkBoxPark)
         val selectedPointsOfInterest = mutableListOf<String>()
+        if (checkBoxSchool.isChecked) selectedPointsOfInterest.add("School")
+        if (checkBoxShops.isChecked) selectedPointsOfInterest.add("Shop")
+        if (checkBoxRestaurants.isChecked) selectedPointsOfInterest.add("Restaurant")
+        if (checkBoxGym.isChecked) selectedPointsOfInterest.add("Gymnast")
+        if (checkBoxFastFood.isChecked) selectedPointsOfInterest.add("Fast food")
+        if (checkBoxPark.isChecked) selectedPointsOfInterest.add("Park")
         val editEstateAgent = dialogLayout.findViewById<EditText>(R.id.estateAgent)
         val radioGroupSended: RadioGroup = dialogLayout.findViewById(R.id.radioGroupSended)
         val radioButtonOnSale: RadioButton = dialogLayout.findViewById(R.id.radioButtonOnSale)
@@ -100,7 +114,13 @@ class AddNewEstate(
         val editDateSale = dialogLayout.findViewById<EditText>(R.id.editTextSaleDate)
         val editRooms = dialogLayout.findViewById<EditText>(R.id.editRooms)
 
-       editDateSale.isFocusable = false
+
+
+        val previousEstateTypes = mutableListOf<String>()
+        val previousPointsOfInterest = mutableListOf<String>()
+
+
+        editDateSale.isFocusable = false
         editDateSale.isClickable = true
 
         editDateSale.setOnClickListener {
@@ -140,12 +160,30 @@ class AddNewEstate(
         }
         realEstate?.point_interest?.forEach { point ->
             when (point) {
-                "School" -> checkBoxSchool.isChecked = true
-                "Shops" -> checkBoxShops.isChecked = true
-                "Restaurant" -> checkBoxRestaurants.isChecked = true
-                "Gymnast" -> checkBoxGym.isChecked = true
-                "Fast food" -> checkBoxFastFood.isChecked = true
-                "Park" -> checkBoxPark.isChecked = true
+                "School" -> {
+                    checkBoxSchool.isChecked = true
+                    previousPointsOfInterest.add("School")
+                }
+                "Shop" -> {
+                    checkBoxShops.isChecked = true
+                    previousPointsOfInterest.add("Shop")
+                }
+                "Restaurant" -> {
+                    checkBoxRestaurants.isChecked = true
+                    previousPointsOfInterest.add("Restaurant")
+                }
+                "Gymnast" -> {
+                    checkBoxGym.isChecked = true
+                    previousPointsOfInterest.add("Gymnast")
+                }
+                "Fast food" -> {
+                    checkBoxFastFood.isChecked = true
+                    previousPointsOfInterest.add("Fast food")
+                }
+                "Park" -> {
+                    checkBoxPark.isChecked = true
+                    previousPointsOfInterest.add("Park")
+                }
             }
         }
         realEstate?.name?.let {
@@ -207,6 +245,8 @@ class AddNewEstate(
         builder.setView(dialogLayout)
 
         val dialog = builder.create()
+        previousDialog = dialog
+        dialog.show()
 
         buttonAddEstate.setOnClickListener {
             val img = imageUri ?: realEstate?.img
@@ -265,7 +305,10 @@ class AddNewEstate(
                         },
                         context = context
                     )
-                    dialog.dismiss()
+                    if (dialog.isShowing) {
+                        dialog.dismiss()
+                    }
+                    previousDialog = null
                 }
             }
         }
@@ -350,13 +393,12 @@ class AddNewEstate(
             }
         }
 
-
-
         builder.setNegativeButton(context.getString(R.string.cancel)) { dialogInterface, _ ->
             dialog.dismiss()
         }
         dialog.show()
     }
+
 
     internal fun createNewEstate(
         img: String?,
