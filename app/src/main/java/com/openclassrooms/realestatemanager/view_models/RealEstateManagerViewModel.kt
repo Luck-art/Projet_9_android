@@ -56,6 +56,9 @@ class RealEstateManagerViewModel(
 
 
 
+
+
+
     fun selectRealEstateForEditing(estate: RealEstate) {
         selectedRealEstate.value = estate
     }
@@ -112,15 +115,20 @@ class RealEstateManagerViewModel(
         isInEditMode.value = !(isInEditMode.value ?: false)
     }
 
-    fun editRealEstate(copy: RealEstate) {
+    fun editRealEstate(estate: RealEstate) {
         viewModelScope.launch(Dispatchers.IO) {
-            realEstateDao.update(copy)
+            realEstateDao.update(estate)
+            withContext(Dispatchers.Main) {
+                showDialog.value = null
+            }
         }
-        showDialog.value = null
     }
 
 
 
+    fun closeDialog() {
+        showDialog.value = null
+    }
 
 
 
