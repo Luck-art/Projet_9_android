@@ -176,6 +176,16 @@ class AddNewEstate(
                 dialogLayout.findViewById<RadioButton>(R.id.radioButtonSold).isChecked = true
             }
         }
+        realEstate?.date_sale?.let {
+            val formattedDate = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault()).format(it)
+            editDateSale.setText(formattedDate)
+        }
+
+        realEstate?.date_sold?.let {
+            val formattedDate = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault()).format(it)
+            editDateSold.setText(formattedDate)
+        }
+
 
         val editTextSaleDate = dialogLayout.findViewById<EditText>(R.id.editTextSaleDate)
         val editTextSoldDate = dialogLayout.findViewById<EditText>(R.id.editTextSoldDate)
