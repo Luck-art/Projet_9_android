@@ -31,9 +31,13 @@ import com.openclassrooms.realestatemanager.models.DialogState
 import com.openclassrooms.realestatemanager.utils.NetworkStateListener
 import com.openclassrooms.realestatemanager.utils.Utils
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
+import java.io.IOException
 
 
 class RealEstateManagerFragment : Fragment() {
@@ -56,15 +60,38 @@ class RealEstateManagerFragment : Fragment() {
 
     var pickMediaCompletable : CompletableDeferred<Uri?>? = null
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-
         if (uri != null) {
             Log.d("PhotoPicker", "Selected URI: $uri")
+            lifecycleScope.launch {
+                val cachedUri = copyImageToCache(uri)
+                pickMediaCompletable?.complete(cachedUri)
+            }
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
-
-        pickMediaCompletable?.complete(uri)
     }
+
+    private suspend fun copyImageToCache(uri: Uri): Uri? = withContext(Dispatchers.IO) {
+        try {
+            val contentResolver = requireContext().contentResolver
+            val inputStream = contentResolver.openInputStream(uri) ?: return@withContext null
+
+            val tempFile = File.createTempFile("cached_image_", ".jpg", requireContext().cacheDir).apply {
+                deleteOnExit()
+            }
+
+            tempFile.outputStream().use { fileOut ->
+                inputStream.copyTo(fileOut)
+            }
+
+            Uri.fromFile(tempFile)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+
 
     fun onFilterNewItems(realEstates: List<RealEstate>) {
         adapter.onNewItems(realEstates)
