@@ -1,25 +1,27 @@
 package com.openclassrooms.realestatemanager.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.robolectric.Shadows.shadowOf;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.NetworkCapabilities;
+import android.os.Build;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.shadows.ShadowNetworkInfo;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowNetworkCapabilities;
 
 import java.util.Calendar;
-import java.util.Date;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk = Build.VERSION_CODES.Q)
 public class UtilsTest {
-
 
 
     @Test
@@ -47,20 +49,20 @@ public class UtilsTest {
 
     @Test
     public void getTodayDate() {
-        Calendar now =  Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
 
 
         int day = now.get(Calendar.DATE);
         String dayString = "";
-        if(day <= 9) {
+        if (day <= 9) {
             dayString = "0" + day;
         } else {
             dayString = "" + day;
         }
 
-        int month = now.get(Calendar.MONTH) + 1 ;
+        int month = now.get(Calendar.MONTH) + 1;
         String monthString = "";
-        if(month <= 9) {
+        if (month <= 9) {
             monthString = "0" + month;
         } else {
             monthString = "" + month;
@@ -73,7 +75,6 @@ public class UtilsTest {
     }
 
 
-
     @Test
     public void convertEuroToDollar_66() {
         int euro = 81;
@@ -82,29 +83,65 @@ public class UtilsTest {
         assertEquals(expected, result, 0.01f);
     }
 
-
     @Test
-    public void getActiveNetworkInfo_shouldReturnTrueCorrectly() {
+    public void connected_to_wifi_returns_true() {
+        // GIVEN
+        Context context = RuntimeEnvironment.application;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-          ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-            ShadowNetworkInfo shadowOfActiveNetworkInfo = shadowOf(connectivityManager.getActiveNetworkInfo());
 
-        Context context = getApplicationContext();
+        NetworkCapabilities capabilities = ShadowNetworkCapabilities.newInstance();
+        // fake I'm connected to wifi
+        shadowOf(capabilities).addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+        shadowOf(connectivityManager).setNetworkCapabilities(connectivityManager.getActiveNetwork(), capabilities);
 
-        shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.CONNECTED);
-        assertTrue(connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting());
-        assertTrue(Utils.checkNetworkAvailability(context));
+        //WHEN
+        boolean result = Utils.checkNetworkAvailability(context);
 
-        shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.CONNECTING);
-        assertTrue(connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting());
-        assertFalse(Utils.checkNetworkAvailability(context));
+        // THEN
 
-        shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.DISCONNECTED);
-        assertFalse(connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting());
-        assertFalse(Utils.checkNetworkAvailability(context));
+        assertTrue(result);
     }
 
+    @Test
+    public void connected_to_cellular_returns_true() {
+        // GIVEN
+        Context context = RuntimeEnvironment.application;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
+
+        NetworkCapabilities capabilities = ShadowNetworkCapabilities.newInstance();
+        // fake I'm connected to cellular
+        shadowOf(capabilities).addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
+        shadowOf(connectivityManager).setNetworkCapabilities(connectivityManager.getActiveNetwork(), capabilities);
+
+        //WHEN
+        boolean result = Utils.checkNetworkAvailability(context);
+
+        // THEN
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void connected_to_nothing_returns_false() {
+        // GIVEN
+        Context context = RuntimeEnvironment.application;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+
+        NetworkCapabilities capabilities = ShadowNetworkCapabilities.newInstance();
+        // fake I'm connected to nothing
+        // shadowOf(capabilities).addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
+        shadowOf(connectivityManager).setNetworkCapabilities(connectivityManager.getActiveNetwork(), capabilities);
+
+        //WHEN
+        boolean result = Utils.checkNetworkAvailability(context);
+
+        // THEN
+
+        assertFalse(result);
+    }
 
 
 }
