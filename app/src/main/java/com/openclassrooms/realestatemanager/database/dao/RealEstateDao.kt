@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.database.dao
 
 import android.database.Cursor
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -38,8 +37,6 @@ interface RealEstateDao {
     @Query("SELECT * FROM real_estate WHERE id = :id LIMIT 1")
     fun observeOneItem(id : Long): Flow<RealEstate?>
 
-    @Delete
-    suspend fun delete(estate: RealEstate)
 
     @Query("SELECT MIN(price) FROM real_estate")
     fun getMinPrice(): Int?
@@ -58,9 +55,6 @@ interface RealEstateDao {
 
     @Query("SELECT MAX(rooms) FROM real_estate")
     fun getMaxRooms(): Int?
-
-    @Query("DELETE FROM real_estate WHERE id = :estateId")
-    suspend fun deleteEstateById(estateId: Long)
 
     @Query("SELECT * FROM real_estate WHERE latitude BETWEEN :latMin AND :latMax AND longitude BETWEEN :lngMin AND :lngMax")
     fun getRealEstatesInRadius(latMin: Double, latMax: Double, lngMin: Double, lngMax: Double): List<RealEstate>

@@ -52,9 +52,7 @@ class RealEstateManagerFragment : Fragment() {
       var checkBoxHouse: CheckBox? = null
       var checkBoxLoft: CheckBox? = null
       var checkBoxApartment: CheckBox? = null
-    private fun onDeleteEstateClicked(estateId: Long) {
-        callViewModel.onDeleteEstateClicked(estateId)
-    }
+
 
     var pickMediaCompletable : CompletableDeferred<Uri?>? = null
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -194,7 +192,7 @@ class RealEstateManagerFragment : Fragment() {
                     onItemClicked = ::onEstateItemClicked,
                     isInEditMode = isInEditMode
 
-                ) { estateId -> onDeleteEstateClicked(estateId) }
+                )
                 recyclerView.adapter = adapter
             }
         }

@@ -134,7 +134,7 @@ class EstateDetailsFragment : Fragment() {
         val estateDateSoldTextView = view.findViewById<TextView>(R.id.estate_date_sold)
         val priceFormatter: NumberFormat = NumberFormat.getCurrencyInstance().apply {
             maximumFractionDigits = 0
-            currency = Currency.getInstance("EUR")
+            currency = Currency.getInstance("USD")
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {

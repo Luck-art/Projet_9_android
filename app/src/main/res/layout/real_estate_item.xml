@@ -59,13 +59,4 @@
         app:layout_constraintEnd_toEndOf="@+id/estate_price"
         app:layout_constraintTop_toBottomOf="@+id/estate_price" />
 
-    <ImageButton
-        android:id="@+id/delete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#F5F5F5"
-        android:src="@drawable/ic_delete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/estate_img"
-        app:layout_constraintBottom_toBottomOf="@+id/estate_img"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

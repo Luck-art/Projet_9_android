@@ -17,8 +17,9 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.tables.RealEstate
+import com.openclassrooms.realestatemanager.utils.Utils.convertEuroToDollar
 
-class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private val items: List<RealEstate>, val onItemClicked: (RealEstate, Boolean) -> Unit, private var isInEditMode: Boolean = false, private val onDeleteClicked: (Long) -> Unit) :
+class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private val items: List<RealEstate>, val onItemClicked: (RealEstate, Boolean) -> Unit, private var isInEditMode: Boolean = false) :
     RecyclerView.Adapter<RealEstateManagerAdapter.ViewHolder>() {
 
     var filteredDataSet: List<RealEstate> = dataSet
@@ -26,7 +27,7 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private va
 
     private val priceFormatter: NumberFormat = NumberFormat.getCurrencyInstance().apply {
         maximumFractionDigits = 0
-        currency = Currency.getInstance("EUR")
+        currency = Currency.getInstance("USD")
     }
 
     fun getItemIdAtPosition(position: Int): Long {
@@ -38,17 +39,8 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private va
         val estateDesciptionView: TextView = view.findViewById(R.id.estate_description)
         val estatePriceView: TextView = view.findViewById(R.id.estate_price)
         val estateSendedView: TextView = view.findViewById(R.id.estate_sended)
-        val deleteButton: ImageButton = itemView.findViewById(R.id.delete_button)
 
 
-
-        init {
-            deleteButton.setOnClickListener {
-                val estateId = getItemIdAtPosition(adapterPosition)
-                Log.d("RealEstateManager", "Suppression de l'élément avec ID: $estateId")
-                onDeleteClicked(estateId)
-            }
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -64,17 +56,20 @@ class RealEstateManagerAdapter(private val dataSet: List<RealEstate>, private va
             .load(item.img)
             .into(holder.estateImageView)
 
+        val priceInDollars = item.price?.let { convertEuroToDollar(it) }
+
 
         holder.itemView.setOnClickListener {
            onItemClicked(item, isInEditMode)
         }
+        holder.estatePriceView.text = priceInDollars?.let { priceFormatter.format(it) }
         holder.estateTextView.text = item.name
         holder.estateDesciptionView.text = item.description
         holder.estatePriceView.text = item.price?.let { priceFormatter.format(it) }
         if (item.sended) {
-            holder.estateSendedView.text = "It's sold"
-        } else {
             holder.estateSendedView.text = "To sale"
+        } else {
+            holder.estateSendedView.text = "It's sold !"
         }
 
 

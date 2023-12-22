@@ -31,7 +31,6 @@ class RealEstateManagerViewModel(
     val showDialog = MutableLiveData<DialogState?>(null)
     val isInEditMode = MutableLiveData<Boolean>(false)
     val selectedRealEstate = MutableLiveData<RealEstate?>(null)
-    private val deleteEstateLogic: DeleteEstate = DeleteEstate(realEstateDao, viewModelScope)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -122,11 +121,6 @@ class RealEstateManagerViewModel(
 
 
 
-    fun onDeleteEstateClicked(estateId: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            deleteEstateLogic.deleteEstate(estateId)
-        }
-    }
 
 
 

@@ -219,7 +219,7 @@ class SearchFilter(
 
         val priceFormatter: NumberFormat = NumberFormat.getCurrencyInstance().apply {
             maximumFractionDigits = 0
-            currency = Currency.getInstance("EUR")
+            currency = Currency.getInstance("USD")
         }
 
         linearLayout.addView(FrameLayout(context).apply {
